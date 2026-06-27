@@ -104,6 +104,8 @@
                 showDebug('No active session found.');
                 renderLoginButton(authContainer);
                 toggleCommentForm(false);
+                // Show signup suggestion banner for non-logged-in users
+                showSignupBanner();
             }
             // Fetch comments anyway (they are public to view)
             fetchComments();
@@ -358,11 +360,41 @@
 
     function renderLoginButton(container) {
         container.innerHTML = `
-            <a href="login.html" class="nav-btn login-btn">
-                <span>Login</span>
+            <a href="login.html?mode=signup" class="auth-button create-account-btn" id="auth-button">
+                <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="9" cy="7" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="19" y1="8" x2="19" y2="14" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="22" y1="11" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="auth-text">Create Account</span>
             </a>
         `;
     }
+
+    function showSignupBanner() {
+        // Don't show if user dismissed it or has an account
+        const dismissed = localStorage.getItem('signup_banner_dismissed');
+        if (dismissed) return;
+
+        const banner = document.getElementById('signup-banner');
+        if (!banner) return;
+
+        // Show with a slight delay for better UX
+        setTimeout(() => {
+            banner.classList.remove('hidden');
+            banner.classList.add('show');
+        }, 2500);
+    }
+
+    window.dismissSignupBanner = function () {
+        const banner = document.getElementById('signup-banner');
+        if (banner) {
+            banner.classList.remove('show');
+            setTimeout(() => banner.classList.add('hidden'), 400);
+        }
+        localStorage.setItem('signup_banner_dismissed', 'true');
+    };
 
     // Start
     checkAuthState();

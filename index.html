@@ -41,16 +41,14 @@
             <div class="nav-actions">
                 <!-- Auth Container (Login/Logout) -->
                 <div id="auth-container">
-                    <a href="login.html" class="auth-button" id="auth-button">
+                    <a href="login.html?mode=signup" class="auth-button create-account-btn" id="auth-button">
                         <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <polyline points="10 17 15 12 10 7" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <line x1="15" y1="12" x2="3" y2="12" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="19" y1="8" x2="19" y2="14" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="22" y1="11" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        <span class="auth-text">Login</span>
+                        <span class="auth-text">Create Account</span>
                     </a>
                 </div>
 
@@ -852,6 +850,31 @@
             </div>
         </div>
     </section>
+
+    <!-- Signup Suggestion Banner (for first-time visitors) -->
+    <div id="signup-banner" class="signup-banner hidden">
+        <div class="signup-banner-content">
+            <div class="signup-banner-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="signup-banner-text">
+                <h4 id="signup-banner-title">Join the Community</h4>
+                <p id="signup-banner-desc">Create a free account to leave comments and interact with the portfolio.</p>
+            </div>
+            <div class="signup-banner-actions">
+                <a href="login.html?mode=signup" class="signup-banner-btn-primary" id="signup-banner-cta">Create Account</a>
+                <button class="signup-banner-btn-secondary" id="signup-banner-dismiss" onclick="dismissSignupBanner()">I have an account</button>
+            </div>
+            <button class="signup-banner-close" onclick="dismissSignupBanner()" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

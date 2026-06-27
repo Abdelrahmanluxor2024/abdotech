@@ -9,7 +9,7 @@ const translations = {
             portfolio: "Portfolio",
             videos: "Videos",
             contact: "Contact",
-            login: "Login",
+            login: "Create Account",
             logout: "Logout",
             langBtn: "عربي"
         },
@@ -126,6 +126,12 @@ const translations = {
             phonePlaceholder: "01xxxxxxxxx",
             ideaPlaceholder: "Describe your project idea...",
             submitBtn: "Send Message"
+        },
+        signupBanner: {
+            title: "Join the Community",
+            desc: "Create a free account to leave comments and interact with the portfolio.",
+            cta: "Create Account",
+            dismiss: "I already have an account"
         }
     },
     ar: {
@@ -137,7 +143,7 @@ const translations = {
             portfolio: "الأعمال",
             videos: "الفيديوهات",
             contact: "تواصل معي",
-            login: "تسجيل دخول",
+            login: "إنشاء حساب",
             logout: "تسجيل خروج",
             langBtn: "English"
         },
@@ -254,6 +260,12 @@ const translations = {
             phonePlaceholder: "01xxxxxxxxx",
             ideaPlaceholder: "اكتب فكرة مشروعك بالتفصيل...",
             submitBtn: "إرسال الرسالة"
+        },
+        signupBanner: {
+            title: "انضم للمجتمع",
+            desc: "أنشئ حساباً مجانياً لترك تعليقات والتفاعل مع الأعمال.",
+            cta: "إنشاء حساب",
+            dismiss: "لدي حساب بالفعل"
         }
     }
 };
@@ -292,11 +304,24 @@ function applyTranslations(t) {
 
     // Update auth button text (if logged out)
     const authText = document.querySelector('.auth-text');
-    if (authText && authText.textContent !== t.nav.logout) {
-        // Only update if it's "Login", not "Logout"
-        if (authText.textContent === 'Login' || authText.textContent === 'تسجيل دخول') {
+    if (authText) {
+        const currentText = authText.textContent.trim();
+        const isLoggedOut = currentText === 'Create Account' || currentText === 'إنشاء حساب';
+        if (isLoggedOut) {
             authText.textContent = t.nav.login;
         }
+    }
+
+    // Update signup banner translations if it exists
+    const bannerTitle = document.getElementById('signup-banner-title');
+    const bannerDesc = document.getElementById('signup-banner-desc');
+    const bannerCta = document.getElementById('signup-banner-cta');
+    const bannerDismiss = document.getElementById('signup-banner-dismiss');
+    if (t.signupBanner) {
+        if (bannerTitle) bannerTitle.textContent = t.signupBanner.title;
+        if (bannerDesc) bannerDesc.textContent = t.signupBanner.desc;
+        if (bannerCta) bannerCta.textContent = t.signupBanner.cta;
+        if (bannerDismiss) bannerDismiss.textContent = t.signupBanner.dismiss;
     }
 
     // Hero Section

@@ -32,6 +32,26 @@
 
     let isSignupMode = false;
 
+    // ==================== CHECK URL MODE ====================
+    // If coming from ?mode=signup link, default to signup form
+    (function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'signup') {
+            isSignupMode = true;
+            // Switch UI immediately
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const toggleText = document.getElementById('toggle-text');
+            const cardTitle = document.querySelector('.card-title');
+            const cardSubtitle = document.querySelector('.card-subtitle');
+            if (loginForm) loginForm.classList.add('hidden');
+            if (signupForm) signupForm.classList.remove('hidden');
+            if (toggleText) toggleText.textContent = 'Already have an account? Sign In';
+            if (cardTitle) cardTitle.textContent = 'Create Account';
+            if (cardSubtitle) cardSubtitle.textContent = 'Sign up to get started';
+        }
+    })();
+
     // ==================== UI FUNCTIONS ====================
     function showAlert(type, message) {
         alertContainer.classList.remove('hidden');
@@ -47,7 +67,7 @@
         alertContainer.classList.add('hidden');
     };
 
-    function toggleForm() {
+    window.toggleForm = function toggleForm() {
         isSignupMode = !isSignupMode;
 
         if (isSignupMode) {
@@ -141,6 +161,8 @@
                 }
             } else {
                 console.log('✅ Login successful:', data);
+                // Mark user as having an account so we don't show signup banner
+                localStorage.setItem('signup_banner_dismissed', 'true');
                 // FORCE redirect with token hash for file:// support
                 const token = data.session.access_token;
                 const refresh = data.session.refresh_token;
@@ -216,8 +238,10 @@
                 if (data?.user?.identities?.length === 0) {
                     showAlert('warning', 'This email is already registered. Please sign in instead.');
                 } else {
+                    // Mark user as having an account
+                    localStorage.setItem('signup_banner_dismissed', 'true');
                     showAlert('success', 'Account created successfully! You can now sign in.');
-                    setTimeout(() => toggleForm(), 2000);
+                    setTimeout(() => window.toggleForm(), 2000);
                 }
             }
         } catch (error) {

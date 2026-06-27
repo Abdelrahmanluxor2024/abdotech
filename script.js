@@ -12,6 +12,29 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// ==================== MOBILE MENU TOGGLE ====================
+if (navToggle) {
+    navToggle.addEventListener('click', () => {
+        const navMenu = document.querySelector('.nav-menu');
+        if (navMenu) {
+            const isOpen = navMenu.classList.toggle('mobile-open');
+            // Animate hamburger lines
+            navToggle.classList.toggle('active', isOpen);
+        }
+    });
+}
+
+// Close mobile menu when a nav link is clicked
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        const navMenu = document.querySelector('.nav-menu');
+        if (navMenu) {
+            navMenu.classList.remove('mobile-open');
+            navToggle.classList.remove('active');
+        }
+    });
+});
+
 // Active link on scroll
 const sections = document.querySelectorAll('section[id]');
 
