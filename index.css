@@ -1060,19 +1060,28 @@ img {
     justify-content: center;
     opacity: 0;
     transition: opacity var(--transition-base);
+    pointer-events: none;
 }
 
 .project-card:hover .project-overlay {
     opacity: 1;
+    pointer-events: all;
 }
 
 .overlay-content {
     transform: translateY(20px);
     transition: transform var(--transition-base);
+    pointer-events: all;
 }
 
 .project-card:hover .overlay-content {
     transform: translateY(0);
+}
+
+.project-link {
+    pointer-events: all;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .project-link {
