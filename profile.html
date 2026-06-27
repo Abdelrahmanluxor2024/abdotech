@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div class="profile-container">
+        <nav class="nav-bar">
+            <a href="index.html" class="back-btn">← Back to Home</a>
+            <button id="sign-out-btn" class="sign-out-btn">Sign Out</button>
+        </nav>
+
+        <div class="profile-header">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Avatar"
+                    id="avatar-img" class="profile-avatar">
+                <button class="avatar-upload-btn" title="Change Avatar">📷</button>
+            </div>
+            <div class="profile-info">
+                <h1 id="display-name">Loading...</h1>
+                <p class="profile-email" id="display-email">user@example.com</p>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <h2>Personal Information</h2>
+            <form id="profile-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="username" class="form-input" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="full_name" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Country</label>
+                        <select id="country" class="form-input">
+                            <option value="Egypt">Egypt 🇪🇬</option>
+                            <option value="Saudi Arabia">Saudi Arabia 🇸🇦</option>
+                            <option value="UAE">UAE 🇦🇪</option>
+                            <option value="Kuwait">Kuwait 🇰🇼</option>
+                            <option value="USA">USA 🇺🇸</option>
+                            <option value="Other">Other 🌍</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Website / Portfolio</label>
+                    <input type="url" id="website" class="form-input" placeholder="https://example.com">
+                </div>
+
+                <button type="submit" class="btn-save">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN SCRIPT -->
+    <script>
+        // --- Supabase Config (Using same creds as auth-standalone.js) ---
+        const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM'; // تأكد إن ده المفتاح الصحيح (JWT)
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function loadProfile() {
+            // 1. Get User
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Display basic auth info
+            document.getElementById('display-email').textContent = user.email;
+
+            // 2. Get Profile Data from Table
+            let { data: profile, error } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            if (error) {
+                console.error('Error loading profile:', error);
+                // If profile doesn't exist yet, we use auth meta data
+                profile = {
+                    username: user.user_metadata.username,
+                    full_name: user.user_metadata.full_name,
+                    phone: user.user_metadata.phone,
+                    country: user.user_metadata.country
+                };
+            }
+
+            // Fill Form
+            if (profile) {
+                document.getElementById('username').value = profile.username || '';
+                document.getElementById('full_name').value = profile.full_name || '';
+                document.getElementById('phone').value = profile.phone || '';
+                document.getElementById('country').value = profile.country || 'Egypt';
+                document.getElementById('website').value = profile.website || '';
+                document.getElementById('display-name').textContent = profile.full_name || profile.username || 'User';
+
+                if (profile.avatar_url) {
+                    // Handle avatar URL logic if stored in storage bucket
+                }
+            }
+        }
+
+        async function updateProfile(e) {
+            e.preventDefault();
+            const { data: { user } } = await supabase.auth.getUser();
+
+            const updates = {
+                id: user.id,
+                username: document.getElementById('username').value,
+                full_name: document.getElementById('full_name').value,
+                phone: document.getElementById('phone').value,
+                country: document.getElementById('country').value,
+                website: document.getElementById('website').value,
+                updated_at: new Date()
+            };
+
+            const { error } = await supabase.from('user_profiles').upsert(updates);
+
+            if (error) {
+                alert('Error updating profile: ' + error.message);
+            } else {
+                alert('Profile updated successfully! ✅');
+                document.getElementById('display-name').textContent = updates.full_name || updates.username;
+            }
+        }
+
+        async function signOut() {
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+        }
+
+        // Init
+        loadProfile();
+        document.getElementById('profile-form').addEventListener('submit', updateProfile);
+        document.getElementById('sign-out-btn').addEventListener('click', signOut);
+
+    </script>
+</body>
+
+</html>
