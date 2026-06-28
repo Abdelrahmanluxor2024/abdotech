@@ -341,88 +341,108 @@ function applyTranslations(t) {
     document.querySelector('.scroll-indicator span').textContent = t.hero.scrollText;
 
     // About Section
-    document.querySelectorAll('.section-label')[0].textContent = t.about.label;
-    document.querySelectorAll('.section-title')[0].textContent = t.about.title;
-    document.querySelectorAll('.intro-paragraph')[0].innerHTML = t.about.intro1;
-    document.querySelectorAll('.intro-paragraph')[1].innerHTML = t.about.intro2;
+    const aboutLabel = document.querySelector('#about .section-label');
+    if (aboutLabel) aboutLabel.textContent = t.about.label;
+    const aboutTitle = document.querySelector('#about .section-title');
+    if (aboutTitle) aboutTitle.textContent = t.about.title;
+    
+    const introParagraphs = document.querySelectorAll('.intro-paragraph');
+    if (introParagraphs[0]) introParagraphs[0].innerHTML = t.about.intro1;
+    if (introParagraphs[1]) introParagraphs[1].innerHTML = t.about.intro2;
 
     const philosophyCards = document.querySelectorAll('.philosophy-card');
-    philosophyCards[0].querySelector('h3').textContent = t.about.card1Title;
-    philosophyCards[0].querySelector('p').textContent = t.about.card1Text;
-    philosophyCards[1].querySelector('h3').textContent = t.about.card2Title;
-    philosophyCards[1].querySelector('p').textContent = t.about.card2Text;
-    philosophyCards[2].querySelector('h3').textContent = t.about.card3Title;
-    philosophyCards[2].querySelector('p').textContent = t.about.card3Text;
+    philosophyCards.forEach((card, idx) => {
+        const key = `card${idx + 1}`;
+        const titleEl = card.querySelector('h3');
+        const textEl = card.querySelector('p');
+        if (titleEl && t.about[key + 'Title']) titleEl.textContent = t.about[key + 'Title'];
+        if (textEl && t.about[key + 'Text']) textEl.textContent = t.about[key + 'Text'];
+    });
 
-    document.querySelector('.mission-statement p').innerHTML = t.about.mission;
+    const missionEl = document.querySelector('.mission-statement p');
+    if (missionEl) missionEl.innerHTML = t.about.mission;
 
     // Expertise Section
-    document.querySelectorAll('.section-label')[1].textContent = t.expertise.label;
-    document.querySelectorAll('.section-title')[1].textContent = t.expertise.title;
+    const expLabel = document.querySelector('#expertise .section-label');
+    if (expLabel) expLabel.textContent = t.expertise.label;
+    const expTitle = document.querySelector('#expertise .section-title');
+    if (expTitle) expTitle.textContent = t.expertise.title;
 
     const skillCards = document.querySelectorAll('.skill-card');
-    skillCards[0].querySelector('h3').textContent = t.expertise.skill1;
-    skillCards[0].querySelector('p').textContent = t.expertise.skill1Text;
-    skillCards[1].querySelector('h3').textContent = t.expertise.skill2;
-    skillCards[1].querySelector('p').textContent = t.expertise.skill2Text;
-    skillCards[2].querySelector('h3').textContent = t.expertise.skill3;
-    skillCards[2].querySelector('p').textContent = t.expertise.skill3Text;
-    skillCards[3].querySelector('h3').textContent = t.expertise.skill4;
-    skillCards[3].querySelector('p').textContent = t.expertise.skill4Text;
-    skillCards[4].querySelector('h3').textContent = t.expertise.skill5;
-    skillCards[4].querySelector('p').textContent = t.expertise.skill5Text;
-    skillCards[5].querySelector('h3').textContent = t.expertise.skill6;
-    skillCards[5].querySelector('p').textContent = t.expertise.skill6Text;
+    skillCards.forEach((card, idx) => {
+        const key = `skill${idx + 1}`;
+        const titleEl = card.querySelector('h3');
+        const textEl = card.querySelector('p');
+        if (titleEl && t.expertise[key]) titleEl.textContent = t.expertise[key];
+        if (textEl && t.expertise[key + 'Text']) textEl.textContent = t.expertise[key + 'Text'];
+    });
 
     // Portfolio Section
-    document.querySelectorAll('.section-label')[2].textContent = t.portfolio.label;
-    document.querySelectorAll('.section-title')[2].textContent = t.portfolio.title;
-    document.querySelectorAll('.section-description')[0].textContent = t.portfolio.description;
+    const portLabel = document.querySelector('#portfolio .section-label');
+    if (portLabel) portLabel.textContent = t.portfolio.label;
+    const portTitle = document.querySelector('#portfolio .section-title');
+    if (portTitle) portTitle.textContent = t.portfolio.title;
+    const portDesc = document.querySelector('#portfolio .section-description');
+    if (portDesc) portDesc.textContent = t.portfolio.description;
 
     const projectCards = document.querySelectorAll('.project-card');
     document.querySelectorAll('.project-link span').forEach(span => {
         span.textContent = t.portfolio.viewLive;
     });
-    projectCards[0].querySelector('.project-title').textContent = t.portfolio.project1Title;
-    projectCards[0].querySelector('.project-description').textContent = t.portfolio.project1Desc;
-    projectCards[1].querySelector('.project-title').textContent = t.portfolio.project2Title;
-    projectCards[1].querySelector('.project-description').textContent = t.portfolio.project2Desc;
-    projectCards[2].querySelector('.project-title').textContent = t.portfolio.project3Title;
-    projectCards[2].querySelector('.project-description').textContent = t.portfolio.project3Desc;
-    projectCards[3].querySelector('.project-title').textContent = t.portfolio.project4Title;
-    projectCards[3].querySelector('.project-description').textContent = t.portfolio.project4Desc;
+    projectCards.forEach((card, idx) => {
+        const keyTitle = `project${idx + 1}Title`;
+        const keyDesc = `project${idx + 1}Desc`;
+        const titleEl = card.querySelector('.project-title');
+        const descEl = card.querySelector('.project-description');
+        if (titleEl && t.portfolio[keyTitle]) titleEl.textContent = t.portfolio[keyTitle];
+        if (descEl && t.portfolio[keyDesc]) descEl.textContent = t.portfolio[keyDesc];
+    });
 
     // Videos Section
-    document.querySelectorAll('.section-label')[3].textContent = t.videos.label;
-    document.querySelectorAll('.section-title')[3].textContent = t.videos.title;
-    document.querySelectorAll('.section-description')[1].textContent = t.videos.description;
+    const videoLabel = document.querySelector('#videos .section-label');
+    if (videoLabel) videoLabel.textContent = t.videos.label;
+    const videoTitle = document.querySelector('#videos .section-title');
+    if (videoTitle) videoTitle.textContent = t.videos.title;
+    const videoDesc = document.querySelector('#videos .section-description');
+    if (videoDesc) videoDesc.textContent = t.videos.description;
 
     const videoCards = document.querySelectorAll('.video-card');
-    videoCards[0].querySelector('.video-title').textContent = t.videos.video1Title;
-    videoCards[0].querySelector('.video-description').textContent = t.videos.video1Desc;
-    videoCards[1].querySelector('.video-title').textContent = t.videos.video2Title;
-    videoCards[1].querySelector('.video-description').textContent = t.videos.video2Desc;
-    videoCards[2].querySelector('.video-title').textContent = t.videos.video3Title;
-    videoCards[2].querySelector('.video-description').textContent = t.videos.video3Desc;
+    videoCards.forEach((card, idx) => {
+        const keyTitle = `video${idx + 1}Title`;
+        const keyDesc = `video${idx + 1}Desc`;
+        const titleEl = card.querySelector('.video-title');
+        const descEl = card.querySelector('.video-description');
+        if (titleEl && t.videos[keyTitle]) titleEl.textContent = t.videos[keyTitle];
+        if (descEl && t.videos[keyDesc]) descEl.textContent = t.videos[keyDesc];
+    });
 
     // Contact Section
-    document.querySelectorAll('.section-label')[4].textContent = t.contact.label;
-    document.querySelectorAll('.section-title')[4].textContent = t.contact.title;
-    document.querySelectorAll('.section-description')[2].textContent = t.contact.description;
+    const contactLabel = document.querySelector('#contact .section-label');
+    if (contactLabel) contactLabel.textContent = t.contact.label;
+    const contactTitle = document.querySelector('#contact .section-title');
+    if (contactTitle) contactTitle.textContent = t.contact.title;
+    const contactDesc = document.querySelector('#contact .section-description');
+    if (contactDesc) contactDesc.textContent = t.contact.description;
 
-    const contactCards = document.querySelectorAll('.contact-card h3');
-    contactCards[0].textContent = t.contact.email;
-    contactCards[1].textContent = t.contact.linkedin;
-    contactCards[2].textContent = t.contact.github;
+    const contactHeaders = document.querySelectorAll('.contact-card h3');
+    if (contactHeaders[0]) contactHeaders[0].textContent = t.contact.email;
+    if (contactHeaders[1]) contactHeaders[1].textContent = t.contact.linkedin;
+    if (contactHeaders[2]) contactHeaders[2].textContent = t.contact.github;
 
-    document.querySelector('.cta-box h3').textContent = t.contact.ctaTitle;
-    document.querySelector('.cta-box p').textContent = t.contact.ctaText;
-    document.querySelector('.cta-box .btn span').textContent = t.contact.ctaBtn;
+    const ctaTitle = document.querySelector('.cta-box h3');
+    if (ctaTitle) ctaTitle.textContent = t.contact.ctaTitle;
+    const ctaText = document.querySelector('.cta-box p');
+    if (ctaText) ctaText.textContent = t.contact.ctaText;
+    const ctaBtn = document.querySelector('.cta-box .btn span');
+    if (ctaBtn) ctaBtn.textContent = t.contact.ctaBtn;
 
     // Footer
-    document.querySelectorAll('.footer-left p')[0].textContent = t.footer.tagline;
-    document.querySelectorAll('.footer-right p')[0].textContent = t.footer.copyright;
-    document.querySelector('.footer-tagline').textContent = t.footer.motto;
+    const footerLeftP = document.querySelectorAll('.footer-left p');
+    if (footerLeftP[0]) footerLeftP[0].textContent = t.footer.tagline;
+    const footerRightP = document.querySelectorAll('.footer-right p');
+    if (footerRightP[0]) footerRightP[0].textContent = t.footer.copyright;
+    const footerTagline = document.querySelector('.footer-tagline');
+    if (footerTagline) footerTagline.textContent = t.footer.motto;
 
     // Guestbook Section
     const commentsLabel = document.querySelector('.comments .section-label');
@@ -469,7 +489,7 @@ function toggleLanguage() {
 }
 
 // ==================== INITIALIZATION ====================
-document.addEventListener('DOMContentLoaded', () => {
+function initTranslations() {
     // Check for saved language preference
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     setLanguage(savedLang);
@@ -479,4 +499,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langToggle) {
         langToggle.addEventListener('click', toggleLanguage);
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTranslations);
+} else {
+    initTranslations();
+}
