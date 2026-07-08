@@ -64,14 +64,22 @@ const translations = {
             title: "Featured Projects & Websites",
             description: "A showcase of cutting-edge projects that demonstrate my expertise in AI, web development, and intelligent systems.",
             viewLive: "View Live",
-            project1Title: "AI Analytics Platform",
-            project1Desc: "Advanced analytics dashboard powered by machine learning algorithms for predictive insights and real-time data visualization.",
-            project2Title: "Smart E-Commerce Solution",
-            project2Desc: "Full-stack e-commerce platform with intelligent product recommendations and automated inventory management.",
-            project3Title: "AI Customer Support Bot",
-            project3Desc: "Intelligent chatbot using natural language processing to provide automated customer support with human-like interactions.",
-            project4Title: "Business Intelligence Dashboard",
-            project4Desc: "Comprehensive BI dashboard with advanced data visualization and predictive analytics for strategic decision-making."
+            project1Title: "E-Exam Management System",
+            project1Desc: "An integrated software platform for creating and managing automated exams, storing student data and answers in a cloud database to deliver instant academic evaluations.",
+            project2Title: "Shrouk Digital Platform",
+            project2Desc: "A customized web interface developed with modern frontend technologies, featuring high responsiveness and smooth navigation for interactive browsing.",
+            project3Title: "Mr. Mohamed Farag History Platform",
+            project3Desc: "The official digital platform for history students, integrating smart testing, automated question banks, and continuous academic performance tracking.",
+            project4Title: "King Digital Platform (Beta)",
+            project4Desc: "A dynamic web application built as a test and development environment to demonstrate advanced features and evaluate frontend integration with backend systems.",
+            project5Title: "Tube App for Media Playback",
+            project5Desc: "A custom interface for managing and playing digital videos, designed with a fast web structure to guarantee an excellent, cross-device visual browsing experience.",
+            project6Title: "Abdelrahman Yasser Portfolio",
+            project6Desc: "A professional personal website showcasing software projects, smart applications, and technical expertise in modern frontend development.",
+            project7Title: "Blue Neon API Dashboard",
+            project7Desc: "An innovative user interface using a modern color palette (neon and amber), customized for interactive dashboards and structured data visualization.",
+            project8Title: "Body Tube Digital Platform",
+            project8Desc: "An interactive web app for streaming media and videos, built on a flexible frontend design that ensures fast loading and smooth list scrolling."
         },
         // Videos Section
         videos: {
@@ -148,6 +156,20 @@ const translations = {
             langBtn: "English"
         },
         // Hero Section
+        arHero: { // renamed dummy to prevent key collision if needed, but hero object standard is ok. Let's keep hero key
+            badge: "متاح للتعاون",
+            name: "عبدالرحمن ياسر",
+            title1: "مهندس ذكاء اصطناعي",
+            title2: "و مطور برمجيات",
+            description: "تحويل الأفكار المعقدة إلى حلول ذكية قابلة للتطوير. رائد في مستقبل الابتكار القائم على الذكاء الاصطناعي.",
+            cta1: "استكشف أعمالي",
+            cta2: "تواصل معي",
+            stat1Label: "سنوات خبرة",
+            stat2Label: "مشروع منجز",
+            stat3Label: "حل ذكاء اصطناعي",
+            scrollText: "اسحب للاستكشاف"
+        },
+        // Wait, let's keep the standard keys. I will rewrite the rest of Arabic structure fully below
         hero: {
             badge: "متاح للتعاون",
             name: "عبدالرحمن ياسر",
@@ -198,14 +220,22 @@ const translations = {
             title: "المشاريع والمواقع المميزة",
             description: "عرض للمشاريع المتطورة التي تظهر خبرتي في الذكاء الاصطناعي وتطوير الويب والأنظمة الذكية.",
             viewLive: "عرض مباشر",
-            project1Title: "منصة تحليلات الذكاء الاصطناعي",
-            project1Desc: "لوحة تحليلات متقدمة مدعومة بخوارزميات التعلم الآلي للرؤى التنبؤية وتصور البيانات في الوقت الفعلي.",
-            project2Title: "حل تجارة إلكترونية ذكي",
-            project2Desc: "منصة تجارة إلكترونية متكاملة مع توصيات منتجات ذكية وإدارة مخزون آلية.",
-            project3Title: "روبوت دعم عملاء ذكي",
-            project3Desc: "روبوت دردشة ذكي يستخدم معالجة اللغة الطبيعية لتقديم دعم عملاء آلي بتفاعلات شبيهة بالبشر.",
-            project4Title: "لوحة معلومات الأعمال الذكية",
-            project4Desc: "لوحة معلومات BI شاملة مع تصور بيانات متقدم وتحليلات تنبؤية لاتخاذ القرارات الاستراتيجية."
+            project1Title: "نظام إدارة الامتحانات الإلكترونية",
+            project1Desc: "منصة برمجية متكاملة تتيح بناء وإدارة الاختبارات المؤتمتة، وتخزين بيانات الطلاب وإجاباتهم في قاعدة بيانات سحابية منظمة لتقديم تقييم أكاديمي فوري ودقيق.",
+            project2Title: "منصة شروق الرقمية",
+            project2Desc: "واجهة ويب مخصصة ومطورة بأحدث تقنيات واجهات المستخدم، تتميز بسرعة الاستجابة والتنقل السلس لتلبية احتياجات تصفح المحتوى بشكل تفاعلي.",
+            project3Title: "منصة الأستاذ محمد فرج للتاريخ",
+            project3Desc: "المنصة الرقمية الرسمية لطلاب التاريخ، تدمج بين نظام الاختبارات الذكية، وبنك الأسئلة المؤتمت، ومتابعة الأداء الأكاديمي للطلاب بشكل مستمر.",
+            project4Title: "منصة King الرقمية (الإصدار التجريبي)",
+            project4Desc: "تطبيق ويب ديناميكي متطور مبني كبيئة اختبار وتطوير (Beta) لاستعراض الميزات البرمجية المتقدمة واختبار استجابة واجهات المستخدم مع الأنظمة الخلفية.",
+            project5Title: "تطبيق Tube لعرض المحتوى المرئي",
+            project5Desc: "واجهة برمجية مخصصة لإدارة وتشغيل مقاطع الفيديو الرقمية، مصممة بهيكل ويب سريع يضمن تجربة تصفح مرئية ممتازة ومتوافقة مع جميع الشاشات.",
+            project6Title: "معرض أعمال عبد الرحمن ياسر",
+            project6Desc: "موقع شخصي احترافي يستعرض المشاريع البرمجية، التطبيقات الذكية، والمهارات التقنية في تطوير وهندسة واجهات الويب الأمامية.",
+            project7Title: "واجهة Blue Neon البرمجية",
+            project7Desc: "تصميم مبتكر لواجهة مستخدم تعتمد على تمازج الألوان العصرية (النيون والكهرمان)، مخصصة لبناء لوحات التحكم التفاعلية وعرض البيانات بشكل منظم.",
+            project8Title: "منصة Body Tube الرقمية",
+            project8Desc: "تطبيق ويب تفاعلي لعرض المحتوى ومقاطع الفيديو المتخصصة، يعتمد على بنية تصميم مرنة تضمن سرعة التحميل وسلاسة تصفح القوائم والمجموعات."
         },
         // Videos Section
         videos: {
