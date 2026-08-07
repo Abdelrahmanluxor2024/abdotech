@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Shrouk Gallery | Graduation Portfolio</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="An ultra-luxury graduation portfolio and gallery showcasing memorable moments in imperial gold and midnight black theme.">
+  <meta name="keywords" content="Graduation, Portfolio, Royal Gallery, Imperial Gold, Luxury UI, Graduation Photos">
+  <meta name="author" content="Royal Graduate">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for Luxury UI Elements -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Welcome Splash Overlay -->
+  <div id="splash-overlay" class="splash-overlay">
+    <div class="splash-content">
+      <div class="splash-crest"><i class="fa-solid fa-crown"></i></div>
+      <h1 class="splash-title" data-key="logo">Shrouk Gallery</h1>
+      <p class="splash-subtitle" data-key="hero-subtitle">Class of 2026 • Executive Graduation Portfolio</p>
+      <button id="enter-btn" class="enter-btn">
+        <span data-key="enter-btn">Enter Experience</span>
+        <i class="fa-solid fa-play"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Background Music Audio -->
+  <audio id="bg-music" src="نور العيلة - شروق.mp3" autoplay loop></audio>
+
+  <!-- Elegant Marble Texture Overlay -->
+  <div class="marble-overlay"></div>
+  <div class="ambient-glow"></div>
+
+  <!-- Minimalist Royal Header -->
+  <header class="royal-header">
+    <div class="header-container">
+      <div class="royal-logo">
+        <span class="crest-mini"><i class="fa-solid fa-crown"></i></span>
+        <span class="logo-text" data-key="logo">Shrouk Gallery</span>
+      </div>
+      
+      <nav class="nav-links">
+        <a href="#hero" class="nav-link active" data-key="nav-home">Home</a>
+        <a href="#journey" class="nav-link" data-key="nav-journey">Journey</a>
+        <a href="#gallery" class="nav-link" data-key="nav-gallery">Gallery</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Music Player Toggle Button -->
+        <button id="music-toggle-btn" class="music-toggle-btn" aria-label="Toggle Background Music">
+          <i class="fa-solid fa-music"></i>
+          <div class="equalizer">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </button>
+
+        <!-- Language Switcher Pill -->
+        <button id="lang-switch-btn" class="lang-switch-btn" aria-label="Switch Language">
+          <i class="fa-solid fa-globe"></i>
+          <span class="lang-text">العربية</span>
+        </button>
+        
+        <!-- Social Icons -->
+        <div class="social-share-mini">
+          <a href="#" class="social-icon" id="header-share-btn" aria-label="Share page"><i class="fa-solid fa-share-nodes"></i></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Video Section -->
+  <section id="hero" class="hero-section">
+    <!-- Cinematic Video Background Container -->
+    <div class="video-bg-container">
+      <!-- We search for a local video file video.mp4, and fall back to a high-end royalty-free background loop -->
+      <video id="hero-bg-video" autoplay loop muted playsinline poster="1.png">
+        <!-- Ambient gold particles background loop -->
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-gold-dust-particles-flowing-slowly-34346-large.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+
+    <!-- Centered Royal Crest Play Button & Headings -->
+    <div class="hero-content">
+      <div class="crest-button-wrapper">
+        <!-- Golden Crest Play Button (Intricate filigree borders SVG) -->
+        <button class="royal-play-btn" id="open-video-btn" aria-label="Play Cinematic Video">
+          <div class="pulsing-halo"></div>
+          <svg class="crest-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#E5D4B1" />
+                <stop offset="30%" stop-color="#C9A96E" />
+                <stop offset="70%" stop-color="#9A7B43" />
+                <stop offset="100%" stop-color="#C9A96E" />
+              </linearGradient>
+              <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComponentTransfer in="blur" result="glow">
+                  <feFuncA type="linear" slope="0.6" />
+                </feComponentTransfer>
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            
+            <!-- Outer Filigree Ring -->
+            <circle cx="100" cy="100" r="92" fill="none" stroke="url(#goldGradient)" stroke-width="1.5" stroke-dasharray="6 3 2 3" />
+            
+            <!-- Intricate Scalloped Border -->
+            <path d="M 100 12 A 88 88 0 0 0 12 100 A 88 88 0 0 0 100 188 A 88 88 0 0 0 188 100 A 88 88 0 0 0 100 12" fill="none" stroke="url(#goldGradient)" stroke-width="1" stroke-dasharray="12 4" />
+            
+            <!-- Internal Filigree Dots & Waves -->
+            <circle cx="100" cy="100" r="80" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.5" />
+            <circle cx="100" cy="100" r="74" fill="none" stroke="url(#goldGradient)" stroke-width="0.75" stroke-dasharray="3 3" />
+            
+            <!-- 3D Embossed Golden Ring -->
+            <circle cx="100" cy="100" r="64" fill="rgba(15, 15, 15, 0.75)" stroke="url(#goldGradient)" stroke-width="4" filter="url(#goldGlow)" />
+            <circle cx="100" cy="100" r="60" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.7" />
+            
+            <!-- Central Crown Icon -->
+            <path class="crest-crown" d="M 85 75 L 92.5 83 L 100 72 L 107.5 83 L 115 75 L 111 93 L 89 93 Z" fill="url(#goldGradient)" />
+            <circle cx="100" cy="97" r="1.5" fill="url(#goldGradient)" />
+            
+            <!-- Elegant Play Triangle -->
+            <polygon class="crest-play-triangle" points="92,104 114,115 92,126" fill="url(#goldGradient)" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="hero-titles">
+        <h1 class="main-title" data-key="hero-title">Watch My Journey</h1>
+        <p class="subtitle" data-key="hero-subtitle">Class of 2026 • Executive Graduation Portfolio</p>
+      </div>
+      
+      <!-- Scroll indicator -->
+      <a href="#journey" class="scroll-indicator" aria-label="Scroll Down">
+        <span class="scroll-text" data-key="scroll-text">Discover Gallery</span>
+        <div class="scroll-arrow">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Journey Description Section -->
+  <section id="journey" class="journey-section">
+    <div class="section-container">
+      <div class="journey-decor">
+        <span class="decor-line"></span>
+        <span class="decor-crest"><i class="fa-solid fa-award"></i></span>
+        <span class="decor-line"></span>
+      </div>
+      <h2 class="journey-title" data-key="journey-header">A Royal Milestone</h2>
+      <p class="journey-text" data-key="journey-p1">
+        Stepping into a future forged with dedication, brilliance, and royal standards. This showcase commemorates a journey of academic excellence, capturing moments that represent the pinnacle of achievement and transition into leadership.
+      </p>
+      <p class="journey-text" data-key="journey-p2">
+        Every portrait tells a story of late nights, deep focus, and final triumph. Walk through the gallery below to share these moments of pride and elegance.
+      </p>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="gallery-section">
+    <div class="section-header">
+      <h2 class="gallery-title" data-key="gallery-header">The Royal Portfolio</h2>
+      <p class="gallery-subtitle" data-key="gallery-subtitle">A collection of moments captured in high definition</p>
+
+      <!-- View Mode Toggle Button -->
+      <button id="view-mode-btn" class="view-mode-btn" aria-label="Switch Gallery View">
+        <i class="fa-solid fa-layer-group"></i>
+        <span data-key="btn-stack-view">Royal Stack View</span>
+      </button>
+    </div>
+
+
+
+    <!-- Gallery Container: Asymmetric Masonry layout on Desktop / Swipeable horizontal carousel on Mobile -->
+    <div class="gallery-container" id="gallery-container">
+      <!-- Group 1: Girl Alone (البنت لوحدها) -->
+      <!-- Item 1 -->
+      <div class="gallery-item size-tall" data-index="0" data-src="1.png">
+        <div class="item-border"></div>
+        <img src="1.png" alt="Graduation Portrait 1" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-1-title">The Sovereign Smile</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="gallery-item size-wide" data-index="1" data-src="2.png">
+        <div class="item-border"></div>
+        <img src="2.png" alt="Graduation Portrait 2" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-2-title">Reflective Triumph</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="gallery-item size-small" data-index="2" data-src="3.png">
+        <div class="item-border"></div>
+        <img src="3.png" alt="Graduation Portrait 3" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-3-title">Academic Honor</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="gallery-item size-tall" data-index="3" data-src="4.png">
+        <div class="item-border"></div>
+        <img src="4.png" alt="Graduation Portrait 4" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-candid">Candid</span>
+            <h3 class="item-title" data-key="pic-4-title">Golden Horizon</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="gallery-item size-medium" data-index="4" data-src="5.png">
+        <div class="item-border"></div>
+        <img src="5.png" alt="Graduation Portrait 5" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-5-title">Prestigious Stature</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 6 -->
+      <div class="gallery-item size-medium" data-index="5" data-src="10.jpeg">
+        <div class="item-border"></div>
+        <img src="10.jpeg" alt="Graduation Portrait 6" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-6-title">Elegance Unveiled</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 7 -->
+      <div class="gallery-item size-small" data-index="6" data-src="ChatGPT Image Jun 21, 2026, 09_37_22 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_37_22 AM.png" alt="Graduation Portrait 7" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-7-title">The Royal Portrait I</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 8 -->
+      <div class="gallery-item size-tall" data-index="7" data-src="ChatGPT Image Jun 21, 2026, 09_39_54 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_39_54 AM.png" alt="Graduation Portrait 8" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-8-title">The Royal Portrait II</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- [HIDDEN ITEMS BY DEFAULT] -->
+      <!-- Item 9 -->
+      <div class="gallery-item size-wide hidden-item" data-index="8" data-src="ChatGPT Image Jun 21, 2026, 09_40_40 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_40_40 AM.png" alt="Graduation Portrait 9" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-9-title">The Royal Portrait III</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 10 -->
+      <div class="gallery-item size-medium hidden-item" data-index="9" data-src="ChatGPT Image Jun 21, 2026, 09_47_14 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_47_14 AM.png" alt="Graduation Portrait 10" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-10-title">The Royal Portrait IV</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 11 -->
+      <div class="gallery-item size-small hidden-item" data-index="10" data-src="ChatGPT Image Jun 21, 2026, 09_49_24 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_49_24 AM.png" alt="Graduation Portrait 11" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-candid">Candid</span>
+            <h3 class="item-title" data-key="pic-11-title">The Royal Portrait V</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 12 -->
+      <div class="gallery-item size-tall hidden-item" data-index="11" data-src="ChatGPT Image Jun 21, 2026, 09_51_06 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_51_06 AM.png" alt="Graduation Portrait 12" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-12-title">The Royal Portrait VI</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 13 -->
+      <div class="gallery-item size-medium hidden-item" data-index="12" data-src="ChatGPT Image Jun 21, 2026, 09_55_57 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 21, 2026, 09_55_57 AM.png" alt="Graduation Portrait 13" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-13-title">The Royal Portrait VII</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Group 2: Girl & Mother (البنت وامها) -->
+      <!-- Item 14 -->
+      <div class="gallery-item size-wide hidden-item" data-index="13" data-src="ChatGPT Image Jun 23, 2026, 01_38_25 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_38_25 AM.png" alt="Graduation Portrait 14" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-14-title">Shared Joy</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 15 -->
+      <div class="gallery-item size-small hidden-item" data-index="14" data-src="ChatGPT Image Jun 23, 2026, 02_03_01 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 02_03_01 AM.png" alt="Graduation Portrait 15" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-15-title">A Mother's Pride</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 16 -->
+      <div class="gallery-item size-medium hidden-item" data-index="15" data-src="ChatGPT Image Jun 23, 2026, 02_06_38 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 02_06_38 AM.png" alt="Graduation Portrait 16" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-16-title">Cherished Bond</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Group 3: Girl & Father (البنت وابوها) -->
+      <!-- Item 17 -->
+      <div class="gallery-item size-wide hidden-item" data-index="16" data-src="6.png">
+        <div class="item-border"></div>
+        <img src="6.png" alt="Graduation Portrait 17" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-17-title">The Crown of Success</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 18 -->
+      <div class="gallery-item size-small hidden-item" data-index="17" data-src="7.png">
+        <div class="item-border"></div>
+        <img src="7.png" alt="Graduation Portrait 18" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-18-title">Gaze of Pride</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 19 -->
+      <div class="gallery-item size-tall hidden-item" data-index="18" data-src="9.png">
+        <div class="item-border"></div>
+        <img src="9.png" alt="Graduation Portrait 19" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-19-title">Empowered Vision</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Group 4: Father, Mother & Girl (الاب والام والبنت في الآخر) -->
+      <!-- Item 20 -->
+      <div class="gallery-item size-tall hidden-item" data-index="19" data-src="ChatGPT Image Jun 23, 2026, 01_12_30 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_12_30 AM.png" alt="Graduation Portrait 20" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-20-title">The Graduation Banquet</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 21 -->
+      <div class="gallery-item size-wide hidden-item" data-index="20" data-src="ChatGPT Image Jun 23, 2026, 01_22_45 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_22_45 AM.png" alt="Graduation Portrait 21" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-moment">Moment</span>
+            <h3 class="item-title" data-key="pic-21-title">Imperial Milestone</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 22 -->
+      <div class="gallery-item size-small hidden-item" data-index="21" data-src="ChatGPT Image Jun 23, 2026, 01_26_37 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_26_37 AM.png" alt="Graduation Portrait 22" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-22-title">Scholarly Legacy</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 23 -->
+      <div class="gallery-item size-medium hidden-item" data-index="22" data-src="ChatGPT Image Jun 23, 2026, 01_28_01 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_28_01 AM.png" alt="Graduation Portrait 23" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-candid">Candid</span>
+            <h3 class="item-title" data-key="pic-23-title">The Royal Seat</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+
+      <!-- Item 24 -->
+      <div class="gallery-item size-tall hidden-item" data-index="23" data-src="ChatGPT Image Jun 23, 2026, 01_33_04 AM.png">
+        <div class="item-border"></div>
+        <img src="ChatGPT Image Jun 23, 2026, 01_33_04 AM.png" alt="Graduation Portrait 24" class="gallery-image" loading="lazy">
+        <div class="item-overlay">
+          <div class="item-details">
+            <span class="item-category" data-key="cat-portrait">Portrait</span>
+            <h3 class="item-title" data-key="pic-24-title">The Grand Portrait</h3>
+          </div>
+          <span class="item-expand"><i class="fa-solid fa-expand"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- View All Images → opens dedicated gallery page -->
+    <div class="view-all-container">
+      <a href="gallery.html" class="view-all-btn" id="view-all-btn" aria-label="View all photos">
+        <span data-key="btn-view-all">View All Images</span>
+        <i class="fa-solid fa-images"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="royal-footer">
+    <div class="footer-container">
+      <div class="footer-crest"><i class="fa-solid fa-crown"></i></div>
+      <p class="footer-copyright" data-key="footer-copyright">© 2026 The Royal Showcase Gallery. Crafted with Excellence.</p>
+    </div>
+  </footer>
+
+
+
+  <!-- MODALS -->
+  
+  <!-- 1. Cinematic Video Modal -->
+  <div class="royal-modal" id="video-modal">
+    <div class="modal-bg-blur"></div>
+    <div class="modal-wrapper">
+      <button class="modal-close-btn" id="close-video-modal" aria-label="Close Video"><i class="fa-solid fa-xmark"></i></button>
+      <div class="video-player-container">
+        <!-- We use an elegant HTML5 video player -->
+        <video id="modal-video-player" controls playsinline>
+          <source src="shrouk.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Interactive Lightbox Modal -->
+  <div class="royal-modal" id="lightbox-modal">
+    <div class="modal-bg-blur"></div>
+    <button class="modal-close-btn" id="close-lightbox-btn" aria-label="Close Gallery"><i class="fa-solid fa-xmark"></i></button>
+    
+    <div class="lightbox-wrapper">
+      <button class="lightbox-nav nav-prev" id="lightbox-prev" aria-label="Previous Image"><i class="fa-solid fa-chevron-left"></i></button>
+      
+      <div class="lightbox-content">
+        <div class="lightbox-image-box">
+          <img src="" alt="" id="lightbox-image">
+        </div>
+        <div class="lightbox-caption">
+          <span class="lightbox-category" id="lightbox-category">Portrait</span>
+          <h3 class="lightbox-title" id="lightbox-title">The Sovereign Smile</h3>
+        </div>
+      </div>
+
+      <button class="lightbox-nav nav-next" id="lightbox-next" aria-label="Next Image"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- 3. Share Modal (Royal Share Sheet) -->
+  <div class="royal-modal modal-small" id="share-modal">
+    <div class="modal-bg-blur"></div>
+    <div class="modal-wrapper">
+      <button class="modal-close-btn" id="close-share-modal" aria-label="Close Share"><i class="fa-solid fa-xmark"></i></button>
+      <div class="share-box">
+        <h3 class="share-box-title" data-key="share-title">Share the Moment</h3>
+        <p class="share-box-desc" data-key="share-desc">Select a platform to share this royal graduation gallery.</p>
+        
+        <div class="share-buttons-grid">
+          <button class="share-option-btn whatsapp" id="share-whatsapp">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </button>
+          <button class="share-option-btn x-twitter" id="share-x">
+            <i class="fa-brands fa-x-twitter"></i>
+            <span>Twitter/X</span>
+          </button>
+          <button class="share-option-btn facebook" id="share-facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+            <span>Facebook</span>
+          </button>
+          <button class="share-option-btn copy" id="share-copy">
+            <i class="fa-solid fa-copy"></i>
+            <span data-key="share-copy-btn">Copy Link</span>
+          </button>
+        </div>
+        
+        <!-- Toast Notification inside Share Modal -->
+        <div class="toast-notification" id="copy-toast" data-key="toast-copied">Link copied to clipboard!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Royal Slideshow View Overlay (hidden by default) -->
+  <div id="slideshow-view" class="slideshow-view" aria-hidden="true">
+    <img id="slideshow-img" src="" alt="Slideshow Image">
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>

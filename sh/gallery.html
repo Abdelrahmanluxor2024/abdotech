@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Shrouk Gallery | All Photos</title>
+  <meta name="description" content="Full photo gallery for Shrouk's graduation — all portrait collections beautifully presented.">
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ===== Design Tokens ===== */
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E5D4B1;
+      --gold-dim: rgba(201,169,110,0.3);
+      --black: #050505;
+      --card-bg: rgba(18,18,18,0.85);
+      --text: #F5F5F5;
+      --muted: #A3A3A3;
+      --font-en: 'Cormorant Garamond', serif;
+      --font-ar: 'Tajawal', sans-serif;
+      --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--font-en);
+      font-size: 18px;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { min-height: 100vh; }
+    body.rtl-mode { font-family: var(--font-ar); direction: rtl; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, transparent, var(--gold), transparent);
+      border-radius: 3px;
+    }
+
+    /* ===== Marble / ambient overlay ===== */
+    .marble-overlay {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cpath d='M0,100 Q100,50 200,100 T400,100 M0,200 Q150,220 250,150 T400,200 M0,300 Q80,280 200,320 T400,300' fill='none' stroke='%23C9A96E' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* ===== HEADER ===== */
+    .g-header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(5,5,5,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .back-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-light);
+      padding: 10px 18px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      background: rgba(201,169,110,0.15);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(201,169,110,0.25);
+      transform: translateX(-3px);
+    }
+
+    .g-header-title {
+      flex: 1;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.2rem; letter-spacing: 2px; font-weight: 600;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+    .g-header-title i { color: var(--gold); font-size: 1rem; }
+
+    /* Language button */
+    .lang-btn {
+      background: transparent; border: 1px solid var(--gold-dim);
+      color: var(--gold-light); padding: 8px 14px;
+      border-radius: 20px; cursor: pointer; font-family: inherit;
+      font-size: 0.8rem; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;
+      transition: all 0.25s ease;
+    }
+    .lang-btn:hover { border-color: var(--gold); background: rgba(201,169,110,0.12); }
+
+    /* ===== Music Toggle Button ===== */
+    .music-btn {
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-light);
+      width: 44px; height: 40px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: all 0.25s ease;
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+    .music-btn:hover {
+      background: rgba(201,169,110,0.15);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(201,169,110,0.25);
+      transform: translateY(-1px);
+    }
+    .music-btn i { font-size: 0.85rem; transition: all 0.3s ease; }
+    .music-btn.playing i { color: var(--gold); text-shadow: 0 0 8px rgba(201,169,110,0.6); animation: rotateNote 4s linear infinite; }
+    .music-btn .eq { display: flex; align-items: flex-end; height: 10px; gap: 2px; }
+    .music-btn .eq span { width: 2px; height: 2px; background: var(--gold-light); border-radius: 1px; transition: height 0.3s ease; }
+    .music-btn.playing .eq span { background: var(--gold); animation: eqBar 1.2s ease-in-out infinite alternate; }
+    .music-btn.playing .eq span:nth-child(1) { animation-duration: 0.8s; }
+    .music-btn.playing .eq span:nth-child(2) { animation-duration: 1.2s; animation-delay: -0.4s; }
+    .music-btn.playing .eq span:nth-child(3) { animation-duration: 1s; animation-delay: -0.2s; }
+    @keyframes eqBar { 0% { height: 2px; } 100% { height: 10px; } }
+    @keyframes rotateNote { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 60px 24px 40px;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(201,169,110,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin-bottom: 24px;
+    }
+    .hero-divider span { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+    .hero-divider span:last-child { transform: scaleX(-1); }
+    .hero-divider i { color: var(--gold); font-size: 1.1rem; }
+
+    .page-hero h1 {
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-weight: 700; letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), #9A7B43, var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .page-hero p {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: var(--muted); letter-spacing: 1.5px;
+      margin-top: 12px; text-transform: uppercase;
+    }
+
+    /* ===== GROUP SECTIONS ===== */
+    .gallery-page { position: relative; z-index: 1; padding: 0 16px 60px; max-width: 1400px; margin: 0 auto; }
+
+    .group-section { margin-bottom: 60px; }
+
+    .group-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--gold-dim);
+    }
+    .group-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(201,169,110,0.12);
+      border: 1px solid var(--gold-dim);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1rem; flex-shrink: 0;
+    }
+    .group-info h2 {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 600; color: var(--gold-light);
+      letter-spacing: 1.5px;
+    }
+    .group-info p {
+      font-size: 0.8rem; color: var(--muted); letter-spacing: 1px;
+      margin-top: 3px; text-transform: uppercase;
+    }
+    .group-count {
+      margin-left: auto; flex-shrink: 0;
+      background: rgba(201,169,110,0.1);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold); font-size: 0.78rem;
+      padding: 4px 12px; border-radius: 12px; letter-spacing: 1px;
+    }
+
+    /* ===== RESPONSIVE PHOTO GRID ===== */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    /* Special spans for featured shots */
+    @media (min-width: 700px) {
+      .photo-grid .span-wide { grid-column: span 2; }
+      .photo-grid .span-tall { grid-row: span 2; }
+    }
+
+    .photo-card {
+      position: relative; overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid rgba(201,169,110,0.18);
+      background: rgba(20,20,20,0.6);
+      cursor: pointer;
+      aspect-ratio: 3/4;
+      transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s ease;
+      will-change: transform;
+    }
+    .photo-card.span-wide { aspect-ratio: 16/9; }
+    .photo-card.span-tall { aspect-ratio: auto; min-height: 520px; }
+
+    .photo-card:hover {
+      transform: scale(1.025) translateY(-3px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 20px rgba(201,169,110,0.2);
+      border-color: rgba(201,169,110,0.5);
+    }
+
+    .photo-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--ease);
+    }
+    .photo-card:hover img { transform: scale(1.06); }
+
+    .photo-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.1) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 20px;
+    }
+    .photo-card:hover .photo-card-overlay { opacity: 1; }
+
+    .photo-card-overlay .cat {
+      font-size: 0.7rem; letter-spacing: 2px;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .photo-card-overlay .title {
+      font-size: 1rem; font-weight: 600;
+      color: var(--gold-light); line-height: 1.3;
+      letter-spacing: 0.5px;
+    }
+
+    .expand-icon {
+      position: absolute; top: 14px; right: 14px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(201,169,110,0.15);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold); font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.8);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .photo-card:hover .expand-icon {
+      opacity: 1; transform: scale(1);
+    }
+
+    /* ===== LIGHTBOX ===== */
+    #g-lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(3,3,3,0.96);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      padding: 16px;
+    }
+    #g-lightbox.open { opacity: 1; visibility: visible; }
+
+    .lb-close {
+      position: fixed; top: 18px; right: 18px; z-index: 10;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(201,169,110,0.1); border: 1px solid var(--gold-dim);
+      color: var(--gold-light); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.25s ease;
+    }
+    .lb-close:hover { background: rgba(201,169,110,0.25); transform: rotate(90deg); }
+
+    .lb-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(201,169,110,0.1); border: 1px solid var(--gold-dim);
+      color: var(--gold-light); font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      transition: all 0.25s ease;
+    }
+    .lb-nav:hover { background: rgba(201,169,110,0.25); box-shadow: 0 0 18px rgba(201,169,110,0.3); }
+    .lb-prev { left: 14px; }
+    .lb-next { right: 14px; }
+
+    .lb-image-box {
+      max-width: min(90vw, 900px);
+      max-height: 85vh;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--gold-dim);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 30px rgba(201,169,110,0.15);
+    }
+    .lb-image-box img {
+      width: 100%; height: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lb-caption {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      text-align: center;
+      background: rgba(5,5,5,0.85); backdrop-filter: blur(10px);
+      border: 1px solid var(--gold-dim);
+      padding: 10px 28px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .lb-caption .cat { font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+    .lb-caption .title { font-size: 1rem; color: var(--gold-light); font-weight: 600; }
+
+    .lb-counter {
+      position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
+      font-size: 0.78rem; color: var(--muted); letter-spacing: 2px;
+      background: rgba(5,5,5,0.8); padding: 6px 16px; border-radius: 12px;
+      border: 1px solid var(--gold-dim);
+    }
+
+    /* ===== FOOTER ===== */
+    .g-footer {
+      text-align: center; padding: 30px 24px;
+      border-top: 1px solid var(--gold-dim);
+      color: var(--muted); font-size: 0.8rem; letter-spacing: 1.5px;
+      position: relative; z-index: 1;
+    }
+    .g-footer i { color: var(--gold); margin: 0 6px; }
+
+    /* ===== MOBILE OPTIMISATIONS ===== */
+    @media (max-width: 600px) {
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .photo-grid .span-wide { grid-column: span 2; }
+      .photo-card.span-tall { min-height: 260px; }
+      .photo-card { border-radius: 8px; }
+      .page-hero { padding: 40px 16px 28px; }
+      .lb-nav { width: 40px; height: 40px; font-size: 0.85rem; }
+      .lb-prev { left: 6px; }
+      .lb-next { right: 6px; }
+      .lb-image-box { max-width: 96vw; border-radius: 8px; }
+      .lb-caption { white-space: normal; max-width: 90vw; }
+      .g-header { padding: 12px 14px; }
+      .g-header-title { font-size: 1rem; }
+      .back-btn { padding: 8px 14px; font-size: 0.78rem; }
+      .group-info h2 { font-size: 1.1rem; }
+    }
+
+    /* Fade-in for cards */
+    .photo-card {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease),
+                  box-shadow 0.4s var(--ease), border-color 0.3s ease;
+    }
+    .photo-card.visible { opacity: 1; transform: translateY(0); }
+
+    /* Touch active state */
+    .photo-card:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+
+  <!-- Marble texture -->
+  <div class="marble-overlay"></div>
+
+  <!-- Background Music -->
+  <audio id="bg-music" src="نور العيلة - شروق.mp3" loop></audio>
+
+  <!-- HEADER -->
+  <header class="g-header">
+    <a href="index.html" class="back-btn" id="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span id="back-text">Back to Gallery</span>
+    </a>
+    <div class="g-header-title">
+      <i class="fa-solid fa-crown"></i>
+      <span id="header-label">Shrouk Gallery</span>
+    </div>
+    <!-- Music Toggle -->
+    <button class="music-btn" id="music-btn" aria-label="Toggle Background Music">
+      <i class="fa-solid fa-music"></i>
+      <div class="eq">
+        <span></span><span></span><span></span>
+      </div>
+    </button>
+    <button class="lang-btn" id="lang-btn">
+      <i class="fa-solid fa-globe"></i>
+      <span id="lang-text">العربية</span>
+    </button>
+  </header>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="hero-divider">
+      <span></span>
+      <i class="fa-solid fa-images"></i>
+      <span></span>
+    </div>
+    <h1 id="page-title">The Complete Royal Portfolio</h1>
+    <p id="page-subtitle">All Moments • Class of 2026</p>
+  </div>
+
+  <!-- GALLERY GROUPS -->
+  <main class="gallery-page">
+
+    <!-- ── Group 1: Girl Alone ── -->
+    <section class="group-section" id="group-1">
+      <div class="group-header">
+        <div class="group-icon"><i class="fa-solid fa-star"></i></div>
+        <div class="group-info">
+          <h2 id="g1-title">Solo Portraits</h2>
+          <p id="g1-sub">Shrouk — Independent Brilliance</p>
+        </div>
+        <span class="group-count" id="g1-count">13 Photos</span>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card span-tall" data-src="1.png" data-cat="Portrait" data-title="The Sovereign Smile" data-cat-ar="بورتريه" data-title-ar="الابتسامة السيادية">
+          <img src="1.png" alt="Shrouk Portrait 1" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Sovereign Smile" data-ar="الابتسامة السيادية">The Sovereign Smile</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-wide" data-src="2.png" data-cat="Moment" data-title="Reflective Triumph" data-cat-ar="لحظة تاريخية" data-title-ar="تأمل الانتصار">
+          <img src="2.png" alt="Shrouk Portrait 2" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="Reflective Triumph" data-ar="تأمل الانتصار">Reflective Triumph</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="3.png" data-cat="Portrait" data-title="Academic Honor" data-cat-ar="بورتريه" data-title-ar="وسام الأكاديمية">
+          <img src="3.png" alt="Shrouk Portrait 3" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="Academic Honor" data-ar="وسام الأكاديمية">Academic Honor</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="4.png" data-cat="Candid" data-title="Golden Horizon" data-cat-ar="لقطة عفوية" data-title-ar="الأفق الذهبي">
+          <img src="4.png" alt="Shrouk Portrait 4" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Candid" data-ar="لقطة عفوية">Candid</span>
+            <span class="title" data-en="Golden Horizon" data-ar="الأفق الذهبي">Golden Horizon</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="5.png" data-cat="Portrait" data-title="Prestigious Stature" data-cat-ar="بورتريه" data-title-ar="الهيبة والوقار">
+          <img src="5.png" alt="Shrouk Portrait 5" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="Prestigious Stature" data-ar="الهيبة والوقار">Prestigious Stature</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="10.jpeg" data-cat="Portrait" data-title="Elegance Unveiled" data-cat-ar="بورتريه" data-title-ar="الأناقة الملكية">
+          <img src="10.jpeg" alt="Shrouk Portrait 6" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="Elegance Unveiled" data-ar="الأناقة الملكية">Elegance Unveiled</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 21, 2026, 09_37_22 AM.png" data-cat="Portrait" data-title="The Royal Portrait I" data-cat-ar="بورتريه" data-title-ar="البورتريه الملكي الأول">
+          <img src="ChatGPT Image Jun 21, 2026, 09_37_22 AM.png" alt="Shrouk Portrait 7" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Royal Portrait I" data-ar="البورتريه الملكي الأول">The Royal Portrait I</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-tall" data-src="ChatGPT Image Jun 21, 2026, 09_39_54 AM.png" data-cat="Moment" data-title="The Royal Portrait II" data-cat-ar="لحظة تاريخية" data-title-ar="البورتريه الملكي الثاني">
+          <img src="ChatGPT Image Jun 21, 2026, 09_39_54 AM.png" alt="Shrouk Portrait 8" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="The Royal Portrait II" data-ar="البورتريه الملكي الثاني">The Royal Portrait II</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-wide" data-src="ChatGPT Image Jun 21, 2026, 09_40_40 AM.png" data-cat="Portrait" data-title="The Royal Portrait III" data-cat-ar="بورتريه" data-title-ar="البورتريه الملكي الثالث">
+          <img src="ChatGPT Image Jun 21, 2026, 09_40_40 AM.png" alt="Shrouk Portrait 9" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Royal Portrait III" data-ar="البورتريه الملكي الثالث">The Royal Portrait III</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 21, 2026, 09_47_14 AM.png" data-cat="Portrait" data-title="The Royal Portrait IV" data-cat-ar="بورتريه" data-title-ar="البورتريه الملكي الرابع">
+          <img src="ChatGPT Image Jun 21, 2026, 09_47_14 AM.png" alt="Shrouk Portrait 10" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Royal Portrait IV" data-ar="البورتريه الملكي الرابع">The Royal Portrait IV</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 21, 2026, 09_49_24 AM.png" data-cat="Candid" data-title="The Royal Portrait V" data-cat-ar="لقطة عفوية" data-title-ar="البورتريه الملكي الخامس">
+          <img src="ChatGPT Image Jun 21, 2026, 09_49_24 AM.png" alt="Shrouk Portrait 11" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Candid" data-ar="لقطة عفوية">Candid</span>
+            <span class="title" data-en="The Royal Portrait V" data-ar="البورتريه الملكي الخامس">The Royal Portrait V</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 21, 2026, 09_51_06 AM.png" data-cat="Portrait" data-title="The Royal Portrait VI" data-cat-ar="بورتريه" data-title-ar="البورتريه الملكي السادس">
+          <img src="ChatGPT Image Jun 21, 2026, 09_51_06 AM.png" alt="Shrouk Portrait 12" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Royal Portrait VI" data-ar="البورتريه الملكي السادس">The Royal Portrait VI</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-wide" data-src="ChatGPT Image Jun 21, 2026, 09_55_57 AM.png" data-cat="Moment" data-title="The Royal Portrait VII" data-cat-ar="لحظة تاريخية" data-title-ar="البورتريه الملكي السابع">
+          <img src="ChatGPT Image Jun 21, 2026, 09_55_57 AM.png" alt="Shrouk Portrait 13" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="The Royal Portrait VII" data-ar="البورتريه الملكي السابع">The Royal Portrait VII</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Group 2: Girl & Mother ── -->
+    <section class="group-section" id="group-2">
+      <div class="group-header">
+        <div class="group-icon"><i class="fa-solid fa-heart"></i></div>
+        <div class="group-info">
+          <h2 id="g2-title">With Her Mother</h2>
+          <p id="g2-sub">Shrouk & Her Mother — A Bond of Love</p>
+        </div>
+        <span class="group-count" id="g2-count">3 Photos</span>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card span-wide" data-src="ChatGPT Image Jun 23, 2026, 01_38_25 AM.png" data-cat="Moment" data-title="Shared Joy" data-cat-ar="لحظة تاريخية" data-title-ar="فرحة مشتركة مع الأم">
+          <img src="ChatGPT Image Jun 23, 2026, 01_38_25 AM.png" alt="Shrouk & Mother 1" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="Shared Joy" data-ar="فرحة مشتركة مع الأم">Shared Joy</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 23, 2026, 02_03_01 AM.png" data-cat="Portrait" data-title="A Mother's Pride" data-cat-ar="بورتريه" data-title-ar="فخر الأمومة">
+          <img src="ChatGPT Image Jun 23, 2026, 02_03_01 AM.png" alt="Shrouk & Mother 2" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="A Mother's Pride" data-ar="فخر الأمومة">A Mother's Pride</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 23, 2026, 02_06_38 AM.png" data-cat="Moment" data-title="Cherished Bond" data-cat-ar="لحظة تاريخية" data-title-ar="رابطة لا تنفصم">
+          <img src="ChatGPT Image Jun 23, 2026, 02_06_38 AM.png" alt="Shrouk & Mother 3" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="Cherished Bond" data-ar="رابطة لا تنفصم">Cherished Bond</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Group 3: Girl & Father ── -->
+    <section class="group-section" id="group-3">
+      <div class="group-header">
+        <div class="group-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="group-info">
+          <h2 id="g3-title">With Her Father</h2>
+          <p id="g3-sub">Shrouk & Her Father — Pride & Protection</p>
+        </div>
+        <span class="group-count" id="g3-count">3 Photos</span>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card span-wide" data-src="6.png" data-cat="Moment" data-title="The Crown of Success" data-cat-ar="لحظة تاريخية" data-title-ar="تاج النجاح والتفوق">
+          <img src="6.png" alt="Shrouk & Father 1" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="The Crown of Success" data-ar="تاج النجاح والتفوق">The Crown of Success</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="7.png" data-cat="Portrait" data-title="Gaze of Pride" data-cat-ar="بورتريه" data-title-ar="نظرة الفخر الطموحة">
+          <img src="7.png" alt="Shrouk & Father 2" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="Gaze of Pride" data-ar="نظرة الفخر الطموحة">Gaze of Pride</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-tall" data-src="9.png" data-cat="Moment" data-title="Empowered Vision" data-cat-ar="لحظة تاريخية" data-title-ar="الرؤية الممكنة">
+          <img src="9.png" alt="Shrouk & Father 3" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="Empowered Vision" data-ar="الرؤية الممكنة">Empowered Vision</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Group 4: Full Family ── -->
+    <section class="group-section" id="group-4">
+      <div class="group-header">
+        <div class="group-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="group-info">
+          <h2 id="g4-title">The Royal Family</h2>
+          <p id="g4-sub">Shrouk, Father & Mother — Together</p>
+        </div>
+        <span class="group-count" id="g4-count">5 Photos</span>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card span-tall" data-src="ChatGPT Image Jun 23, 2026, 01_12_30 AM.png" data-cat="Portrait" data-title="The Graduation Banquet" data-cat-ar="بورتريه" data-title-ar="مأدبة التخرج العائلية">
+          <img src="ChatGPT Image Jun 23, 2026, 01_12_30 AM.png" alt="Family Portrait 1" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Graduation Banquet" data-ar="مأدبة التخرج العائلية">The Graduation Banquet</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-wide" data-src="ChatGPT Image Jun 23, 2026, 01_22_45 AM.png" data-cat="Moment" data-title="Imperial Milestone" data-cat-ar="لحظة تاريخية" data-title-ar="الحدث الإمبراطوري">
+          <img src="ChatGPT Image Jun 23, 2026, 01_22_45 AM.png" alt="Family Portrait 2" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Moment" data-ar="لحظة تاريخية">Moment</span>
+            <span class="title" data-en="Imperial Milestone" data-ar="الحدث الإمبراطوري">Imperial Milestone</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 23, 2026, 01_26_37 AM.png" data-cat="Portrait" data-title="Scholarly Legacy" data-cat-ar="بورتريه" data-title-ar="الإرث العلمي">
+          <img src="ChatGPT Image Jun 23, 2026, 01_26_37 AM.png" alt="Family Portrait 3" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="Scholarly Legacy" data-ar="الإرث العلمي">Scholarly Legacy</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card" data-src="ChatGPT Image Jun 23, 2026, 01_28_01 AM.png" data-cat="Candid" data-title="The Royal Seat" data-cat-ar="لقطة عفوية" data-title-ar="المقعد الملكي">
+          <img src="ChatGPT Image Jun 23, 2026, 01_28_01 AM.png" alt="Family Portrait 4" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Candid" data-ar="لقطة عفوية">Candid</span>
+            <span class="title" data-en="The Royal Seat" data-ar="المقعد الملكي">The Royal Seat</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="photo-card span-wide" data-src="ChatGPT Image Jun 23, 2026, 01_33_04 AM.png" data-cat="Portrait" data-title="The Grand Portrait" data-cat-ar="بورتريه" data-title-ar="البورتريه الكبير">
+          <img src="ChatGPT Image Jun 23, 2026, 01_33_04 AM.png" alt="Family Portrait 5" loading="lazy">
+          <div class="photo-card-overlay">
+            <span class="cat" data-en="Portrait" data-ar="بورتريه">Portrait</span>
+            <span class="title" data-en="The Grand Portrait" data-ar="البورتريه الكبير">The Grand Portrait</span>
+          </div>
+          <div class="expand-icon"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="g-footer">
+    <i class="fa-solid fa-crown"></i>
+    <span id="footer-text">© 2026 Shrouk Gallery — Crafted with Excellence</span>
+    <i class="fa-solid fa-crown"></i>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="g-lightbox" role="dialog" aria-modal="true" aria-label="Photo lightbox">
+    <button class="lb-close" id="lb-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <span class="lb-counter" id="lb-counter">1 / 24</span>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="lb-image-box">
+      <img id="lb-img" src="" alt="">
+    </div>
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="lb-caption">
+      <div class="cat" id="lb-cat"></div>
+      <div class="title" id="lb-title"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Language ===== */
+    let lang = 'en';
+    const translations = {
+      en: {
+        'back': 'Back to Gallery',
+        'header': 'Shrouk Gallery',
+        'lang': 'العربية',
+        'page-title': 'The Complete Royal Portfolio',
+        'page-sub': 'All Moments • Class of 2026',
+        'g1': 'Solo Portraits', 'g1-sub': 'Shrouk — Independent Brilliance', 'g1-count': '13 Photos',
+        'g2': 'With Her Mother', 'g2-sub': 'Shrouk & Her Mother — A Bond of Love', 'g2-count': '3 Photos',
+        'g3': 'With Her Father', 'g3-sub': 'Shrouk & Her Father — Pride & Protection', 'g3-count': '3 Photos',
+        'g4': 'The Royal Family', 'g4-sub': 'Shrouk, Father & Mother — Together', 'g4-count': '5 Photos',
+        'footer': '© 2026 Shrouk Gallery — Crafted with Excellence'
+      },
+      ar: {
+        'back': 'العودة للمعرض',
+        'header': 'معرض شروق',
+        'lang': 'English',
+        'page-title': 'المعرض الملكي الكامل',
+        'page-sub': 'جميع اللحظات • دفعة 2026',
+        'g1': 'بورتريهات منفردة', 'g1-sub': 'شروق — تألق مستقل', 'g1-count': '١٣ صورة',
+        'g2': 'مع أمها', 'g2-sub': 'شروق وأمها — رابطة المحبة', 'g2-count': '٣ صور',
+        'g3': 'مع أبيها', 'g3-sub': 'شروق وأبيها — الفخر والحماية', 'g3-count': '٣ صور',
+        'g4': 'العائلة الملكية', 'g4-sub': 'شروق والأب والأم — معاً', 'g4-count': '٥ صور',
+        'footer': '© 2026 معرض شروق — صُمم بامتياز وفخامة'
+      }
+    };
+
+    function applyLang(l) {
+      lang = l;
+      const t = translations[l];
+      document.getElementById('back-text').textContent = t['back'];
+      document.getElementById('header-label').textContent = t['header'];
+      document.getElementById('lang-text').textContent = t['lang'];
+      document.getElementById('page-title').textContent = t['page-title'];
+      document.getElementById('page-subtitle').textContent = t['page-sub'];
+      document.getElementById('g1-title').textContent = t['g1'];
+      document.getElementById('g1-sub').textContent = t['g1-sub'];
+      document.getElementById('g1-count').textContent = t['g1-count'];
+      document.getElementById('g2-title').textContent = t['g2'];
+      document.getElementById('g2-sub').textContent = t['g2-sub'];
+      document.getElementById('g2-count').textContent = t['g2-count'];
+      document.getElementById('g3-title').textContent = t['g3'];
+      document.getElementById('g3-sub').textContent = t['g3-sub'];
+      document.getElementById('g3-count').textContent = t['g3-count'];
+      document.getElementById('g4-title').textContent = t['g4'];
+      document.getElementById('g4-sub').textContent = t['g4-sub'];
+      document.getElementById('g4-count').textContent = t['g4-count'];
+      document.getElementById('footer-text').textContent = t['footer'];
+
+      // Update card overlays
+      document.querySelectorAll('.photo-card-overlay .cat').forEach(el => {
+        el.textContent = el.getAttribute(`data-${l}`) || el.getAttribute('data-en');
+      });
+      document.querySelectorAll('.photo-card-overlay .title').forEach(el => {
+        el.textContent = el.getAttribute(`data-${l}`) || el.getAttribute('data-en');
+      });
+
+      document.documentElement.lang = l;
+      document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+      document.body.classList.toggle('rtl-mode', l === 'ar');
+    }
+
+    document.getElementById('lang-btn').addEventListener('click', () => {
+      applyLang(lang === 'en' ? 'ar' : 'en');
+    });
+
+    applyLang('en');
+
+    /* ===== Lightbox ===== */
+    const allCards = Array.from(document.querySelectorAll('.photo-card'));
+    let lbIndex = 0;
+
+    const lightbox = document.getElementById('g-lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const lbCat = document.getElementById('lb-cat');
+    const lbTitle = document.getElementById('lb-title');
+    const lbCounter = document.getElementById('lb-counter');
+
+    function openLightbox(index) {
+      lbIndex = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const card = allCards[lbIndex];
+      const src = card.getAttribute('data-src');
+      const catKey = lang === 'ar' ? 'data-cat-ar' : 'data-cat';
+      const titleKey = lang === 'ar' ? 'data-title-ar' : 'data-title';
+
+      lbImg.src = src;
+      lbCat.textContent = card.getAttribute(catKey) || card.getAttribute('data-cat');
+      lbTitle.textContent = card.getAttribute(titleKey) || card.getAttribute('data-title');
+      lbCounter.textContent = `${lbIndex + 1} / ${allCards.length}`;
+    }
+
+    function lbPrev() {
+      lbIndex = (lbIndex - 1 + allCards.length) % allCards.length;
+      updateLightbox();
+    }
+
+    function lbNext() {
+      lbIndex = (lbIndex + 1) % allCards.length;
+      updateLightbox();
+    }
+
+    allCards.forEach((card, i) => {
+      card.addEventListener('click', () => openLightbox(i));
+    });
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); lbPrev(); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); lbNext(); });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard
+    window.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') lbPrev();
+      else if (e.key === 'ArrowRight') lbNext();
+    });
+
+    // Touch swipe on lightbox
+    let tsX = 0;
+    lightbox.addEventListener('touchstart', e => { tsX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tsX;
+      if (Math.abs(dx) > 40) { dx < 0 ? lbNext() : lbPrev(); }
+    });
+
+    /* ===== Scroll reveal ===== */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, Math.min(i * 60, 300));
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.07 });
+
+    allCards.forEach(card => observer.observe(card));
+
+    /* ===== Background Music ===== */
+    const bgMusic = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+
+    function setMusicPlaying(playing) {
+      if (playing) {
+        musicBtn.classList.add('playing');
+      } else {
+        musicBtn.classList.remove('playing');
+      }
+    }
+
+    // Try auto-play immediately (works on desktop, may be blocked on mobile)
+    function tryAutoPlay() {
+      if (!bgMusic) return;
+      bgMusic.volume = 0.8;
+      bgMusic.play().then(() => {
+        setMusicPlaying(true);
+      }).catch(() => {
+        // Autoplay blocked — wait for first user interaction
+        setMusicPlaying(false);
+        const playOnInteraction = () => {
+          bgMusic.play().then(() => {
+            setMusicPlaying(true);
+          }).catch(() => {});
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('click', playOnInteraction);
+        };
+        document.addEventListener('touchstart', playOnInteraction, { once: true });
+        document.addEventListener('click', playOnInteraction, { once: true });
+      });
+    }
+
+    // Music toggle button
+    if (musicBtn && bgMusic) {
+      musicBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (bgMusic.paused) {
+          bgMusic.play().then(() => setMusicPlaying(true)).catch(() => {});
+        } else {
+          bgMusic.pause();
+          setMusicPlaying(false);
+        }
+      });
+    }
+
+    tryAutoPlay();
+  </script>
+</body>
+</html>
+
