@@ -123,7 +123,7 @@ navLinks.forEach(link => {
 });
 
 // ==================== CARD ANIMATIONS (CSS CLASS BASED) ====================
-const cards = document.querySelectorAll('.philosophy-card, .skill-card, .contact-card, .project-card');
+const cards = document.querySelectorAll('.philosophy-card, .service-card, .skill-category-block, .contact-card, .project-card');
 
 const cardObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -142,5 +142,6 @@ cards.forEach((card) => {
 });
 
 // Console Branding
-console.log('%c🚀 Built by Abdelrahman Yasser', 'color: #667eea; font-size: 14px; font-weight: bold;');
+console.log('%c🚀 Built by Abdelrahman El-Assiouty', 'color: #667eea; font-size: 14px; font-weight: bold;');
+
 

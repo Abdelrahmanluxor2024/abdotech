@@ -5,7 +5,7 @@ const translations = {
         nav: {
             home: "Home",
             about: "About",
-            expertise: "Expertise",
+            expertise: "Services & Skills",
             portfolio: "Portfolio",
             videos: "Videos",
             contact: "Contact",
@@ -15,54 +15,64 @@ const translations = {
         },
         // Hero Section
         hero: {
-            badge: "Available for collaboration",
-            name: "Abdelrahman Yasser",
-            title1: "AI Architect &",
-            title2: "Software Engineer",
-            description: "Transforming complex ideas into intelligent, scalable solutions. Pioneering the future of AI-driven innovation.",
+            badge: "Available for Freelance & Remote Work",
+            name: "Abdelrahman El-Assiouty",
+            title1: "Front-End Developer &",
+            title2: "Web Architect",
+            description: "👋 Hi, I'm Abdelrahman — a passionate Front-End Developer based in Luxor, Egypt. I specialize in building modern, fast, and responsive web applications using the latest technologies in the industry.",
             cta1: "Explore My Work",
             cta2: "Get In Touch",
             stat1Label: "Years Experience",
             stat2Label: "Projects Delivered",
-            stat3Label: "AI Solutions",
+            stat3Label: "Client Satisfaction",
             scrollText: "Scroll to explore"
         },
         // About Section
         about: {
             label: "Who I Am",
-            title: "Crafting the Future with Code & Intelligence",
-            intro1: "I am <strong>Abdelrahman Yasser</strong>, a visionary software engineer and artificial intelligence specialist dedicated to pushing the boundaries of what's possible with technology.",
-            intro2: "With deep expertise in <strong>Machine Learning</strong>, <strong>neural networks</strong>, and <strong>intelligent systems</strong>, I transform complex challenges into elegant, scalable solutions that drive real-world impact. My approach combines cutting-edge AI research with practical engineering excellence to build products that don't just work—they innovate.",
-            card1Title: "Problem Solver",
-            card1Text: "I thrive on complexity, breaking down intricate problems into innovative, actionable solutions that deliver measurable results.",
-            card2Title: "Forward-Thinking",
-            card2Text: "My passion lies in emerging technologies—AI, automation, and intelligent systems that shape tomorrow's digital landscape.",
-            card3Title: "Builder & Creator",
-            card3Text: "From concept to deployment, I architect and build intelligent applications that are robust, scalable, and future-proof.",
-            mission: "<strong>My Mission:</strong> To bridge the gap between human ambition and technological capability, creating AI-powered solutions that empower businesses and individuals to achieve what was once impossible."
+            title: "Crafting High-Performance Web Applications",
+            intro1: "I am <strong>Abdelrahman El-Assiouty</strong>, a passionate Front-End Developer based in Luxor, Egypt, dedicated to crafting modern, ultra-fast, and responsive digital experiences.",
+            intro2: "I specialize in building Single Page Applications (SPA) with <strong>React.js</strong> and <strong>TypeScript</strong>, designing clean user interfaces with <strong>Tailwind CSS</strong>, creating bilingual Arabic & English platforms, and optimizing web applications for top performance and SEO.",
+            card1Title: "Clean & Maintainable Code",
+            card1Text: "Writing structured, scalable, and well-documented frontend code using modern best practices.",
+            card2Title: "Fast & Quality Delivery",
+            card2Text: "Delivering high-performance, pixel-perfect web apps on schedule with meticulous attention to detail.",
+            card3Title: "Global Remote Collaboration",
+            card3Text: "Effective communication and availability for freelance projects, remote full-time roles, and long-term partnerships worldwide.",
+            mission: "<strong>My Mission:</strong> To bridge creative design and technical execution, delivering fast, accessible, and engaging web solutions that empower businesses worldwide."
         },
-        // Expertise Section
+        // Expertise & Services Section
         expertise: {
-            label: "Core Competencies",
-            title: "Technical Excellence & Innovation",
-            skill1: "Advanced Programming",
-            skill1Text: "Mastery of multiple programming languages and frameworks, with expertise in Python, JavaScript, C++, and modern development tools. Building clean, efficient, and maintainable code is my foundation.",
-            skill2: "AI & Machine Learning",
-            skill2Text: "Deep expertise in designing and deploying machine learning models, neural networks, and intelligent systems. From research to production, I deliver AI solutions that learn, adapt, and excel.",
-            skill3: "Intelligent Applications",
-            skill3Text: "Specialized in building smart platforms, chatbots, recommendation engines, and predictive systems that leverage AI to solve complex business problems and enhance user experiences.",
-            skill4: "Creative Innovation",
-            skill4Text: "Combining technical mastery with creative thinking to design novel solutions. I don't just follow trends—I anticipate them and build systems that stand the test of time.",
-            skill5: "Analytical Mindset",
-            skill5Text: "Strong analytical and problem-solving capabilities. I dissect challenges methodically, identify patterns, and engineer solutions backed by data-driven insights and strategic thinking.",
-            skill6: "Product Development",
-            skill6Text: "End-to-end product development from ideation to launch. I transform abstract ideas into production-ready, scalable digital products that users love and businesses rely on."
+            label: "Services & Technical Skills",
+            title: "What I Do & Tech Stack",
+            servicesTitle: "Professional Services",
+            service1: "Web Design",
+            service1Desc: "Designing clean, modern, and user-centric web interfaces tailored to elevate your brand identity.",
+            service2: "Web Development",
+            service2Desc: "Developing fast, responsive, and robust websites with modern web standards and clean architecture.",
+            service3: "User Experience Design (UED)",
+            service3Desc: "Crafting intuitive user journeys and seamless interactive flows that enhance user satisfaction and engagement.",
+            service4: "Custom Software Development",
+            service4Desc: "Building custom frontend solutions, dynamic portals, and web tools designed specifically for your business needs.",
+            service5: "Mobile Application Development",
+            service5Desc: "Creating responsive, mobile-first web applications and cross-platform experiences optimized for handheld devices.",
+            service6: "Software Testing",
+            service6Desc: "Conducting thorough cross-browser, layout, and functionality testing to guarantee flawless user experiences.",
+            service7: "Single Page Applications (SPA)",
+            service7Desc: "Engineering dynamic, lightning-fast SPAs with React.js that load instantly and provide smooth navigation.",
+            
+            // Skills Categories
+            skillsTitle: "Technical Stack & Tools",
+            catPriority: "Core Priority Technologies",
+            catImportant: "Frontend & Web Specializations",
+            catTools: "Tools & Ecosystem",
+            catAdditional: "Additional Skills & Concepts"
         },
         // Portfolio Section
         portfolio: {
             label: "My Work",
-            title: "Featured Projects & Websites",
-            description: "A showcase of cutting-edge projects that demonstrate my expertise in AI, web development, and intelligent systems.",
+            title: "Featured Projects & Platforms",
+            description: "A showcase of responsive web applications, educational portals, and custom frontend solutions.",
             viewLive: "View Live",
             project1Title: "E-Exam Management System",
             project1Desc: "An integrated software platform for creating and managing automated exams, storing student data and answers in a cloud database to deliver instant academic evaluations.",
@@ -74,7 +84,7 @@ const translations = {
             project4Desc: "A dynamic web application built as a test and development environment to demonstrate advanced features and evaluate frontend integration with backend systems.",
             project5Title: "Tube App for Media Playback",
             project5Desc: "A custom interface for managing and playing digital videos, designed with a fast web structure to guarantee an excellent, cross-device visual browsing experience.",
-            project6Title: "Abdelrahman Yasser Portfolio",
+            project6Title: "Abdelrahman Portfolio",
             project6Desc: "A professional personal website showcasing software projects, smart applications, and technical expertise in modern frontend development.",
             project7Title: "Blue Neon API Dashboard",
             project7Desc: "An innovative user interface using a modern color palette (neon and amber), customized for interactive dashboards and structured data visualization.",
@@ -85,13 +95,13 @@ const translations = {
         videos: {
             label: "Video Showcase",
             title: "My Work in Action",
-            description: "Watch demonstrations of my projects, tutorials, and insights into the world of AI and software engineering.",
-            video1Title: "Building AI-Powered Chat Applications",
-            video1Desc: "Complete tutorial on creating intelligent chatbots using modern NLP techniques and deep learning models.",
-            video2Title: "Machine Learning Model Deployment",
-            video2Desc: "Step-by-step guide to deploying ML models in production environments with best practices and optimization techniques.",
-            video3Title: "Modern Web Development with AI Integration",
-            video3Desc: "Learn how to integrate AI capabilities into modern web applications for enhanced user experiences.",
+            description: "Watch demonstrations of my projects, tutorials, and insights into web engineering.",
+            video1Title: "Building Modern React Applications",
+            video1Desc: "Complete tutorial on creating fast Single Page Applications using React.js and modern state management.",
+            video2Title: "Frontend Optimization & Deployment",
+            video2Desc: "Step-by-step guide to optimizing web performance, responsive layouts, and deploying via Vite and Vercel.",
+            video3Title: "Modern Web Design & Tailwind CSS",
+            video3Desc: "Learn how to build sleek, responsive user interfaces with Tailwind CSS and modern CSS utility architectures.",
             views: "views",
             ago: "ago",
             week: "week",
@@ -101,20 +111,21 @@ const translations = {
         // Contact Section
         contact: {
             label: "Let's Connect",
-            title: "Ready to Build Something Amazing?",
-            description: "Whether you have a project in mind, need consultation, or want to explore collaboration opportunities, I'd love to hear from you.",
+            title: "Ready to Build Something Amazing Together?",
+            description: "I am open to freelance projects, remote full-time opportunities, and long-term collaborations. Feel free to reach out via email, WhatsApp, or social profiles!",
             email: "Email",
             linkedin: "LinkedIn",
             github: "GitHub",
-            ctaTitle: "Let's Create the Future Together",
-            ctaText: "I'm always open to discussing new projects, innovative ideas, or opportunities to be part of your vision.",
+            whatsapp: "WhatsApp & Mobile",
+            ctaTitle: "Let me bring your ideas to life",
+            ctaText: "Whether you need a full web app from scratch, a UI redesign, or a fast responsive landing page, let's discuss your vision.",
             ctaBtn: "Start a Conversation"
         },
         // Footer
         footer: {
-            tagline: "Building intelligent solutions for a smarter future.",
-            copyright: "© 2024 Abdelrahman Yasser. All rights reserved.",
-            motto: "Powered by Intelligence. Driven by Innovation."
+            tagline: "Building modern, fast, and responsive web applications.",
+            copyright: "© 2026 Abdelrahman El-Assiouty. All rights reserved.",
+            motto: "Crafted with Passion & Precision."
         },
         comments: {
             label: "Guestbook",
@@ -126,13 +137,13 @@ const translations = {
         },
         modal: {
             title: "Start a Conversation",
-            subtitle: "Leave your details and project idea, and we will get back to you.",
+            subtitle: "Leave your details and project idea, and I will get back to you promptly.",
             nameLabel: "Full Name",
-            phoneLabel: "Phone Number",
-            ideaLabel: "Project Idea",
+            phoneLabel: "Phone / WhatsApp",
+            ideaLabel: "Project Details",
             namePlaceholder: "Your Name",
-            phonePlaceholder: "01xxxxxxxxx",
-            ideaPlaceholder: "Describe your project idea...",
+            phonePlaceholder: "01064106070",
+            ideaPlaceholder: "Describe your project idea or requirements...",
             submitBtn: "Send Message"
         },
         signupBanner: {
@@ -147,7 +158,7 @@ const translations = {
         nav: {
             home: "الرئيسية",
             about: "من أنا",
-            expertise: "الخبرات",
+            expertise: "الخدمات والمهارات",
             portfolio: "الأعمال",
             videos: "الفيديوهات",
             contact: "تواصل معي",
@@ -156,69 +167,65 @@ const translations = {
             langBtn: "English"
         },
         // Hero Section
-        arHero: { // renamed dummy to prevent key collision if needed, but hero object standard is ok. Let's keep hero key
-            badge: "متاح للتعاون",
-            name: "عبدالرحمن ياسر",
-            title1: "مهندس ذكاء اصطناعي",
-            title2: "و مطور برمجيات",
-            description: "تحويل الأفكار المعقدة إلى حلول ذكية قابلة للتطوير. رائد في مستقبل الابتكار القائم على الذكاء الاصطناعي.",
-            cta1: "استكشف أعمالي",
-            cta2: "تواصل معي",
-            stat1Label: "سنوات خبرة",
-            stat2Label: "مشروع منجز",
-            stat3Label: "حل ذكاء اصطناعي",
-            scrollText: "اسحب للاستكشاف"
-        },
-        // Wait, let's keep the standard keys. I will rewrite the rest of Arabic structure fully below
         hero: {
-            badge: "متاح للتعاون",
-            name: "عبدالرحمن ياسر",
-            title1: "مهندس ذكاء اصطناعي",
-            title2: "و مطور برمجيات",
-            description: "تحويل الأفكار المعقدة إلى حلول ذكية قابلة للتطوير. رائد في مستقبل الابتكار القائم على الذكاء الاصطناعي.",
+            badge: "متاح للعمل الحر والعمل عن بُعد",
+            name: "عبدالرحمن الأسيوطي",
+            title1: "مطور واجهات أمامیة",
+            title2: "و مهندس مواقع ويب",
+            description: "👋 مرحباً، أنا عبدالرحمن — مطور واجهات أمامية شغوف مقيم في الأقصر، مصر. متخصص في بناء تطبيقات ويب حديثة، سريعة، ومستجيبة باستخدام أحدث التقنيات.",
             cta1: "استكشف أعمالي",
             cta2: "تواصل معي",
             stat1Label: "سنوات خبرة",
             stat2Label: "مشروع منجز",
-            stat3Label: "حل ذكاء اصطناعي",
+            stat3Label: "رضا العملاء",
             scrollText: "اسحب للاستكشاف"
         },
         // About Section
         about: {
             label: "من أنا",
-            title: "صياغة المستقبل بالبرمجة والذكاء",
-            intro1: "أنا <strong>عبدالرحمن ياسر</strong>، مهندس برمجيات ذو رؤية ومتخصص في الذكاء الاصطناعي، ملتزم بدفع حدود ما هو ممكن مع التكنولوجيا.",
-            intro2: "بخبرة عميقة في <strong>التعلم الآلي</strong> و<strong>الشبكات العصبية</strong> و<strong>الأنظمة الذكية</strong>، أحول التحديات المعقدة إلى حلول أنيقة وقابلة للتطوير تحدث تأثيراً حقيقياً. نهجي يجمع بين أبحاث الذكاء الاصطناعي المتطورة والتميز الهندسي العملي لبناء منتجات لا تعمل فقط - بل تبتكر.",
-            card1Title: "حل المشكلات",
-            card1Text: "أزدهر في التعقيد، أحلل المشاكل المعقدة إلى حلول مبتكرة وقابلة للتنفيذ تحقق نتائج قابلة للقياس.",
-            card2Title: "تفكير مستقبلي",
-            card2Text: "شغفي يكمن في التقنيات الناشئة - الذكاء الاصطناعي والأتمتة والأنظمة الذكية التي تشكل المشهد الرقمي للغد.",
-            card3Title: "بناء وإبداع",
-            card3Text: "من الفكرة إلى النشر، أصمم وأبني تطبيقات ذكية قوية وقابلة للتطوير ومستقبلية.",
-            mission: "<strong>مهمتي:</strong> سد الفجوة بين الطموح البشري والقدرة التكنولوجية، وإنشاء حلول مدعومة بالذكاء الاصطناعي تمكن الشركات والأفراد من تحقيق ما كان مستحيلاً."
+            title: "صياغة تطبيقات ويب حديثة وفائقة الأداء",
+            intro1: "أنا <strong>عبدالرحمن الأسيوطي</strong>، مطور واجهات أمامية (Front-End Developer) شغوف ومقيم في الأقصر، مصر، مكرس لبناء تجارب رقمية حديثة وسريعة ومتجاوبة مع جميع الشاشات.",
+            intro2: "أتمتع بخبرة متخصصة في تطوير تطبيقات الصفحة الواحدة (SPA) باستخدام <strong>React.js</strong> و <strong>TypeScript</strong>، وتصميم واجهات مستخدم أنيقة ومستجيبة باستخدام <strong>Tailwind CSS</strong>، وبناء منصات متعددة اللغات (عربي وإنجليزي)، وتحسين أداء المواقع لمحركات البحث (SEO).",
+            card1Title: "كود نظيف وقابل للصيانة",
+            card1Text: "كتابة برمجيات واجهة أمامية عالية الجودة، منظمة، وموثقة طبقاً لأفضل الممارسات العالمية.",
+            card2Title: "تسليم سريع بجودة عالية",
+            card2Text: "التزام كامل بالمواعيد ودقة فائقة في التفاصيل مع تقديم أفضل أداء واستجابة.",
+            card3Title: "تعاون عن بُعد حول العالم",
+            card3Text: "تواصل فعال وجاهزية تامة للمشاريع المستقلة، الوظائف الكاملة عن بُعد، والتعاون طويل الأجل.",
+            mission: "<strong>مهمتي:</strong> تحويل الأفكار والتصاميم إلى تطبيقات ويب سريعة، سهلة الاستخدام، وذات تجربة استثنائية تمكن الأفراد والشركات من النمو والتألق."
         },
-        // Expertise Section
+        // Expertise & Services Section
         expertise: {
-            label: "الكفاءات الأساسية",
-            title: "التميز التقني والابتكار",
-            skill1: "البرمجة المتقدمة",
-            skill1Text: "إتقان لغات وأطر عمل برمجية متعددة، مع خبرة في Python و JavaScript و C++ وأدوات التطوير الحديثة. بناء كود نظيف وفعال وقابل للصيانة هو أساسي.",
-            skill2: "الذكاء الاصطناعي والتعلم الآلي",
-            skill2Text: "خبرة عميقة في تصميم ونشر نماذج التعلم الآلي والشبكات العصبية والأنظمة الذكية. من البحث إلى الإنتاج، أقدم حلول ذكاء اصطناعي تتعلم وتتكيف وتتفوق.",
-            skill3: "التطبيقات الذكية",
-            skill3Text: "متخصص في بناء منصات ذكية وروبوتات دردشة ومحركات توصيات وأنظمة تنبؤية تستفيد من الذكاء الاصطناعي لحل مشاكل الأعمال المعقدة وتحسين تجربة المستخدم.",
-            skill4: "الابتكار الإبداعي",
-            skill4Text: "الجمع بين الإتقان التقني والتفكير الإبداعي لتصميم حلول جديدة. لا أتبع الاتجاهات فقط - بل أتوقعها وأبني أنظمة تصمد أمام اختبار الزمن.",
-            skill5: "العقلية التحليلية",
-            skill5Text: "قدرات تحليلية قوية وحل المشكلات. أحلل التحديات بشكل منهجي، وأحدد الأنماط، وأهندس حلولاً مدعومة برؤى مدفوعة بالبيانات وتفكير استراتيجي.",
-            skill6: "تطوير المنتجات",
-            skill6Text: "تطوير منتجات من البداية إلى الإطلاق. أحول الأفكار المجردة إلى منتجات رقمية جاهزة للإنتاج وقابلة للتطوير يحبها المستخدمون وتعتمد عليها الشركات."
+            label: "الخدمات والمهارات التقنية",
+            title: "الخدمات التقنية والمهارات البرمجية",
+            servicesTitle: "الخدمات الاحترافية",
+            service1: "تصميم المواقع (Web Design)",
+            service1Desc: "تصميم واجهات ويب عصرية ومبتكرة تبرز هوية علامتك التجارية وتمنح مستخدميك تجربة تصفح فريدة.",
+            service2: "تطوير المواقع (Web Development)",
+            service2Desc: "بناء مواقع وتطبيقات ويب سريعة، مستجيبة، وآمنة تعتمد على أفضل التقنيات والمعايير البرمجية.",
+            service3: "تصميم تجربة المستخدم (UED / UI-UX)",
+            service3Desc: "دراسة وتصميم رحلة المستخدم لتكون سلسة وممتعة وبسيطة تزيد من تفاعل الزوار ومعدلات التحويل.",
+            service4: "تطوير البرمجيات المخصصة (Custom Software)",
+            service4Desc: "تطوير حلول برمجة واجهات أمامية مخصصة ومنصات تفاعلية مصممة خصيصاً لتلبية متطلبات عملك.",
+            service5: "تطوير تطبيقات الهواتف الذكية (Mobile Apps)",
+            service5Desc: "بناء تطبيقات واجهات متوافقة ومستجيبة كلياً للهواتف الذكية والأجهزة اللوحية بكفاءة عالية.",
+            service6: "اختبار وفحص البرمجيات (Software Testing)",
+            service6Desc: "إجراء اختبارات دقيقة للشاشات، الاستجابة، الوظائف، والأداء لضمان تجربة خالية من الأخطاء.",
+            service7: "تطبيقات الصفحة الواحدة (Single Page Applications)",
+            service7Desc: "بناء تطبيقات SPA فائقة السرعة بـ React.js تضمن انتقالات لحظية ودون الحاجة لإعادة تحميل الصفحة.",
+            
+            // Skills Categories
+            skillsTitle: "المهارات والأدوات البرمجية",
+            catPriority: "الأولوية القصوى (Top Priority)",
+            catImportant: "تطوير الواجهات والويب (Important)",
+            catTools: "الأدوات وأدوات التطوير (Tools)",
+            catAdditional: "مهارات ومفاهيم إضافية (Additional)"
         },
         // Portfolio Section
         portfolio: {
             label: "أعمالي",
-            title: "المشاريع والمواقع المميزة",
-            description: "عرض للمشاريع المتطورة التي تظهر خبرتي في الذكاء الاصطناعي وتطوير الويب والأنظمة الذكية.",
+            title: "المشاريع والمنصات المميزة",
+            description: "عرض للمشاريع وتطبيقات الويب المستجيبة والمنصات التفاعلية التي قمت بتطويرها.",
             viewLive: "عرض مباشر",
             project1Title: "نظام إدارة الامتحانات الإلكترونية",
             project1Desc: "منصة برمجية متكاملة تتيح بناء وإدارة الاختبارات المؤتمتة، وتخزين بيانات الطلاب وإجاباتهم في قاعدة بيانات سحابية منظمة لتقديم تقييم أكاديمي فوري ودقيق.",
@@ -230,8 +237,8 @@ const translations = {
             project4Desc: "تطبيق ويب ديناميكي متطور مبني كبيئة اختبار وتطوير (Beta) لاستعراض الميزات البرمجية المتقدمة واختبار استجابة واجهات المستخدم مع الأنظمة الخلفية.",
             project5Title: "تطبيق Tube لعرض المحتوى المرئي",
             project5Desc: "واجهة برمجية مخصصة لإدارة وتشغيل مقاطع الفيديو الرقمية، مصممة بهيكل ويب سريع يضمن تجربة تصفح مرئية ممتازة ومتوافقة مع جميع الشاشات.",
-            project6Title: "معرض أعمال عبد الرحمن ياسر",
-            project6Desc: "موقع شخصي احترافي يستعرض المشاريع البرمجية، التطبيقات الذكية، والمهارات التقنية في تطوير وهندسة واجهات الويب الأمامية.",
+            project6Title: "معرض أعمال عبدالرحمن الأسيوطي",
+            project6Desc: "موقع شخصي احترافي يستعرض المشاريع البرمجية، التطبيقات الحديثة، والمهارات التقنية في تطوير وهندسة واجهات الويب الأمامية.",
             project7Title: "واجهة Blue Neon البرمجية",
             project7Desc: "تصميم مبتكر لواجهة مستخدم تعتمد على تمازج الألوان العصرية (النيون والكهرمان)، مخصصة لبناء لوحات التحكم التفاعلية وعرض البيانات بشكل منظم.",
             project8Title: "منصة Body Tube الرقمية",
@@ -241,13 +248,13 @@ const translations = {
         videos: {
             label: "عرض الفيديوهات",
             title: "أعمالي في الواقع",
-            description: "شاهد عروضاً توضيحية لمشاريعي ودروساً ورؤى في عالم الذكاء الاصطناعي وهندسة البرمجيات.",
-            video1Title: "بناء تطبيقات دردشة مدعومة بالذكاء الاصطناعي",
-            video1Desc: "دورة تعليمية كاملة حول إنشاء روبوتات دردشة ذكية باستخدام تقنيات معالجة اللغة الطبيعية الحديثة ونماذج التعلم العميق.",
-            video2Title: "نشر نماذج التعلم الآلي",
-            video2Desc: "دليل خطوة بخطوة لنشر نماذج التعلم الآلي في بيئات الإنتاج مع أفضل الممارسات وتقنيات التحسين.",
-            video3Title: "تطوير الويب الحديث مع تكامل الذكاء الاصطناعي",
-            video3Desc: "تعلم كيفية دمج قدرات الذكاء الاصطناعي في تطبيقات الويب الحديثة لتحسين تجارب المستخدم.",
+            description: "شاهد عروضاً توضيحية لمشاريعي ودروساً ورؤى في تطوير الويب والواجهات الأمامية.",
+            video1Title: "بناء تطبيقات React الحديثة",
+            video1Desc: "دليل كامل لإنشاء تطبيقات الصفحة الواحدة (SPA) باستخدام React.js وإدارة الحالة السلسة.",
+            video2Title: "تحسين أداء الواجهات ونشر المواقع",
+            video2Desc: "طريقة تحسين السرعة والتجاوب ونشر المواقع باستعمال Vite و Vercel بشكل احترافي.",
+            video3Title: "تصميم الواجهات مع Tailwind CSS",
+            video3Desc: "تعلم بناء واجهات مستخدم أنيقة وسريعة مع Tailwind CSS وأحدث أساليب التصميم.",
             views: "مشاهدة",
             ago: "منذ",
             week: "أسبوع",
@@ -257,20 +264,21 @@ const translations = {
         // Contact Section
         contact: {
             label: "لنتواصل",
-            title: "مستعد لبناء شيء مذهل؟",
-            description: "سواء كان لديك مشروع في ذهنك، أو تحتاج إلى استشارة، أو ترغب في استكشاف فرص التعاون، أود أن أسمع منك.",
+            title: "مستعد لبناء شيء مذهل معاً؟",
+            description: "أنا متاح للمشاريع المستقلة (Freelance)، الفرص الكاملة عن بُعد، والتعاون طويل الأجل. يسعدني تواصلك عبر البريد، الواتساب، أو الشبكات الاجتماعية!",
             email: "البريد الإلكتروني",
             linkedin: "لينكد إن",
             github: "جيت هب",
-            ctaTitle: "لنصنع المستقبل معاً",
-            ctaText: "أنا دائماً منفتح لمناقشة مشاريع جديدة أو أفكار مبتكرة أو فرص لأكون جزءاً من رؤيتك.",
+            whatsapp: "الواتساب والموبايل",
+            ctaTitle: "لنحول أفكارك إلى واقع رقمي مذهل",
+            ctaText: "سواء كنت بحاجة إلى تطبيق ويب كامل، إعادة تصميم الواجهة، أو موقع سريع ومستجيب، يسعدني مناقشة رؤيتك.",
             ctaBtn: "ابدأ محادثة"
         },
         // Footer
         footer: {
-            tagline: "بناء حلول ذكية لمستقبل أذكى.",
-            copyright: "© 2024 عبدالرحمن ياسر. جميع الحقوق محفوظة.",
-            motto: "مدعوم بالذكاء. مدفوع بالابتكار."
+            tagline: "بناء تطبيقات ومواقع ويب حديثة، سريعة، ومستجيبة.",
+            copyright: "© 2026 عبدالرحمن الأسيوطي. جميع الحقوق محفوظة.",
+            motto: "صُنع بشغف وإتقان."
         },
         comments: {
             label: "كتاب الزوار",
@@ -282,13 +290,13 @@ const translations = {
         },
         modal: {
             title: "ابدأ محادثة",
-            subtitle: "اترك بياناتك وفكرة مشروعك، وسنتواصل معك قريباً.",
+            subtitle: "اترك بياناتك وفكرة مشروعك، وسأتواصل معك في أقرب وقت.",
             nameLabel: "الاسم بالكامل",
-            phoneLabel: "رقم الهاتف",
-            ideaLabel: "فكرة المشروع",
+            phoneLabel: "رقم الهاتف / الواتساب",
+            ideaLabel: "تفاصيل المشروع",
             namePlaceholder: "اسمك الكريم",
-            phonePlaceholder: "01xxxxxxxxx",
-            ideaPlaceholder: "اكتب فكرة مشروعك بالتفصيل...",
+            phonePlaceholder: "01064106070",
+            ideaPlaceholder: "اكتب فكرة مشروعك ومتطلباته...",
             submitBtn: "إرسال الرسالة"
         },
         signupBanner: {
@@ -313,7 +321,8 @@ function setLanguage(lang) {
     html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
 
     // Update language button text
-    document.querySelector('.lang-text').textContent = t.nav.langBtn;
+    const langBtnText = document.querySelector('.lang-text');
+    if (langBtnText) langBtnText.textContent = t.nav.langBtn;
 
     // Save preference
     localStorage.setItem('preferredLanguage', lang);
@@ -325,12 +334,14 @@ function setLanguage(lang) {
 function applyTranslations(t) {
     // Navigation
     const navLinks = document.querySelectorAll('.nav-link');
-    navLinks[0].textContent = t.nav.home;
-    navLinks[1].textContent = t.nav.about;
-    navLinks[2].textContent = t.nav.expertise;
-    navLinks[3].textContent = t.nav.portfolio;
-    navLinks[4].textContent = t.nav.videos;
-    navLinks[5].textContent = t.nav.contact;
+    if (navLinks.length >= 6) {
+        navLinks[0].textContent = t.nav.home;
+        navLinks[1].textContent = t.nav.about;
+        navLinks[2].textContent = t.nav.expertise;
+        navLinks[3].textContent = t.nav.portfolio;
+        navLinks[4].textContent = t.nav.videos;
+        navLinks[5].textContent = t.nav.contact;
+    }
 
     // Update auth button text (if logged out)
     const authText = document.querySelector('.auth-text');
@@ -355,20 +366,36 @@ function applyTranslations(t) {
     }
 
     // Hero Section
-    document.querySelector('.hero-label').innerHTML = `<span class="pulse-dot"></span>${t.hero.badge}`;
+    const heroLabel = document.querySelector('.hero-label');
+    if (heroLabel) heroLabel.innerHTML = `<span class="pulse-dot"></span>${t.hero.badge}`;
+    
     const heroTitle = document.querySelector('.hero-title');
-    heroTitle.innerHTML = `
-        <span class="title-line">${t.hero.name}</span>
-        <span class="title-gradient">${t.hero.title1}</span>
-        <span class="title-gradient">${t.hero.title2}</span>
-    `;
-    document.querySelector('.hero-description').textContent = t.hero.description;
-    document.querySelectorAll('.hero-cta .btn span')[0].textContent = t.hero.cta1;
-    document.querySelectorAll('.hero-cta .btn span')[1].textContent = t.hero.cta2;
-    document.querySelectorAll('.stat-label')[0].textContent = t.hero.stat1Label;
-    document.querySelectorAll('.stat-label')[1].textContent = t.hero.stat2Label;
-    document.querySelectorAll('.stat-label')[2].textContent = t.hero.stat3Label;
-    document.querySelector('.scroll-indicator span').textContent = t.hero.scrollText;
+    if (heroTitle) {
+        heroTitle.innerHTML = `
+            <span class="title-line">${t.hero.name}</span>
+            <span class="title-gradient">${t.hero.title1}</span>
+            <span class="title-gradient">${t.hero.title2}</span>
+        `;
+    }
+    
+    const heroDesc = document.querySelector('.hero-description');
+    if (heroDesc) heroDesc.textContent = t.hero.description;
+    
+    const ctaBtns = document.querySelectorAll('.hero-cta .btn span');
+    if (ctaBtns.length >= 2) {
+        ctaBtns[0].textContent = t.hero.cta1;
+        ctaBtns[1].textContent = t.hero.cta2;
+    }
+    
+    const statLabels = document.querySelectorAll('.stat-label');
+    if (statLabels.length >= 3) {
+        statLabels[0].textContent = t.hero.stat1Label;
+        statLabels[1].textContent = t.hero.stat2Label;
+        statLabels[2].textContent = t.hero.stat3Label;
+    }
+    
+    const scrollText = document.querySelector('.scroll-indicator span');
+    if (scrollText) scrollText.textContent = t.hero.scrollText;
 
     // About Section
     const aboutLabel = document.querySelector('#about .section-label');
@@ -392,20 +419,40 @@ function applyTranslations(t) {
     const missionEl = document.querySelector('.mission-statement p');
     if (missionEl) missionEl.innerHTML = t.about.mission;
 
-    // Expertise Section
+    // Expertise & Services Section
     const expLabel = document.querySelector('#expertise .section-label');
     if (expLabel) expLabel.textContent = t.expertise.label;
     const expTitle = document.querySelector('#expertise .section-title');
     if (expTitle) expTitle.textContent = t.expertise.title;
 
-    const skillCards = document.querySelectorAll('.skill-card');
-    skillCards.forEach((card, idx) => {
-        const key = `skill${idx + 1}`;
+    const servicesTitle = document.querySelector('.services-subheading');
+    if (servicesTitle && t.expertise.servicesTitle) servicesTitle.textContent = t.expertise.servicesTitle;
+
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, idx) => {
+        const keyTitle = `service${idx + 1}`;
+        const keyDesc = `service${idx + 1}Desc`;
         const titleEl = card.querySelector('h3');
         const textEl = card.querySelector('p');
-        if (titleEl && t.expertise[key]) titleEl.textContent = t.expertise[key];
-        if (textEl && t.expertise[key + 'Text']) textEl.textContent = t.expertise[key + 'Text'];
+        if (titleEl && t.expertise[keyTitle]) titleEl.textContent = t.expertise[keyTitle];
+        if (textEl && t.expertise[keyDesc]) textEl.textContent = t.expertise[keyDesc];
     });
+
+    // Skills Category Headings
+    const skillsTitle = document.querySelector('.skills-subheading');
+    if (skillsTitle && t.expertise.skillsTitle) skillsTitle.textContent = t.expertise.skillsTitle;
+
+    const catPriorityEl = document.querySelector('.skill-cat-priority .cat-title');
+    if (catPriorityEl && t.expertise.catPriority) catPriorityEl.textContent = t.expertise.catPriority;
+
+    const catImportantEl = document.querySelector('.skill-cat-important .cat-title');
+    if (catImportantEl && t.expertise.catImportant) catImportantEl.textContent = t.expertise.catImportant;
+
+    const catToolsEl = document.querySelector('.skill-cat-tools .cat-title');
+    if (catToolsEl && t.expertise.catTools) catToolsEl.textContent = t.expertise.catTools;
+
+    const catAdditionalEl = document.querySelector('.skill-cat-additional .cat-title');
+    if (catAdditionalEl && t.expertise.catAdditional) catAdditionalEl.textContent = t.expertise.catAdditional;
 
     // Portfolio Section
     const portLabel = document.querySelector('#portfolio .section-label');
@@ -458,6 +505,7 @@ function applyTranslations(t) {
     if (contactHeaders[0]) contactHeaders[0].textContent = t.contact.email;
     if (contactHeaders[1]) contactHeaders[1].textContent = t.contact.linkedin;
     if (contactHeaders[2]) contactHeaders[2].textContent = t.contact.github;
+    if (contactHeaders[3]) contactHeaders[3].textContent = t.contact.whatsapp;
 
     const ctaTitle = document.querySelector('.cta-box h3');
     if (ctaTitle) ctaTitle.textContent = t.contact.ctaTitle;

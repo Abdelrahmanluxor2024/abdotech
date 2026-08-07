@@ -2012,4 +2012,193 @@ img {
         width: 100%;
         justify-content: center;
     }
-}
+}
+
+/* ==================== SERVICES & CATEGORIZED SKILLS ==================== */
+.services-subheading,
+.skills-subheading {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem;
+    color: var(--color-text-primary);
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.services-subheading::after,
+.skills-subheading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 3px;
+}
+
+[dir="rtl"] .services-subheading::after,
+[dir="rtl"] .skills-subheading::after {
+    left: auto;
+    right: 0;
+}
+
+/* Services Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.service-card {
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--border-radius-md);
+    padding: 1.75rem 1.5rem;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    will-change: transform;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.12);
+}
+
+.service-icon {
+    width: 52px;
+    height: 52px;
+    padding: 12px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(124, 58, 237, 0.15));
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    margin-bottom: 1.25rem;
+}
+
+.service-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--color-accent-3);
+}
+
+.service-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* Categorized Skills Blocks */
+.skills-categorized-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.skill-category-block {
+    background: rgba(26, 26, 36, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+}
+
+.cat-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skill-cat-priority {
+    border-color: rgba(124, 58, 237, 0.35);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(102, 126, 234, 0.04));
+}
+
+.skill-cat-priority .cat-title {
+    color: #a5b4fc;
+}
+
+.skill-cat-important {
+    border-color: rgba(0, 212, 255, 0.25);
+}
+
+.skills-flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+}
+
+.skill-badge:hover {
+    transform: translateY(-2px);
+}
+
+.priority-badge {
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+}
+
+.priority-badge:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.important-badge {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #e0f2fe;
+}
+
+.important-badge:hover {
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+.tool-badge {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+}
+
+.additional-badge {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--color-text-secondary);
+}
+
+/* Contact Cards Link Hover fix */
+a.contact-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+a.contact-card:hover h3 {
+    color: var(--color-accent-3);
+}
+
