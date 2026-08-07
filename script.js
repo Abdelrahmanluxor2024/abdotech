@@ -2,15 +2,45 @@
 const navbar = document.getElementById('navbar');
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id]');
 
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+let ticking = false;
+
+function onScroll() {
+    const scrollY = window.scrollY;
+    
+    // Navbar background
+    if (scrollY > 100) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
-});
+
+    // Active link highlighting
+    sections.forEach(section => {
+        const sectionHeight = section.offsetHeight;
+        const sectionTop = section.offsetTop - 100;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${sectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+
+    ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+    }
+}, { passive: true });
 
 // ==================== MOBILE MENU TOGGLE ====================
 if (navToggle) {
@@ -18,7 +48,6 @@ if (navToggle) {
         const navMenu = document.querySelector('.nav-menu');
         if (navMenu) {
             const isOpen = navMenu.classList.toggle('mobile-open');
-            // Animate hamburger lines
             navToggle.classList.toggle('active', isOpen);
         }
     });
@@ -35,57 +64,31 @@ navLinks.forEach(link => {
     });
 });
 
-// Active link on scroll
-const sections = document.querySelectorAll('section[id]');
-
-function highlightNav() {
-    const scrollY = window.pageYOffset;
-    
-    sections.forEach(section => {
-        const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop - 100;
-        const sectionId = section.getAttribute('id');
-        
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    });
-}
-
-window.addEventListener('scroll', highlightNav);
-
 // ==================== COUNTER ANIMATION ====================
-const statNumbers = document.querySelectorAll('.stat-number');
-
 function animateCounter(element) {
     const target = parseInt(element.getAttribute('data-target'));
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    let current = 0;
+    const duration = 1200;
+    const start = performance.now();
     
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
+    function step(timestamp) {
+        const progress = Math.min((timestamp - start) / duration, 1);
+        element.textContent = Math.floor(progress * target);
+        if (progress < 1) {
+            requestAnimationFrame(step);
         } else {
-            element.textContent = Math.floor(current);
+            element.textContent = target;
         }
-    }, 16);
+    }
+    
+    requestAnimationFrame(step);
 }
 
-// Intersection Observer for counter animation
 const observerOptions = {
-    threshold: 0.5,
+    threshold: 0.2,
     rootMargin: '0px'
 };
 
-const observer = new IntersectionObserver((entries) => {
+const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const statNumber = entry.target.querySelector('.stat-number');
@@ -93,12 +96,13 @@ const observer = new IntersectionObserver((entries) => {
                 animateCounter(statNumber);
                 statNumber.classList.add('animated');
             }
+            counterObserver.unobserve(entry.target);
         }
     });
 }, observerOptions);
 
 document.querySelectorAll('.stat-item').forEach(stat => {
-    observer.observe(stat);
+    counterObserver.observe(stat);
 });
 
 // ==================== SMOOTH SCROLLING ====================
@@ -118,83 +122,25 @@ navLinks.forEach(link => {
     });
 });
 
-// ==================== CARD ANIMATIONS ====================
-const cards = document.querySelectorAll('.philosophy-card, .skill-card, .contact-card');
+// ==================== CARD ANIMATIONS (CSS CLASS BASED) ====================
+const cards = document.querySelectorAll('.philosophy-card, .skill-card, .contact-card, .project-card');
 
 const cardObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '0';
-            entry.target.style.transform = 'translateY(30px)';
-            
-            setTimeout(() => {
-                entry.target.style.transition = 'all 0.6s ease';
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }, 100);
-            
+            entry.target.classList.add('revealed');
             cardObserver.unobserve(entry.target);
         }
     });
 }, {
     threshold: 0.1,
-    rootMargin: '0px'
+    rootMargin: '50px'
 });
 
-cards.forEach((card, index) => {
-    card.style.transitionDelay = `${index * 0.1}s`;
+cards.forEach((card) => {
     cardObserver.observe(card);
 });
 
-// ==================== FLOATING ELEMENTS PARALLAX ====================
-const floatingElements = document.querySelectorAll('.float-element');
+// Console Branding
+console.log('%c🚀 Built by Abdelrahman Yasser', 'color: #667eea; font-size: 14px; font-weight: bold;');
 
-window.addEventListener('mousemove', (e) => {
-    const { clientX, clientY } = e;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    
-    floatingElements.forEach((element, index) => {
-        const speed = (index + 1) * 0.02;
-        const x = (clientX - centerX) * speed;
-        const y = (clientY - centerY) * speed;
-        
-        element.style.transform = `translate(${x}px, ${y}px)`;
-    });
-});
-
-// ==================== NEURAL NETWORK ANIMATION ====================
-const neuralNetwork = document.querySelector('.neural-network');
-
-function createParticle() {
-    const particle = document.createElement('div');
-    particle.style.position = 'absolute';
-    particle.style.width = '2px';
-    particle.style.height = '2px';
-    particle.style.background = '#667eea';
-    particle.style.borderRadius = '50%';
-    particle.style.pointerEvents = 'none';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.top = Math.random() * 100 + '%';
-    particle.style.opacity = '0';
-    particle.style.boxShadow = '0 0 10px #667eea';
-    
-    neuralNetwork.appendChild(particle);
-    
-    // Animate particle
-    particle.animate([
-        { opacity: 0, transform: 'scale(0)' },
-        { opacity: 1, transform: 'scale(1)' },
-        { opacity: 0, transform: 'scale(0)' }
-    ], {
-        duration: 3000 + Math.random() * 2000,
-        easing: 'ease-in-out'
-    }).onfinish = () => particle.remove();
-}
-
-// Create particles periodically
-setInterval(createParticle, 500);
-
-// ==================== CONSOLE MESSAGE ====================
-console.log('%c🚀 Built by Abdelrahman Yasser', 'color: #667eea; font-size: 16px; font-weight: bold;');
-console.log('%cAI Engineer & Software Architect', 'color: #764ba2; font-size: 14px;');
