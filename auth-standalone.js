@@ -69,6 +69,7 @@
 
     window.toggleForm = function toggleForm() {
         isSignupMode = !isSignupMode;
+        const googleBtnLabel = document.getElementById('google-btn-label');
 
         if (isSignupMode) {
             loginForm.classList.add('hidden');
@@ -76,12 +77,14 @@
             toggleText.textContent = 'Already have an account? Sign In';
             document.querySelector('.card-title').textContent = 'Create Account';
             document.querySelector('.card-subtitle').textContent = 'Sign up to get started';
+            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign up with Google';
         } else {
             signupForm.classList.add('hidden');
             loginForm.classList.remove('hidden');
             toggleText.textContent = 'Create New Account';
             document.querySelector('.card-title').textContent = 'Welcome Back';
             document.querySelector('.card-subtitle').textContent = 'Sign in to access your account';
+            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign in with Google';
         }
 
         closeAlert();
@@ -264,21 +267,137 @@
         }
     });
 
+    // ==================== GOOGLE CLIENT CONFIG ====================
+    const GOOGLE_CLIENT_ID = '192480132298-jt33utn5motg52f308c4kihqenj09t4v.apps.googleusercontent.com';
+
+    // Helper: Decode JWT
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            console.error('Failed to parse JWT', e);
+            return null;
+        }
+    }
+
+    // Google Identity Services (GIS) Credential Handler
+    async function handleGoogleCredentialResponse(response) {
+        try {
+            console.log('✅ Google credential response received');
+            const idToken = response.credential;
+            const profile = parseJwt(idToken);
+
+            if (profile) {
+                // Store Google session profile for immediate recognition
+                const customSession = {
+                    user: {
+                        id: profile.sub,
+                        email: profile.email,
+                        user_metadata: {
+                            full_name: profile.name,
+                            avatar_url: profile.picture,
+                            email: profile.email
+                        }
+                    },
+                    access_token: idToken,
+                    expires_at: profile.exp
+                };
+
+                localStorage.setItem('google_auth_user', JSON.stringify(customSession));
+                localStorage.setItem('signup_banner_dismissed', 'true');
+
+                // Also try Supabase signInWithIdToken if supported
+                try {
+                    if (supabaseClient.auth.signInWithIdToken) {
+                        await supabaseClient.auth.signInWithIdToken({
+                            provider: 'google',
+                            token: idToken
+                        });
+                    }
+                } catch (sbErr) {
+                    console.warn('Supabase ID token signin:', sbErr.message);
+                }
+
+                showAlert('success', `Welcome, ${profile.name}! Redirecting...`);
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Google token error:', error);
+            showAlert('error', 'Google authentication failed: ' + error.message);
+        }
+    }
+
+    // Initialize GIS if loaded
+    function initGoogleGIS() {
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+            try {
+                window.google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                console.log('✅ Google Identity Services initialized');
+            } catch (e) {
+                console.warn('GIS init notice:', e.message);
+            }
+        }
+    }
+
+    window.addEventListener('load', initGoogleGIS);
+
     // ==================== GOOGLE LOGIN HANDLER ====================
     async function handleGoogleLogin() {
+        const googleBtn = document.getElementById('google-btn');
+        if (googleBtn) googleBtn.disabled = true;
+
         try {
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.href.replace('login.html', 'index.html')
-                }
-            });
-
-            if (error) throw error;
-
+            // First try Google Identity Services prompt if available
+            if (window.google && window.google.accounts && window.google.accounts.id) {
+                initGoogleGIS();
+                window.google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        // Fallback to Supabase OAuth if One-Tap prompt not displayed
+                        triggerSupabaseGoogleOAuth();
+                    }
+                });
+            } else {
+                await triggerSupabaseGoogleOAuth();
+            }
         } catch (error) {
             console.error('Google login error:', error);
             showAlert('error', getErrorMessage(error));
+            if (googleBtn) googleBtn.disabled = false;
+        }
+    }
+
+    async function triggerSupabaseGoogleOAuth() {
+        const isFileProtocol = window.location.protocol === 'file:';
+        const redirectTo = isFileProtocol 
+            ? window.location.href.replace('login.html', 'index.html')
+            : window.location.origin + window.location.pathname.replace('login.html', 'index.html');
+
+        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: redirectTo,
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                }
+            }
+        });
+
+        if (error) throw error;
+        if (data && data.url) {
+            window.location.href = data.url;
         }
     }
 
@@ -293,5 +412,5 @@
         googleBtn.addEventListener('click', handleGoogleLogin);
     }
 
-    console.log('✅ Login page initialized (standalone version)');
+    console.log('✅ Login page initialized (standalone version with Google auth)');
 })();

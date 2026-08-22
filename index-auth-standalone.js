@@ -34,7 +34,13 @@
     }
 
     window.handleLogout = async function () {
-        await supabaseClient.auth.signOut();
+        try {
+            await supabaseClient.auth.signOut();
+        } catch (e) {
+            console.warn('Supabase signout:', e);
+        }
+        localStorage.removeItem('google_auth_user');
+        localStorage.removeItem('project_auth_token');
         window.location.href = 'login.html';
     }
 
@@ -93,10 +99,24 @@
 
         // STEP 2: Get Current Session
         try {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            let { data: { session }, error } = await supabaseClient.auth.getSession();
+
+            if (!session) {
+                const storedGoogle = localStorage.getItem('google_auth_user');
+                if (storedGoogle) {
+                    try {
+                        const parsed = JSON.parse(storedGoogle);
+                        if (parsed && parsed.user) {
+                            session = parsed;
+                        }
+                    } catch (e) {
+                        console.warn('Failed to parse google user', e);
+                    }
+                }
+            }
 
             if (session) {
-                showDebug('User is logged in: ' + session.user.email);
+                showDebug('User is logged in: ' + (session.user.email || 'Google User'));
                 currentSession = session;
                 renderUserMenu(session, authContainer);
                 toggleCommentForm(true);
@@ -226,13 +246,15 @@
             });
         }
 
-        // Contact Modal Form Submission
+        // Contact Modal Form Submission with Web3Forms
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const name = document.getElementById('modal-name').value.trim();
                 const phone = document.getElementById('modal-phone').value.trim();
+                const emailInput = document.getElementById('modal-email');
+                const email = emailInput ? emailInput.value.trim() : '';
                 const idea = document.getElementById('modal-idea').value.trim();
 
                 if (!name || !idea) {
@@ -243,32 +265,59 @@
                 const submitBtn = document.getElementById('modal-submit-btn');
                 submitBtn.disabled = true;
                 const btnText = submitBtn.querySelector('span');
-                const originalText = btnText.textContent;
-                btnText.textContent = 'Sending...';
+                const originalText = btnText ? btnText.textContent : 'Send Message';
+                if (btnText) btnText.textContent = 'Sending...';
 
                 try {
-                    const { error } = await supabaseClient
-                        .from('contact_messages')
-                        .insert([
-                            {
-                                name,
-                                phone,
-                                project_idea: idea,
-                                recipient_email: 'assioutytech@gmail.com'
-                            }
-                        ]);
+                    // Send to Web3Forms
+                    const response = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            access_key: '7fec361c-f8d1-4a40-afef-510df8701b30',
+                            name: name,
+                            phone: phone,
+                            email: email || 'assioutytech@gmail.com',
+                            message: idea,
+                            from_name: 'Abdelrahman Portfolio Contact',
+                            subject: `New Project Inquiry from ${name} (${phone})`
+                        })
+                    });
 
-                    if (error) throw error;
+                    const result = await response.json();
 
-                    alert('Message sent successfully! Thank you. ✅');
-                    contactForm.reset();
-                    modal.classList.remove('show');
+                    // Optional backup to Supabase
+                    try {
+                        await supabaseClient
+                            .from('contact_messages')
+                            .insert([
+                                {
+                                    name,
+                                    phone,
+                                    project_idea: idea,
+                                    recipient_email: 'assioutytech@gmail.com'
+                                }
+                            ]);
+                    } catch (sbErr) {
+                        console.warn('Supabase backup note:', sbErr.message);
+                    }
+
+                    if (result.success || response.ok) {
+                        alert('Message sent successfully via Web3Forms! Thank you. ✅');
+                        contactForm.reset();
+                        modal.classList.remove('show');
+                    } else {
+                        throw new Error(result.message || 'Submission error');
+                    }
                 } catch (err) {
                     console.error('Error sending message:', err);
                     alert('Failed to send message: ' + err.message);
                 } finally {
                     submitBtn.disabled = false;
-                    btnText.textContent = originalText;
+                    if (btnText) btnText.textContent = originalText;
                 }
             });
         }

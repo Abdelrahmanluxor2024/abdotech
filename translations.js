@@ -501,11 +501,13 @@ function applyTranslations(t) {
     const contactDesc = document.querySelector('#contact .section-description');
     if (contactDesc) contactDesc.textContent = t.contact.description;
 
-    const contactHeaders = document.querySelectorAll('.contact-card h3');
-    if (contactHeaders[0]) contactHeaders[0].textContent = t.contact.email;
-    if (contactHeaders[1]) contactHeaders[1].textContent = t.contact.linkedin;
-    if (contactHeaders[2]) contactHeaders[2].textContent = t.contact.github;
-    if (contactHeaders[3]) contactHeaders[3].textContent = t.contact.whatsapp;
+    const emailCard = document.querySelector('.contact-card[data-contact="email"] h3') || document.querySelectorAll('.contact-card h3')[0];
+    const linkedinCard = document.querySelector('.contact-card[data-contact="linkedin"] h3') || document.querySelectorAll('.contact-card h3')[1];
+    const whatsappCard = document.querySelector('.contact-card[data-contact="whatsapp"] h3') || document.querySelectorAll('.contact-card h3')[2];
+
+    if (emailCard) emailCard.textContent = t.contact.email;
+    if (linkedinCard) linkedinCard.textContent = t.contact.linkedin;
+    if (whatsappCard) whatsappCard.textContent = t.contact.whatsapp;
 
     const ctaTitle = document.querySelector('.cta-box h3');
     if (ctaTitle) ctaTitle.textContent = t.contact.ctaTitle;

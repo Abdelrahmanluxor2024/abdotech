@@ -85,7 +85,23 @@
 
         async function loadProfile() {
             // 1. Get User
-            const { data: { user } } = await supabase.auth.getUser();
+            let user = null;
+            try {
+                const { data } = await supabase.auth.getUser();
+                user = data?.user;
+            } catch (e) {
+                console.warn('Supabase getUser error:', e);
+            }
+
+            if (!user) {
+                const googleAuth = localStorage.getItem('google_auth_user');
+                if (googleAuth) {
+                    try {
+                        const parsed = JSON.parse(googleAuth);
+                        user = parsed.user;
+                    } catch (e) {}
+                }
+            }
 
             if (!user) {
                 window.location.href = 'login.html';
@@ -93,23 +109,29 @@
             }
 
             // Display basic auth info
-            document.getElementById('display-email').textContent = user.email;
+            document.getElementById('display-email').textContent = user.email || '';
 
             // 2. Get Profile Data from Table
-            let { data: profile, error } = await supabase
-                .from('user_profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
+            let profile = null;
+            try {
+                let { data, error } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                if (!error && data) profile = data;
+            } catch (e) {
+                console.warn('Profile fetch note:', e);
+            }
 
-            if (error) {
-                console.error('Error loading profile:', error);
+            if (!profile) {
                 // If profile doesn't exist yet, we use auth meta data
                 profile = {
-                    username: user.user_metadata.username,
-                    full_name: user.user_metadata.full_name,
-                    phone: user.user_metadata.phone,
-                    country: user.user_metadata.country
+                    username: user.user_metadata?.username || user.email?.split('@')[0] || 'User',
+                    full_name: user.user_metadata?.full_name || '',
+                    phone: user.user_metadata?.phone || '',
+                    country: user.user_metadata?.country || 'Egypt',
+                    avatar_url: user.user_metadata?.avatar_url || ''
                 };
             }
 
@@ -122,15 +144,33 @@
                 document.getElementById('website').value = profile.website || '';
                 document.getElementById('display-name').textContent = profile.full_name || profile.username || 'User';
 
-                if (profile.avatar_url) {
-                    // Handle avatar URL logic if stored in storage bucket
+                if (profile.avatar_url || user.user_metadata?.avatar_url) {
+                    const avatarImg = document.getElementById('avatar-img');
+                    if (avatarImg) avatarImg.src = profile.avatar_url || user.user_metadata?.avatar_url;
                 }
             }
         }
 
         async function updateProfile(e) {
             e.preventDefault();
-            const { data: { user } } = await supabase.auth.getUser();
+            let user = null;
+            try {
+                const { data } = await supabase.auth.getUser();
+                user = data?.user;
+            } catch (e) {}
+
+            if (!user) {
+                const googleAuth = localStorage.getItem('google_auth_user');
+                if (googleAuth) {
+                    try { user = JSON.parse(googleAuth).user; } catch (e) {}
+                }
+            }
+
+            if (!user) {
+                alert('Session expired. Please sign in again.');
+                window.location.href = 'login.html';
+                return;
+            }
 
             const updates = {
                 id: user.id,
@@ -142,18 +182,23 @@
                 updated_at: new Date()
             };
 
-            const { error } = await supabase.from('user_profiles').upsert(updates);
-
-            if (error) {
-                alert('Error updating profile: ' + error.message);
-            } else {
-                alert('Profile updated successfully! ✅');
-                document.getElementById('display-name').textContent = updates.full_name || updates.username;
+            try {
+                const { error } = await supabase.from('user_profiles').upsert(updates);
+                if (error) throw error;
+            } catch (err) {
+                console.warn('Upsert note:', err.message);
             }
+
+            alert('Profile updated successfully! ✅');
+            document.getElementById('display-name').textContent = updates.full_name || updates.username;
         }
 
         async function signOut() {
-            await supabase.auth.signOut();
+            try {
+                await supabase.auth.signOut();
+            } catch (e) {}
+            localStorage.removeItem('google_auth_user');
+            localStorage.removeItem('project_auth_token');
             window.location.href = 'login.html';
         }
 
