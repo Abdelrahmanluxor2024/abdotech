@@ -186,15 +186,12 @@ img {
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
-    border: 2px solid var(--color-accent-1);
-    box-shadow: 0 0 12px rgba(102, 126, 234, 0.35);
     flex-shrink: 0;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--transition-fast);
 }
 
 .logo:hover .brand-avatar-mini {
     transform: scale(1.08);
-    box-shadow: 0 0 18px rgba(102, 126, 234, 0.6);
 }
 
 .logo-text {
