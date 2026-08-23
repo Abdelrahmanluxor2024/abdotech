@@ -359,17 +359,22 @@
         if (googleBtn) googleBtn.disabled = true;
 
         try {
-            // First try Google Identity Services prompt if available
+            // Use Google Identity Services (GIS) - One Tap or popup
             if (window.google && window.google.accounts && window.google.accounts.id) {
                 initGoogleGIS();
                 window.google.accounts.id.prompt((notification) => {
                     if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                        // Fallback to Supabase OAuth if One-Tap prompt not displayed
-                        triggerSupabaseGoogleOAuth();
+                        // One-Tap was blocked, use OAuth2 popup flow instead
+                        triggerGoogleOAuthPopup();
+                    } else {
+                        // One-Tap is showing, keep button disabled until response
                     }
+                    if (googleBtn) googleBtn.disabled = false;
                 });
             } else {
-                await triggerSupabaseGoogleOAuth();
+                // GIS not loaded yet, try popup flow
+                await triggerGoogleOAuthPopup();
+                if (googleBtn) googleBtn.disabled = false;
             }
         } catch (error) {
             console.error('Google login error:', error);
@@ -378,26 +383,48 @@
         }
     }
 
-    async function triggerSupabaseGoogleOAuth() {
-        const isFileProtocol = window.location.protocol === 'file:';
-        const redirectTo = isFileProtocol 
-            ? window.location.href.replace('login.html', 'index.html')
-            : window.location.origin + window.location.pathname.replace('login.html', 'index.html');
-
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: redirectTo,
-                queryParams: {
-                    access_type: 'offline',
-                    prompt: 'consent',
+    async function triggerGoogleOAuthPopup() {
+        // Use Google OAuth2 popup via GIS oauth2 client (doesn't require Supabase Google provider)
+        if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+            const client = window.google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: 'email profile openid',
+                callback: async (tokenResponse) => {
+                    if (tokenResponse.error) {
+                        showAlert('error', 'Google sign-in failed: ' + tokenResponse.error);
+                        return;
+                    }
+                    // Fetch user info with the access token
+                    try {
+                        const resp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                            headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+                        });
+                        const profile = await resp.json();
+                        const customSession = {
+                            user: {
+                                id: profile.sub,
+                                email: profile.email,
+                                user_metadata: {
+                                    full_name: profile.name,
+                                    avatar_url: profile.picture,
+                                    email: profile.email
+                                }
+                            },
+                            access_token: tokenResponse.access_token,
+                            expires_at: Date.now() / 1000 + tokenResponse.expires_in
+                        };
+                        localStorage.setItem('google_auth_user', JSON.stringify(customSession));
+                        localStorage.setItem('signup_banner_dismissed', 'true');
+                        showAlert('success', `Welcome, ${profile.name}! Redirecting...`);
+                        setTimeout(() => { window.location.replace('index.html'); }, 1000);
+                    } catch (e) {
+                        showAlert('error', 'Failed to get user info: ' + e.message);
+                    }
                 }
-            }
-        });
-
-        if (error) throw error;
-        if (data && data.url) {
-            window.location.href = data.url;
+            });
+            client.requestAccessToken();
+        } else {
+            showAlert('error', 'Google sign-in is not available. Please refresh the page and try again.');
         }
     }
 

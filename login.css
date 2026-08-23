@@ -172,8 +172,6 @@ body {
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
-    border: 2px solid var(--color-accent-1);
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
 }
 
 .logo-text {
