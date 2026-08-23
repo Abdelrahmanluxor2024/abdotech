@@ -181,17 +181,18 @@ img {
 }
 
 .brand-avatar-mini {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: top;
+    height: 42px;
+    width: auto;
+    max-width: 140px;
+    border-radius: 8px;
+    object-fit: contain;
     flex-shrink: 0;
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
 .logo:hover .brand-avatar-mini {
-    transform: scale(1.08);
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
 
 .logo-text {
