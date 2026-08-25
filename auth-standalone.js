@@ -256,22 +256,29 @@
                 if (data?.user?.identities?.length === 0) {
                     showAlert('warning', 'This email is already registered. Please sign in instead.');
                 } else {
-                    // Save profile info locally and in DB
+                    const userId = (data && data.user && data.user.id) || 'user_' + Date.now();
                     const profileObj = {
-                        id: data.user.id,
+                        id: userId,
                         username: username,
                         full_name: username,
                         phone: phone,
                         country: country,
                         email: email
                     };
-                    localStorage.setItem('user_profile_' + data.user.id, JSON.stringify(profileObj));
+                    localStorage.setItem('active_user_session', JSON.stringify(profileObj));
+                    localStorage.setItem('user_profile_' + userId, JSON.stringify(profileObj));
                     localStorage.setItem('last_registered_profile', JSON.stringify(profileObj));
+                    localStorage.setItem('saved_user_email', email);
+                    localStorage.setItem('saved_user_name', username);
+                    localStorage.setItem('saved_user_phone', phone);
+                    localStorage.setItem('saved_user_gov', country);
 
-                    try {
-                        await supabaseClient.from('user_profiles').upsert([profileObj]);
-                    } catch (dbErr) {
-                        console.warn('DB profile upsert note:', dbErr);
+                    if (data && data.user) {
+                        try {
+                            await supabaseClient.from('user_profiles').upsert([profileObj]);
+                        } catch (dbErr) {
+                            console.warn('DB profile upsert note:', dbErr);
+                        }
                     }
 
                     // Mark user as having an account
