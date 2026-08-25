@@ -164,12 +164,27 @@
                 }
             } else {
                 console.log('✅ Login successful:', data);
-                // Mark user as having an account so we don't show signup banner
                 localStorage.setItem('signup_banner_dismissed', 'true');
+
+                const u = data.user || (data.session && data.session.user);
+                if (u) {
+                    const uMeta = u.user_metadata || {};
+                    const activeProfile = {
+                        id: u.id,
+                        email: u.email,
+                        username: uMeta.username || u.email.split('@')[0],
+                        full_name: uMeta.full_name || uMeta.username || '',
+                        phone: uMeta.phone || '',
+                        country: uMeta.country || 'Luxor',
+                        avatar_url: uMeta.avatar_url || ''
+                    };
+                    localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
+                    localStorage.setItem('user_profile_' + u.id, JSON.stringify(activeProfile));
+                }
+
                 // FORCE redirect with token hash for file:// support
                 const token = data.session.access_token;
                 const refresh = data.session.refresh_token;
-                // Debug log
                 console.log('Redirecting with token...');
                 window.location.replace(`index.html#access_token=${token}&refresh_token=${refresh}`);
             }
@@ -328,6 +343,18 @@
 
                 localStorage.setItem('google_auth_user', JSON.stringify(customSession));
                 localStorage.setItem('signup_banner_dismissed', 'true');
+
+                const activeProfile = {
+                    id: profile.sub,
+                    email: profile.email,
+                    username: profile.name || profile.email.split('@')[0],
+                    full_name: profile.name || '',
+                    phone: '',
+                    country: 'Cairo',
+                    avatar_url: profile.picture || ''
+                };
+                localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
+                localStorage.setItem('user_profile_' + profile.sub, JSON.stringify(activeProfile));
 
                 // Also try Supabase signInWithIdToken if supported
                 try {

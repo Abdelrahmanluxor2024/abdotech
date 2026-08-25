@@ -121,12 +121,19 @@ body {
     background: var(--gradient-primary);
 }
 
+#avatar-file-input {
+    display: none !important;
+}
+
 .avatar-wrapper {
     position: relative;
     width: 110px;
     height: 110px;
     flex-shrink: 0;
     cursor: pointer;
+    display: block;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .profile-avatar {

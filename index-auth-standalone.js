@@ -118,6 +118,19 @@
             if (session) {
                 showDebug('User is logged in: ' + (session.user.email || 'Google User'));
                 currentSession = session;
+
+                const userMeta = session.user.user_metadata || {};
+                const activeProfile = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    username: userMeta.username || session.user.email.split('@')[0],
+                    full_name: userMeta.full_name || userMeta.username || '',
+                    phone: userMeta.phone || '',
+                    country: userMeta.country || 'Luxor',
+                    avatar_url: userMeta.avatar_url || ''
+                };
+                localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
+
                 renderUserMenu(session, authContainer);
                 toggleCommentForm(true);
             } else {
