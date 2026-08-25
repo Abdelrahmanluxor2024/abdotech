@@ -89,7 +89,19 @@ const translations = {
             project7Title: "Blue Neon API Dashboard",
             project7Desc: "An innovative user interface using a modern color palette (neon and amber), customized for interactive dashboards and structured data visualization.",
             project8Title: "Body Tube Digital Platform",
-            project8Desc: "An interactive web app for streaming media and videos, built on a flexible frontend design that ensures fast loading and smooth list scrolling."
+            project8Desc: "An interactive web app for streaming media and videos, built on a flexible frontend design that ensures fast loading and smooth list scrolling.",
+            flagshipBadge: "⭐ My Flagship Project ⭐",
+            flagshipLive: "Integrated Digital Platform",
+            flagshipTitle: "Mr. Abdelrahman El-Assiouty Platform for Programming & AI",
+            flagshipQuote: "\"After months of dedication and hard work, the dream is finally reality: Mr. Abdelrahman El-Assiouty Platform for Programming & AI! 🚀💻 A massive, seamless educational environment built with cutting-edge AI technologies to guarantee top performance and quality. Students code hands-on from session one.\"",
+            flagshipF1Title: "Foundational Tracks",
+            flagshipF1Desc: "Gradual progression from scratch to building strong computational thinking.",
+            flagshipF2Title: "Smart Practical Application",
+            flagshipF2Desc: "Real-world projects and applications built with Python & Artificial Intelligence.",
+            flagshipF3Title: "Exams & Full Support",
+            flagshipF3Desc: "Regular monitoring and smart evaluation system tracking performance continuously.",
+            flagshipCta: "Visit Platform Live 🚀",
+            flagshipPreview: "Preview Live Platform"
         },
         // Videos Section
         videos: {
@@ -242,7 +254,19 @@ const translations = {
             project7Title: "واجهة Blue Neon البرمجية",
             project7Desc: "تصميم مبتكر لواجهة مستخدم تعتمد على تمازج الألوان العصرية (النيون والكهرمان)، مخصصة لبناء لوحات التحكم التفاعلية وعرض البيانات بشكل منظم.",
             project8Title: "منصة Body Tube الرقمية",
-            project8Desc: "تطبيق ويب تفاعلي لعرض المحتوى ومقاطع الفيديو المتخصصة، يعتمد على بنية تصميم مرنة تضمن سرعة التحميل وسلاسة تصفح القوائم والمجموعات."
+            project8Desc: "تطبيق ويب تفاعلي لعرض المحتوى ومقاطع الفيديو المتخصصة، يعتمد على بنية تصميم مرنة تضمن سرعة التحميل وسلاسة تصفح القوائم والمجموعات.",
+            flagshipBadge: "⭐ أهم أعمالي ⭐",
+            flagshipLive: "منصة رقمية متكاملة",
+            flagshipTitle: "منصة مستر عبدالرحمن الأسيوطي للبرمجة والذكاء الاصطناعي",
+            flagshipQuote: "\"بعد شهور من التعب والسهر، أخيرًا الحلم بقى حقيقة: منصة مستر عبدالرحمن الأسيوطي للبرمجة والذكاء الاصطناعي! 🚀💻<br><br>بيئة تعليمية ضخمة وسلسة تليق بالطلاب، تم تطويرها بأحدث تقنيات الذكاء الاصطناعي لبناء نظام دعم ذكي جوة الموقع يضمن أسرع أداء وأعلى جودة. الطالب بيمسك الكيبورد ويكتب كود بإيده من أول حصة.\"",
+            flagshipF1Title: "مسارات تأسيسية",
+            flagshipF1Desc: "تدرّج من الصفر لحد ما تبني تفكير برمجي قوي.",
+            flagshipF2Title: "تطبيق عملي ذكي",
+            flagshipF2Desc: "مشروعات وتطبيقات حقيقية على بايثون والذكاء الاصطناعي.",
+            flagshipF3Title: "امتحانات ودعم كامل",
+            flagshipF3Desc: "نظام تقييم ومتابعة دورية يقيس مستواك أولاً بأول.",
+            flagshipCta: "زيارة المنصة الآن 🚀",
+            flagshipPreview: "معاينة المنصة مباشرة"
         },
         // Videos Section
         videos: {
@@ -474,6 +498,33 @@ function applyTranslations(t) {
         if (titleEl && t.portfolio[keyTitle]) titleEl.textContent = t.portfolio[keyTitle];
         if (descEl && t.portfolio[keyDesc]) descEl.textContent = t.portfolio[keyDesc];
     });
+
+    // Flagship Project Elements Update
+    const fsBadge = document.getElementById('flagship-badge-text');
+    const fsLive = document.getElementById('flagship-live-tag');
+    const fsTitle = document.getElementById('flagship-title-text');
+    const fsQuote = document.getElementById('flagship-quote-text');
+    const fsF1Title = document.getElementById('flagship-f1-title');
+    const fsF1Desc = document.getElementById('flagship-f1-desc');
+    const fsF2Title = document.getElementById('flagship-f2-title');
+    const fsF2Desc = document.getElementById('flagship-f2-desc');
+    const fsF3Title = document.getElementById('flagship-f3-title');
+    const fsF3Desc = document.getElementById('flagship-f3-desc');
+    const fsCta = document.getElementById('flagship-cta-text');
+    const fsView = document.getElementById('flagship-view-btn');
+
+    if (fsBadge && t.portfolio.flagshipBadge) fsBadge.textContent = t.portfolio.flagshipBadge;
+    if (fsLive && t.portfolio.flagshipLive) fsLive.textContent = t.portfolio.flagshipLive;
+    if (fsTitle && t.portfolio.flagshipTitle) fsTitle.textContent = t.portfolio.flagshipTitle;
+    if (fsQuote && t.portfolio.flagshipQuote) fsQuote.innerHTML = t.portfolio.flagshipQuote;
+    if (fsF1Title && t.portfolio.flagshipF1Title) fsF1Title.textContent = t.portfolio.flagshipF1Title;
+    if (fsF1Desc && t.portfolio.flagshipF1Desc) fsF1Desc.textContent = t.portfolio.flagshipF1Desc;
+    if (fsF2Title && t.portfolio.flagshipF2Title) fsF2Title.textContent = t.portfolio.flagshipF2Title;
+    if (fsF2Desc && t.portfolio.flagshipF2Desc) fsF2Desc.textContent = t.portfolio.flagshipF2Desc;
+    if (fsF3Title && t.portfolio.flagshipF3Title) fsF3Title.textContent = t.portfolio.flagshipF3Title;
+    if (fsF3Desc && t.portfolio.flagshipF3Desc) fsF3Desc.textContent = t.portfolio.flagshipF3Desc;
+    if (fsCta && t.portfolio.flagshipCta) fsCta.textContent = t.portfolio.flagshipCta;
+    if (fsView && t.portfolio.flagshipPreview) fsView.textContent = t.portfolio.flagshipPreview;
 
     // Videos Section
     const videoLabel = document.querySelector('#videos .section-label');
