@@ -378,7 +378,9 @@
             session.user.user_metadata.username ||
             session.user.email.split('@')[0];
 
-        let avatarUrl = session.user.user_metadata.avatar_url ||
+        const localAvatar = localStorage.getItem('user_avatar_' + session.user.id);
+
+        let avatarUrl = localAvatar || session.user.user_metadata.avatar_url ||
             `https://ui-avatars.com/api/?name=${displayName}&background=6366f1&color=fff`;
 
         // Try to fetch profile from DB for latest info
@@ -391,7 +393,7 @@
 
             if (profile) {
                 displayName = profile.full_name || profile.username || displayName;
-                // if profile has avatar_url use it
+                if (!localAvatar && profile.avatar_url) avatarUrl = profile.avatar_url;
             }
         } catch (e) {
             // ignore

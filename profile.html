@@ -25,8 +25,9 @@
         <div class="profile-header">
             <div class="avatar-wrapper">
                 <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Avatar"
-                    id="avatar-img" class="profile-avatar">
-                <button class="avatar-upload-btn" title="Change Avatar">📷</button>
+                    id="avatar-img" class="profile-avatar" title="Click to change profile picture">
+                <button type="button" class="avatar-upload-btn" id="upload-btn" title="Change Avatar">📷</button>
+                <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
             </div>
             <div class="profile-info">
                 <h1 id="display-name">Loading...</h1>
@@ -40,17 +41,17 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Username</label>
-                        <input type="text" id="username" class="form-input" readonly>
+                        <input type="text" id="username" class="form-input" placeholder="Username">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Full Name</label>
-                        <input type="text" id="full_name" class="form-input">
+                        <input type="text" id="full_name" class="form-input" placeholder="Full Name">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Phone Number</label>
-                        <input type="tel" id="phone" class="form-input">
+                        <input type="tel" id="phone" class="form-input" placeholder="01xxxxxxxxx">
                     </div>
 
                     <div class="form-group">
@@ -66,11 +67,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Website / Portfolio</label>
-                    <input type="url" id="website" class="form-input" placeholder="https://example.com">
-                </div>
-
                 <button type="submit" class="btn-save">Save Changes</button>
             </form>
         </div>
@@ -78,125 +74,168 @@
 
     <!-- MAIN SCRIPT -->
     <script>
-        // --- Supabase Config (Using same creds as auth-standalone.js) ---
+        // --- Supabase Config ---
         const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM'; // تأكد إن ده المفتاح الصحيح (JWT)
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
 
         async function loadProfile() {
             // 1. Get User
-            let user = null;
             try {
                 const { data } = await supabase.auth.getUser();
-                user = data?.user;
+                if (data && data.user) {
+                    currentUser = data.user;
+                }
             } catch (e) {
                 console.warn('Supabase getUser error:', e);
             }
 
-            if (!user) {
+            if (!currentUser) {
                 const googleAuth = localStorage.getItem('google_auth_user');
                 if (googleAuth) {
                     try {
                         const parsed = JSON.parse(googleAuth);
-                        user = parsed.user;
+                        currentUser = parsed.user;
                     } catch (e) {}
                 }
             }
 
-            if (!user) {
+            if (!currentUser) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Display basic auth info
-            document.getElementById('display-email').textContent = user.email || '';
+            // Display user email
+            const userEmail = currentUser.email || '';
+            document.getElementById('display-email').textContent = userEmail;
 
-            // 2. Get Profile Data from Table
+            // Display name fallback
+            let displayName = currentUser.user_metadata?.full_name ||
+                              currentUser.user_metadata?.username ||
+                              (userEmail ? userEmail.split('@')[0] : 'User');
+
+            document.getElementById('display-name').textContent = displayName;
+
+            // Load saved avatar if exists
+            const savedAvatar = localStorage.getItem('user_avatar_' + currentUser.id) ||
+                                currentUser.user_metadata?.avatar_url;
+
+            const avatarImg = document.getElementById('avatar-img');
+            if (savedAvatar) {
+                avatarImg.src = savedAvatar;
+            } else {
+                avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=6366f1&color=fff`;
+            }
+
+            // Fetch Profile Data from DB
             let profile = null;
             try {
                 let { data, error } = await supabase
                     .from('user_profiles')
                     .select('*')
-                    .eq('id', user.id)
+                    .eq('id', currentUser.id)
                     .single();
                 if (!error && data) profile = data;
             } catch (e) {
                 console.warn('Profile fetch note:', e);
             }
 
-            if (!profile) {
-                // If profile doesn't exist yet, we use auth meta data
-                profile = {
-                    username: user.user_metadata?.username || user.email?.split('@')[0] || 'User',
-                    full_name: user.user_metadata?.full_name || '',
-                    phone: user.user_metadata?.phone || '',
-                    country: user.user_metadata?.country || 'Egypt',
-                    avatar_url: user.user_metadata?.avatar_url || ''
-                };
-            }
+            // Fallback metadata if DB has no record
+            const meta = currentUser.user_metadata || {};
 
-            // Fill Form
-            if (profile) {
-                document.getElementById('username').value = profile.username || '';
-                document.getElementById('full_name').value = profile.full_name || '';
-                document.getElementById('phone').value = profile.phone || '';
-                document.getElementById('country').value = profile.country || 'Egypt';
-                document.getElementById('website').value = profile.website || '';
-                document.getElementById('display-name').textContent = profile.full_name || profile.username || 'User';
-
-                if (profile.avatar_url || user.user_metadata?.avatar_url) {
-                    const avatarImg = document.getElementById('avatar-img');
-                    if (avatarImg) avatarImg.src = profile.avatar_url || user.user_metadata?.avatar_url;
-                }
-            }
+            document.getElementById('username').value = (profile && profile.username) || meta.username || '';
+            document.getElementById('full_name').value = (profile && profile.full_name) || meta.full_name || '';
+            document.getElementById('phone').value = (profile && profile.phone) || meta.phone || '';
+            document.getElementById('country').value = (profile && profile.country) || meta.country || 'Egypt';
         }
 
-        async function updateProfile(e) {
-            e.preventDefault();
-            let user = null;
-            try {
-                const { data } = await supabase.auth.getUser();
-                user = data?.user;
-            } catch (e) {}
+        // Avatar Upload Handler
+        const uploadBtn = document.getElementById('upload-btn');
+        const avatarImg = document.getElementById('avatar-img');
+        const fileInput = document.getElementById('avatar-file-input');
 
-            if (!user) {
-                const googleAuth = localStorage.getItem('google_auth_user');
-                if (googleAuth) {
-                    try { user = JSON.parse(googleAuth).user; } catch (e) {}
-                }
-            }
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        avatarImg.addEventListener('click', () => fileInput.click());
 
-            if (!user) {
-                alert('Session expired. Please sign in again.');
-                window.location.href = 'login.html';
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size should be less than 5MB');
                 return;
             }
 
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                const base64Data = evt.target.result;
+                avatarImg.src = base64Data;
+
+                if (currentUser) {
+                    localStorage.setItem('user_avatar_' + currentUser.id, base64Data);
+
+                    // Update local google_auth_user if present
+                    const googleAuth = localStorage.getItem('google_auth_user');
+                    if (googleAuth) {
+                        try {
+                            const parsed = JSON.parse(googleAuth);
+                            if (parsed.user && parsed.user.user_metadata) {
+                                parsed.user.user_metadata.avatar_url = base64Data;
+                                localStorage.setItem('google_auth_user', JSON.stringify(parsed));
+                            }
+                        } catch (e) {}
+                    }
+                }
+                alert('Profile picture updated successfully! ✅');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        async function updateProfile(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const username = document.getElementById('username').value.trim();
+            const full_name = document.getElementById('full_name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const country = document.getElementById('country').value;
+            const currentAvatar = avatarImg.src;
+
             const updates = {
-                id: user.id,
-                username: document.getElementById('username').value,
-                full_name: document.getElementById('full_name').value,
-                phone: document.getElementById('phone').value,
-                country: document.getElementById('country').value,
-                website: document.getElementById('website').value,
+                id: currentUser.id,
+                username: username || (currentUser.email ? currentUser.email.split('@')[0] : 'User'),
+                full_name: full_name,
+                phone: phone,
+                country: country,
+                avatar_url: currentAvatar,
                 updated_at: new Date()
             };
 
             try {
                 const { error } = await supabase.from('user_profiles').upsert(updates);
-                if (error) throw error;
+                if (error) console.warn('Supabase upsert note:', error.message);
             } catch (err) {
                 console.warn('Upsert note:', err.message);
             }
 
+            // Save locally
+            localStorage.setItem('user_profile_' + currentUser.id, JSON.stringify(updates));
+            if (updates.full_name) {
+                document.getElementById('display-name').textContent = updates.full_name;
+            }
+
             alert('Profile updated successfully! ✅');
-            document.getElementById('display-name').textContent = updates.full_name || updates.username;
         }
 
         async function signOut() {
             try {
                 await supabase.auth.signOut();
             } catch (e) {}
+            if (currentUser) {
+                localStorage.removeItem('user_avatar_' + currentUser.id);
+            }
             localStorage.removeItem('google_auth_user');
             localStorage.removeItem('project_auth_token');
             window.location.href = 'login.html';
