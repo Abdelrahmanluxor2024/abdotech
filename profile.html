@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="View and manage your profile on Abdelrahman El-Assiouty's Portfolio.">
-    <meta name="keywords"
-        content="Abdelrahman El-Assiouty, Front-End Developer, React.js, TypeScript, Tailwind CSS, Luxor Egypt, Web Development, Single Page Applications, UI/UX Design, عبدالرحمن الأسيوطي, مطور واجهات أمامیة, الأقصر">
-    <title>My Profile | Abdelrahman El-Assiouty</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="الملف الشخصي وإدارة الحساب - عبدالرحمن الأسيوطي">
+    <title>الملف الشخصي | My Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="profile.css">
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,110 +17,222 @@
 <body>
 
     <div class="profile-container">
+        <!-- Navigation -->
         <nav class="nav-bar">
-            <a href="index.html" class="back-btn">← Back to Home</a>
-            <button id="sign-out-btn" class="sign-out-btn">Sign Out</button>
+            <a href="index.html" class="back-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+                <span>العودة إلى الصفحة الرئيسية</span>
+            </a>
+            <button id="sign-out-btn" class="sign-out-btn">تسجيل الخروج</button>
         </nav>
 
+        <!-- Profile Header -->
         <div class="profile-header">
-            <div class="avatar-wrapper">
+            <div class="avatar-wrapper" id="avatar-container" title="اضغط لتغيير الصورة الشخصية">
                 <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Avatar"
-                    id="avatar-img" class="profile-avatar" title="Click to change profile picture">
-                <button type="button" class="avatar-upload-btn" id="upload-btn" title="Change Avatar">📷</button>
+                    id="avatar-img" class="profile-avatar">
+                <button type="button" class="avatar-upload-btn" id="upload-btn" title="تغيير الصورة">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </button>
                 <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
             </div>
             <div class="profile-info">
-                <h1 id="display-name">Loading...</h1>
-                <p class="profile-email" id="display-email">user@example.com</p>
+                <h1 id="display-name">مستخدم مسجل</h1>
+                <p class="profile-email">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span id="display-email">user@example.com</span>
+                </p>
+                <span class="profile-badge" id="account-badge">حساب نشط ✓</span>
             </div>
         </div>
 
+        <!-- Personal Information Form -->
         <div class="profile-card">
-            <h2>Personal Information</h2>
+            <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>البيانات الشخصية</span>
+            </h2>
             <form id="profile-form">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <input type="text" id="username" class="form-input" placeholder="Username">
+                        <label class="form-label" for="username">اسم المستخدم (Username)</label>
+                        <input type="text" id="username" class="form-input" placeholder="اسم المستخدم">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" id="full_name" class="form-input" placeholder="Full Name">
+                        <label class="form-label" for="full_name">الاسم بالكامل (Full Name)</label>
+                        <input type="text" id="full_name" class="form-input" placeholder="الاسم ثلاثي أو ثنائي">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" id="phone" class="form-input" placeholder="01xxxxxxxxx">
+                        <label class="form-label" for="phone">رقم الهاتف / الواتساب</label>
+                        <input type="tel" id="phone" class="form-input" placeholder="01xxxxxxxxx" dir="ltr" style="text-align: right;">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Country</label>
+                        <label class="form-label" for="country">المحافظة (Governorate)</label>
                         <select id="country" class="form-input">
-                            <option value="Egypt">Egypt 🇪🇬</option>
-                            <option value="Saudi Arabia">Saudi Arabia 🇸🇦</option>
-                            <option value="UAE">UAE 🇦🇪</option>
-                            <option value="Kuwait">Kuwait 🇰🇼</option>
-                            <option value="USA">USA 🇺🇸</option>
-                            <option value="Other">Other 🌍</option>
+                            <option value="Cairo">القاهرة (Cairo)</option>
+                            <option value="Giza">الجيزة (Giza)</option>
+                            <option value="Alexandria">الإسكندرية (Alexandria)</option>
+                            <option value="Luxor" selected>الأقصر (Luxor)</option>
+                            <option value="Aswan">أسوان (Aswan)</option>
+                            <option value="Qena">قنا (Qena)</option>
+                            <option value="Sohag">سوهاج (Sohag)</option>
+                            <option value="Assiut">أسيوط (Assiut)</option>
+                            <option value="Minya">المنيا (Minya)</option>
+                            <option value="Beni Suef">بني سويف (Beni Suef)</option>
+                            <option value="Fayoum">الفيوم (Fayoum)</option>
+                            <option value="Qalyubia">القليوبية (Qalyubia)</option>
+                            <option value="Sharqia">الشرقية (Sharqia)</option>
+                            <option value="Dakahlia">الدقهلية (Dakahlia)</option>
+                            <option value="Monufia">المنوفية (Monufia)</option>
+                            <option value="Gharbia">الغربية (Gharbia)</option>
+                            <option value="Kafr El Sheikh">كفر الشيخ (Kafr El Sheikh)</option>
+                            <option value="Damietta">دمياط (Damietta)</option>
+                            <option value="Port Said">بورسعيد (Port Said)</option>
+                            <option value="Ismailia">الإسماعيلية (Ismailia)</option>
+                            <option value="Suez">السويس (Suez)</option>
+                            <option value="North Sinai">شمال سيناء (North Sinai)</option>
+                            <option value="South Sinai">جنوب سيناء (South Sinai)</option>
+                            <option value="Red Sea">البحر الأحمر (Red Sea)</option>
+                            <option value="New Valley">الوادي الجديد (New Valley)</option>
+                            <option value="Matrouh">مطروح (Matrouh)</option>
+                            <option value="Beheira">البحيرة (Beheira)</option>
+                            <option value="Outside Egypt">خارج مصر (Outside Egypt 🌍)</option>
                         </select>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-save">Save Changes</button>
+                <button type="submit" class="btn-save" id="save-btn">حفظ التغييرات</button>
             </form>
         </div>
     </div>
 
-    <!-- MAIN SCRIPT -->
+    <!-- MAIN PROFILE SCRIPT -->
     <script>
-        // --- Supabase Config ---
+        // --- Supabase Config with Same Storage Key ---
         const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                persistSession: true,
+                storageKey: 'project_auth_token',
+                storage: window.localStorage,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        });
 
         let currentUser = null;
 
+        function showToast(msg, type = 'success') {
+            const existing = document.querySelector('.toast-msg');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `toast-msg ${type}`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
         async function loadProfile() {
-            // 1. Get User
+            // 1. Check direct Supabase session
             try {
-                const { data } = await supabase.auth.getUser();
-                if (data && data.user) {
-                    currentUser = data.user;
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session && session.user) {
+                    currentUser = session.user;
                 }
             } catch (e) {
-                console.warn('Supabase getUser error:', e);
+                console.warn('Session retrieval note:', e);
             }
 
+            // 2. Check localStorage project_auth_token
+            if (!currentUser) {
+                const storedToken = localStorage.getItem('project_auth_token');
+                if (storedToken) {
+                    try {
+                        const parsed = JSON.parse(storedToken);
+                        if (parsed && parsed.user) {
+                            currentUser = parsed.user;
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            // 3. Check Google session
             if (!currentUser) {
                 const googleAuth = localStorage.getItem('google_auth_user');
                 if (googleAuth) {
                     try {
                         const parsed = JSON.parse(googleAuth);
-                        currentUser = parsed.user;
+                        if (parsed && parsed.user) {
+                            currentUser = parsed.user;
+                        }
                     } catch (e) {}
                 }
             }
 
-            if (!currentUser) {
+            // 4. Fallback to last registered profile if local guest mode
+            let localProfile = null;
+            if (currentUser && currentUser.id) {
+                const savedLocal = localStorage.getItem('user_profile_' + currentUser.id);
+                if (savedLocal) {
+                    try { localProfile = JSON.parse(savedLocal); } catch (e) {}
+                }
+            }
+            if (!localProfile) {
+                const lastReg = localStorage.getItem('last_registered_profile');
+                if (lastReg) {
+                    try { localProfile = JSON.parse(lastReg); } catch (e) {}
+                }
+            }
+
+            // If no user at all, redirect to login
+            if (!currentUser && !localProfile) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Display user email
-            const userEmail = currentUser.email || '';
-            document.getElementById('display-email').textContent = userEmail;
+            const userId = currentUser ? currentUser.id : (localProfile ? localProfile.id : 'default_user');
+            const userEmail = (currentUser && currentUser.email) || (localProfile && localProfile.email) || '';
+            const userMeta = (currentUser && currentUser.user_metadata) || {};
 
-            // Display name fallback
-            let displayName = currentUser.user_metadata?.full_name ||
-                              currentUser.user_metadata?.username ||
-                              (userEmail ? userEmail.split('@')[0] : 'User');
+            // Display Email
+            const emailEl = document.getElementById('display-email');
+            if (emailEl) emailEl.textContent = userEmail || 'حساب مفعل';
 
-            document.getElementById('display-name').textContent = displayName;
+            // Display Name
+            let displayName = (localProfile && (localProfile.full_name || localProfile.username)) ||
+                              userMeta.full_name ||
+                              userMeta.username ||
+                              (userEmail ? userEmail.split('@')[0] : 'مستخدم الأسيوطي');
 
-            // Load saved avatar if exists
-            const savedAvatar = localStorage.getItem('user_avatar_' + currentUser.id) ||
-                                currentUser.user_metadata?.avatar_url;
+            const nameEl = document.getElementById('display-name');
+            if (nameEl) nameEl.textContent = displayName;
+
+            // Load Avatar
+            const savedAvatar = localStorage.getItem('user_avatar_' + userId) ||
+                                localStorage.getItem('user_avatar_global') ||
+                                (localProfile && localProfile.avatar_url) ||
+                                userMeta.avatar_url;
 
             const avatarImg = document.getElementById('avatar-img');
             if (savedAvatar) {
@@ -129,42 +241,66 @@
                 avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=6366f1&color=fff`;
             }
 
-            // Fetch Profile Data from DB
-            let profile = null;
-            try {
-                let { data, error } = await supabase
-                    .from('user_profiles')
-                    .select('*')
-                    .eq('id', currentUser.id)
-                    .single();
-                if (!error && data) profile = data;
-            } catch (e) {
-                console.warn('Profile fetch note:', e);
+            // Fetch latest from DB user_profiles table if possible
+            let dbProfile = null;
+            if (currentUser && currentUser.id) {
+                try {
+                    let { data, error } = await supabase
+                        .from('user_profiles')
+                        .select('*')
+                        .eq('id', currentUser.id)
+                        .single();
+                    if (!error && data) dbProfile = data;
+                } catch (e) {
+                    console.warn('DB profile fetch notice:', e);
+                }
             }
 
-            // Fallback metadata if DB has no record
-            const meta = currentUser.user_metadata || {};
+            const finalProfile = dbProfile || localProfile || {};
 
-            document.getElementById('username').value = (profile && profile.username) || meta.username || '';
-            document.getElementById('full_name').value = (profile && profile.full_name) || meta.full_name || '';
-            document.getElementById('phone').value = (profile && profile.phone) || meta.phone || '';
-            document.getElementById('country').value = (profile && profile.country) || meta.country || 'Egypt';
+            // Pre-fill input fields
+            document.getElementById('username').value = finalProfile.username || userMeta.username || (userEmail ? userEmail.split('@')[0] : '');
+            document.getElementById('full_name').value = finalProfile.full_name || userMeta.full_name || displayName || '';
+            document.getElementById('phone').value = finalProfile.phone || userMeta.phone || '';
+            
+            const countryVal = finalProfile.country || userMeta.country;
+            if (countryVal) {
+                const countrySelect = document.getElementById('country');
+                for (let i = 0; i < countrySelect.options.length; i++) {
+                    if (countrySelect.options[i].value.toLowerCase() === countryVal.toLowerCase()) {
+                        countrySelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
         }
 
-        // Avatar Upload Handler
+        // ==================== AVATAR UPLOAD HANDLER ====================
         const uploadBtn = document.getElementById('upload-btn');
+        const avatarContainer = document.getElementById('avatar-container');
         const avatarImg = document.getElementById('avatar-img');
         const fileInput = document.getElementById('avatar-file-input');
 
-        uploadBtn.addEventListener('click', () => fileInput.click());
-        avatarImg.addEventListener('click', () => fileInput.click());
+        function triggerFileSelect(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileInput.click();
+        }
+
+        uploadBtn.addEventListener('click', triggerFileSelect);
+        avatarContainer.addEventListener('click', triggerFileSelect);
 
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
+            if (!file.type.startsWith('image/')) {
+                showToast('يرجى اختيار ملف صورة صالح (PNG, JPG, WEBP)', 'error');
+                return;
+            }
+
             if (file.size > 5 * 1024 * 1024) {
-                alert('Image size should be less than 5MB');
+                showToast('حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 5 ميجابايت', 'error');
                 return;
             }
 
@@ -173,75 +309,94 @@
                 const base64Data = evt.target.result;
                 avatarImg.src = base64Data;
 
-                if (currentUser) {
-                    localStorage.setItem('user_avatar_' + currentUser.id, base64Data);
+                const userId = currentUser ? currentUser.id : 'default_user';
+                localStorage.setItem('user_avatar_' + userId, base64Data);
+                localStorage.setItem('user_avatar_global', base64Data);
 
-                    // Update local google_auth_user if present
-                    const googleAuth = localStorage.getItem('google_auth_user');
-                    if (googleAuth) {
-                        try {
-                            const parsed = JSON.parse(googleAuth);
-                            if (parsed.user && parsed.user.user_metadata) {
-                                parsed.user.user_metadata.avatar_url = base64Data;
-                                localStorage.setItem('google_auth_user', JSON.stringify(parsed));
-                            }
-                        } catch (e) {}
-                    }
+                // Update Google session if logged in with Google
+                const googleAuth = localStorage.getItem('google_auth_user');
+                if (googleAuth) {
+                    try {
+                        const parsed = JSON.parse(googleAuth);
+                        if (parsed.user && parsed.user.user_metadata) {
+                            parsed.user.user_metadata.avatar_url = base64Data;
+                            localStorage.setItem('google_auth_user', JSON.stringify(parsed));
+                        }
+                    } catch (err) {}
                 }
-                alert('Profile picture updated successfully! ✅');
+
+                // Update Supabase DB if user id exists
+                if (currentUser && currentUser.id) {
+                    supabase.from('user_profiles').upsert([
+                        { id: currentUser.id, avatar_url: base64Data, updated_at: new Date() }
+                    ]).then(() => {}).catch(() => {});
+                }
+
+                showToast('تم تحديث الصورة الشخصية بنجاح! ✅', 'success');
             };
             reader.readAsDataURL(file);
         });
 
+        // ==================== SAVE PROFILE HANDLER ====================
         async function updateProfile(e) {
             e.preventDefault();
-            if (!currentUser) return;
+
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'جاري الحفظ...';
 
             const username = document.getElementById('username').value.trim();
             const full_name = document.getElementById('full_name').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const country = document.getElementById('country').value;
             const currentAvatar = avatarImg.src;
+            const userId = currentUser ? currentUser.id : 'default_user';
+            const userEmail = document.getElementById('display-email').textContent;
 
             const updates = {
-                id: currentUser.id,
-                username: username || (currentUser.email ? currentUser.email.split('@')[0] : 'User'),
+                id: userId,
+                username: username,
                 full_name: full_name,
                 phone: phone,
                 country: country,
+                email: userEmail,
                 avatar_url: currentAvatar,
                 updated_at: new Date()
             };
 
-            try {
-                const { error } = await supabase.from('user_profiles').upsert(updates);
-                if (error) console.warn('Supabase upsert note:', error.message);
-            } catch (err) {
-                console.warn('Upsert note:', err.message);
+            // Save to localStorage
+            localStorage.setItem('user_profile_' + userId, JSON.stringify(updates));
+            localStorage.setItem('last_registered_profile', JSON.stringify(updates));
+
+            // Save to Supabase
+            if (currentUser && currentUser.id) {
+                try {
+                    await supabase.from('user_profiles').upsert([updates]);
+                } catch (err) {
+                    console.warn('Supabase profile upsert:', err);
+                }
             }
 
-            // Save locally
-            localStorage.setItem('user_profile_' + currentUser.id, JSON.stringify(updates));
-            if (updates.full_name) {
-                document.getElementById('display-name').textContent = updates.full_name;
+            if (full_name) {
+                document.getElementById('display-name').textContent = full_name;
             }
 
-            alert('Profile updated successfully! ✅');
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'حفظ التغييرات';
+            showToast('تم حفظ التعديلات بنجاح! ✅', 'success');
         }
 
+        // ==================== SIGNOUT HANDLER ====================
         async function signOut() {
             try {
                 await supabase.auth.signOut();
             } catch (e) {}
-            if (currentUser) {
-                localStorage.removeItem('user_avatar_' + currentUser.id);
-            }
             localStorage.removeItem('google_auth_user');
             localStorage.removeItem('project_auth_token');
             window.location.href = 'login.html';
         }
 
-        // Init
+        // Initialize
         loadProfile();
         document.getElementById('profile-form').addEventListener('submit', updateProfile);
         document.getElementById('sign-out-btn').addEventListener('click', signOut);

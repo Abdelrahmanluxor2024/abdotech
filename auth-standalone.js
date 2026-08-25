@@ -230,7 +230,7 @@
                         username: username,
                         phone: phone,
                         country: country,
-                        full_name: username // مبدئيا نستخدم اليوزر نيم كاسم كامل
+                        full_name: username
                     }
                 }
             });
@@ -241,6 +241,24 @@
                 if (data?.user?.identities?.length === 0) {
                     showAlert('warning', 'This email is already registered. Please sign in instead.');
                 } else {
+                    // Save profile info locally and in DB
+                    const profileObj = {
+                        id: data.user.id,
+                        username: username,
+                        full_name: username,
+                        phone: phone,
+                        country: country,
+                        email: email
+                    };
+                    localStorage.setItem('user_profile_' + data.user.id, JSON.stringify(profileObj));
+                    localStorage.setItem('last_registered_profile', JSON.stringify(profileObj));
+
+                    try {
+                        await supabaseClient.from('user_profiles').upsert([profileObj]);
+                    } catch (dbErr) {
+                        console.warn('DB profile upsert note:', dbErr);
+                    }
+
                     // Mark user as having an account
                     localStorage.setItem('signup_banner_dismissed', 'true');
                     showAlert('success', 'Account created successfully! You can now sign in.');
