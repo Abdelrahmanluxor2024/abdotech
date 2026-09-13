@@ -1,18 +1,15 @@
-// ==================== SUPABASE AUTH - STANDALONE VERSION ====================
-// This version works without ES Modules (works with file:// protocol)
-// All code is in one file
+﻿// ==================== SUPABASE AUTH - STANDALONE VERSION ====================
+// Fixed version - All buttons working correctly
 
-(function () {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function () {
 
-    function init() {
     // ==================== SUPABASE CONFIG ====================
-    const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
+    var SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
 
-    // Initialize Supabase safely
-    const supabaseClient = (window.supabase && window.supabase.createClient)
-        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    var supabaseClient = null;
+    if (window.supabase && window.supabase.createClient) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: {
                 persistSession: true,
                 storageKey: 'project_auth_token',
@@ -20,192 +17,173 @@
                 autoRefreshToken: true,
                 detectSessionInUrl: true
             }
-        })
-        : null;
-
-    if (!supabaseClient) {
-        console.error('❌ Supabase failed to load. Please check your internet connection.');
-        const alertBox = document.getElementById('alert-container');
-        const alertText = document.querySelector('.alert-text');
-        const alertMsg = document.getElementById('alert-message');
-        if (alertBox && alertText && alertMsg) {
-            alertBox.classList.remove('hidden');
-            alertMsg.className = 'alert error';
-            alertText.textContent = 'Connection error. Please refresh the page or check your internet connection.';
-        }
-        return; // Stop execution if Supabase failed to load
+        });
+        console.log('Supabase initialized OK');
+    } else {
+        console.error('Supabase library not loaded!');
     }
-
 
     // ==================== DOM ELEMENTS ====================
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const toggleFormBtn = document.getElementById('toggle-form-btn');
-    const toggleText = document.getElementById('toggle-text');
-    const toggleDividerText = document.getElementById('toggle-divider-text');
-    const alertContainer = document.getElementById('alert-container');
-    const alertMessage = document.getElementById('alert-message');
-    const alertText = document.querySelector('.alert-text');
+    var loginForm      = document.getElementById('login-form');
+    var signupForm     = document.getElementById('signup-form');
+    var toggleFormBtn  = document.getElementById('toggle-form-btn');
+    var toggleText     = document.getElementById('toggle-text');
+    var toggleDivText  = document.getElementById('toggle-divider-text');
+    var alertContainer = document.getElementById('alert-container');
+    var alertMessage   = document.getElementById('alert-message');
+    var alertTextEl    = document.querySelector('.alert-text');
 
-    let isSignupMode = false;
-    let isRedirecting = false;
+    var isSignupMode  = false;
+    var isRedirecting = false;
 
-    // ==================== MODE SWITCHING FUNCTION ====================
-    function setAuthMode(mode) {
-        isSignupMode = (mode === 'signup');
-
-        const cardTitle = document.querySelector('.card-title');
-        const cardSubtitle = document.querySelector('.card-subtitle');
-        const googleBtnLabel = document.getElementById('google-btn-label');
-
-        if (isSignupMode) {
-            if (loginForm) loginForm.classList.add('hidden');
-            if (signupForm) signupForm.classList.remove('hidden');
-            if (toggleText) toggleText.textContent = 'Sign In';
-            if (toggleDividerText) toggleDividerText.textContent = 'Already have an account?';
-            if (cardTitle) cardTitle.textContent = 'Create Account';
-            if (cardSubtitle) cardSubtitle.textContent = 'Sign up to get started';
-            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign up with Google';
-            try {
-                if (window.location.search !== '?mode=signup') {
-                    window.history.replaceState(null, '', 'login.html?mode=signup');
-                }
-            } catch (e) {}
-        } else {
-            if (signupForm) signupForm.classList.add('hidden');
-            if (loginForm) loginForm.classList.remove('hidden');
-            if (toggleText) toggleText.textContent = 'Create New Account';
-            if (toggleDividerText) toggleDividerText.textContent = "Don't have an account?";
-            if (cardTitle) cardTitle.textContent = 'Welcome Back';
-            if (cardSubtitle) cardSubtitle.textContent = 'Sign in to access your account';
-            if (googleBtnLabel) googleBtnLabel.textContent = 'Continue with Google';
-            try {
-                if (window.location.search.includes('mode=signup')) {
-                    window.history.replaceState(null, '', 'login.html');
-                }
-            } catch (e) {}
-        }
-
-        closeAlert();
-    }
-
-    window.setAuthMode = setAuthMode;
-    window.toggleForm = function (e) {
-        if (e && e.preventDefault) e.preventDefault();
-        setAuthMode(isSignupMode ? 'signin' : 'signup');
-    };
-
-    // Initialize mode from URL
-    (function initModeFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mode') === 'signup' || window.location.hash === '#signup') {
-            setAuthMode('signup');
-        } else {
-            setAuthMode('signin');
-        }
-    })();
-
-    // Support browser Back/Forward navigation
-    window.addEventListener('popstate', function () {
-        const params = new URLSearchParams(window.location.search);
-        setAuthMode(params.get('mode') === 'signup' ? 'signup' : 'signin');
-    });
-
-    // ==================== UI FUNCTIONS ====================
+    // ==================== ALERT FUNCTIONS ====================
     function showAlert(type, message) {
+        if (!alertContainer || !alertMessage || !alertTextEl) return;
         alertContainer.classList.remove('hidden');
-        alertMessage.className = `alert ${type}`;
-        alertText.textContent = message;
-
+        alertMessage.className = 'alert ' + type;
+        alertTextEl.textContent = message;
         if (type === 'success') {
-            setTimeout(() => closeAlert(), 5000);
+            setTimeout(function () { closeAlert(); }, 5000);
         }
     }
 
-    window.closeAlert = function () {
-        alertContainer.classList.add('hidden');
-    };
+    function closeAlert() {
+        if (alertContainer) alertContainer.classList.add('hidden');
+    }
 
+    window.closeAlert = closeAlert;
+
+    // ==================== PASSWORD TOGGLE ====================
     window.togglePasswordVisibility = function (formType) {
-        const passwordInput = formType === 'signup'
-            ? document.getElementById('signup-password')
-            : document.getElementById('password');
-
-        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        var id = formType === 'signup' ? 'signup-password' : 'password';
+        var el = document.getElementById(id);
+        if (el) el.type = (el.type === 'password') ? 'text' : 'password';
     };
 
+    // ==================== HELPERS ====================
     function isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
     function getErrorMessage(error) {
         if (!error || !error.message) return 'An unexpected error occurred';
-
-        const errorMsg = error.message.toLowerCase();
-
-        if (errorMsg.includes('invalid login credentials')) {
-            return 'Invalid email or password. Please try again.';
-        } else if (errorMsg.includes('email not confirmed')) {
-            return 'Please confirm your email address to continue.';
-        } else if (errorMsg.includes('user already registered')) {
-            return 'This email is already registered. Please sign in instead.';
-        } else if (errorMsg.includes('password should be at least 6 characters')) {
-            return 'Password must be at least 6 characters long.';
-        } else if (errorMsg.includes('rate limit')) {
-            return 'Too many attempts. Please wait a moment and try again.';
-        } else if (errorMsg.includes('network') || errorMsg.includes('fetch')) {
-            return 'Network error. Please check your internet connection.';
-        }
-
+        var msg = error.message.toLowerCase();
+        if (msg.indexOf('invalid login credentials') !== -1) return 'Invalid email or password. Please try again.';
+        if (msg.indexOf('email not confirmed') !== -1)       return 'Please confirm your email address to continue.';
+        if (msg.indexOf('user already registered') !== -1)   return 'This email is already registered. Please sign in instead.';
+        if (msg.indexOf('password should be at least') !== -1) return 'Password must be at least 6 characters long.';
+        if (msg.indexOf('rate limit') !== -1)                return 'Too many attempts. Please wait a moment and try again.';
+        if (msg.indexOf('network') !== -1 || msg.indexOf('fetch') !== -1) return 'Network error. Please check your internet connection.';
         return error.message;
     }
+
+    // ==================== MODE SWITCHING ====================
+    function setAuthMode(mode) {
+        isSignupMode = (mode === 'signup');
+
+        var cardTitle    = document.querySelector('.card-title');
+        var cardSubtitle = document.querySelector('.card-subtitle');
+        var googleLabel  = document.getElementById('google-btn-label');
+
+        if (isSignupMode) {
+            if (loginForm)    loginForm.classList.add('hidden');
+            if (signupForm)   signupForm.classList.remove('hidden');
+            if (toggleText)   toggleText.textContent = 'Sign In';
+            if (toggleDivText) toggleDivText.textContent = 'Already have an account?';
+            if (cardTitle)    cardTitle.textContent = 'Create Account';
+            if (cardSubtitle) cardSubtitle.textContent = 'Sign up to get started';
+            if (googleLabel)  googleLabel.textContent = 'Sign up with Google';
+            try {
+                if (window.location.search !== '?mode=signup')
+                    window.history.replaceState(null, '', 'login.html?mode=signup');
+            } catch(e) {}
+        } else {
+            if (signupForm)   signupForm.classList.add('hidden');
+            if (loginForm)    loginForm.classList.remove('hidden');
+            if (toggleText)   toggleText.textContent = 'Create New Account';
+            if (toggleDivText) toggleDivText.textContent = "Don't have an account?";
+            if (cardTitle)    cardTitle.textContent = 'Welcome Back';
+            if (cardSubtitle) cardSubtitle.textContent = 'Sign in to access your account';
+            if (googleLabel)  googleLabel.textContent = 'Continue with Google';
+            try {
+                if (window.location.search.indexOf('mode=signup') !== -1)
+                    window.history.replaceState(null, '', 'login.html');
+            } catch(e) {}
+        }
+        closeAlert();
+    }
+
+    window.setAuthMode = setAuthMode;
+    window.toggleForm  = function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        setAuthMode(isSignupMode ? 'signin' : 'signup');
+    };
+
+    // Read URL on load
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'signup' || window.location.hash === '#signup') {
+        setAuthMode('signup');
+    } else {
+        setAuthMode('signin');
+    }
+
+    window.addEventListener('popstate', function () {
+        var p = new URLSearchParams(window.location.search);
+        setAuthMode(p.get('mode') === 'signup' ? 'signup' : 'signin');
+    });
 
     // ==================== LOGIN HANDLER ====================
     async function handleLogin(event) {
         event.preventDefault();
+        if (!supabaseClient) {
+            showAlert('error', 'Service not available. Please refresh the page.');
+            return;
+        }
 
-        const loginBtn = document.getElementById('login-btn');
-        const btnText = loginBtn.querySelector('.btn-text');
-        const btnLoader = loginBtn.querySelector('.btn-loader');
+        var loginBtn  = document.getElementById('login-btn');
+        var btnText   = loginBtn ? loginBtn.querySelector('.btn-text')   : null;
+        var btnLoader = loginBtn ? loginBtn.querySelector('.btn-loader') : null;
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
+        var emailEl    = document.getElementById('email');
+        var passwordEl = document.getElementById('password');
+        var email      = emailEl    ? emailEl.value.trim() : '';
+        var password   = passwordEl ? passwordEl.value     : '';
 
         if (!email || !password) {
             showAlert('error', 'Please fill in all fields');
             return;
         }
-
         if (!isValidEmail(email)) {
             showAlert('error', 'Please enter a valid email address');
             return;
         }
 
-        loginBtn.disabled = true;
-        btnText.style.opacity = '0';
-        btnLoader.classList.remove('hidden');
+        if (loginBtn)  loginBtn.disabled = true;
+        if (btnText)   btnText.style.opacity = '0';
+        if (btnLoader) btnLoader.classList.remove('hidden');
 
         try {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
+            var result = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+            var data   = result.data;
+            var error  = result.error;
 
             if (error) {
-                // Handle specific confirm email case
-                if (error.message.includes('Email not confirmed')) {
-                    showAlert('warning', 'Please check your email to confirm account, or use a new email.');
+                if (error.message.indexOf('Email not confirmed') !== -1) {
+                    showAlert('warning', 'Please check your email inbox and confirm your account first, then try to sign in.');
                 } else {
                     showAlert('error', getErrorMessage(error));
                 }
+                if (loginBtn)  loginBtn.disabled = false;
+                if (btnText)   btnText.style.opacity = '1';
+                if (btnLoader) btnLoader.classList.add('hidden');
             } else {
-                console.log('✅ Login successful:', data);
+                console.log('Login successful!');
                 localStorage.setItem('signup_banner_dismissed', 'true');
 
-                const u = data.user || (data.session && data.session.user);
+                var u = data.user || (data.session && data.session.user);
                 if (u) {
-                    const uMeta = u.user_metadata || {};
-                    const activeProfile = {
+                    var uMeta = u.user_metadata || {};
+                    var activeProfile = {
                         id: u.id,
                         email: u.email,
                         username: uMeta.username || u.email.split('@')[0],
@@ -218,65 +196,71 @@
                     localStorage.setItem('user_profile_' + u.id, JSON.stringify(activeProfile));
                 }
 
-                // FORCE redirect with token hash for file:// support
-                const token = data.session.access_token;
-                const refresh = data.session.refresh_token;
-                console.log('Redirecting with token...');
                 isRedirecting = true;
-                window.location.replace(`index.html#access_token=${token}&refresh_token=${refresh}`);
+                showAlert('success', 'Login successful! Redirecting...');
+
+                setTimeout(function () {
+                    if (data.session && data.session.access_token) {
+                        window.location.replace('index.html#access_token=' + data.session.access_token + '&refresh_token=' + data.session.refresh_token);
+                    } else {
+                        window.location.replace('index.html');
+                    }
+                }, 800);
             }
-        } catch (error) {
-            console.error('Login error:', error);
-            showAlert('error', 'An unexpected error occurred');
-        } finally {
-            if (!isRedirecting) {
-                // Only reset button if not redirecting after success
-                loginBtn.disabled = false;
-                btnText.style.opacity = '1';
-                btnLoader.classList.add('hidden');
-            }
+        } catch (err) {
+            console.error('Login error:', err);
+            showAlert('error', 'An unexpected error occurred. Please try again.');
+            if (loginBtn)  loginBtn.disabled = false;
+            if (btnText)   btnText.style.opacity = '1';
+            if (btnLoader) btnLoader.classList.add('hidden');
         }
     }
 
     // ==================== SIGNUP HANDLER ====================
     async function handleSignup(event) {
         event.preventDefault();
-
-        const signupBtn = document.getElementById('signup-btn');
-        const btnText = signupBtn.querySelector('.btn-text');
-        const btnLoader = signupBtn.querySelector('.btn-loader');
-
-        const email = document.getElementById('signup-email').value.trim();
-        const password = document.getElementById('signup-password').value;
-
-        // بيانات إضافية
-        const username = document.getElementById('username').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const country = document.getElementById('country').value;
-
-        if (!email || !password || !username) {
-            showAlert('error', 'Please fill in all required fields (Username, Email, Password)');
+        if (!supabaseClient) {
+            showAlert('error', 'Service not available. Please refresh the page.');
             return;
         }
 
+        var signupBtn = document.getElementById('signup-btn');
+        var btnText   = signupBtn ? signupBtn.querySelector('.btn-text')   : null;
+        var btnLoader = signupBtn ? signupBtn.querySelector('.btn-loader') : null;
+
+        var emailEl    = document.getElementById('signup-email');
+        var passwordEl = document.getElementById('signup-password');
+        var usernameEl = document.getElementById('username');
+        var phoneEl    = document.getElementById('phone');
+        var countryEl  = document.getElementById('country');
+
+        var email    = emailEl    ? emailEl.value.trim()    : '';
+        var password = passwordEl ? passwordEl.value        : '';
+        var username = usernameEl ? usernameEl.value.trim() : '';
+        var phone    = phoneEl    ? phoneEl.value.trim()    : '';
+        var country  = countryEl  ? countryEl.value         : 'Luxor';
+
+        if (!email || !password || !username) {
+            showAlert('error', 'Please fill in Username, Email, and Password');
+            return;
+        }
         if (!isValidEmail(email)) {
             showAlert('error', 'Please enter a valid email address');
             return;
         }
-
         if (password.length < 6) {
             showAlert('error', 'Password must be at least 6 characters long');
             return;
         }
 
-        signupBtn.disabled = true;
-        btnText.style.opacity = '0';
-        btnLoader.classList.remove('hidden');
+        if (signupBtn) signupBtn.disabled = true;
+        if (btnText)   btnText.style.opacity = '0';
+        if (btnLoader) btnLoader.classList.remove('hidden');
 
         try {
-            const { data, error } = await supabaseClient.auth.signUp({
-                email,
-                password,
+            var result = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
                 options: {
                     data: {
                         username: username,
@@ -286,145 +270,85 @@
                     }
                 }
             });
+            var data  = result.data;
+            var error = result.error;
 
             if (error) {
                 showAlert('error', getErrorMessage(error));
+            } else if (data && data.user && data.user.identities && data.user.identities.length === 0) {
+                showAlert('warning', 'This email is already registered. Please sign in instead.');
             } else {
-                if (data?.user?.identities?.length === 0) {
-                    showAlert('warning', 'This email is already registered. Please sign in instead.');
-                } else {
-                    const userId = (data && data.user && data.user.id) || 'user_' + Date.now();
-                    const profileObj = {
-                        id: userId,
-                        username: username,
-                        full_name: username,
-                        phone: phone,
-                        country: country,
-                        email: email
-                    };
-                    localStorage.setItem('active_user_session', JSON.stringify(profileObj));
-                    localStorage.setItem('user_profile_' + userId, JSON.stringify(profileObj));
-                    localStorage.setItem('last_registered_profile', JSON.stringify(profileObj));
-                    localStorage.setItem('saved_user_email', email);
-                    localStorage.setItem('saved_user_name', username);
-                    localStorage.setItem('saved_user_phone', phone);
-                    localStorage.setItem('saved_user_gov', country);
-
-                    if (data && data.user) {
-                        try {
-                            await supabaseClient.from('user_profiles').upsert([profileObj]);
-                        } catch (dbErr) {
-                            console.warn('DB profile upsert note:', dbErr);
-                        }
-                    }
-
-                    // Mark user as having an account
-                    localStorage.setItem('signup_banner_dismissed', 'true');
-                    showAlert('success', 'Account created successfully! You can now sign in.');
-                    setTimeout(() => window.toggleForm(), 2000);
-                }
-            }
-        } catch (error) {
-            console.error('Signup error:', error);
-            showAlert('error', 'An unexpected error occurred');
-        } finally {
-            signupBtn.disabled = false;
-            btnText.style.opacity = '1';
-            btnLoader.classList.add('hidden');
-        }
-    }
-
-    // ==================== AUTH STATE LISTENER ====================
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-        console.log('🔔 Auth event:', event);
-
-        if (event === 'SIGNED_IN' && !isRedirecting) {
-            // Only redirect if we're not already handling it in login/signup handlers
-            isRedirecting = true;
-            window.location.replace('index.html');
-        }
-    });
-
-    // ==================== GOOGLE CLIENT CONFIG ====================
-    const GOOGLE_CLIENT_ID = '192480132298-jt33utn5motg52f308c4kihqenj09t4v.apps.googleusercontent.com';
-
-    // Helper: Decode JWT
-    function parseJwt(token) {
-        try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        } catch (e) {
-            console.error('Failed to parse JWT', e);
-            return null;
-        }
-    }
-
-    // Google Identity Services (GIS) Credential Handler
-    async function handleGoogleCredentialResponse(response) {
-        try {
-            console.log('✅ Google credential response received');
-            const idToken = response.credential;
-            const profile = parseJwt(idToken);
-
-            if (profile) {
-                // Store Google session profile for immediate recognition
-                const customSession = {
-                    user: {
-                        id: profile.sub,
-                        email: profile.email,
-                        user_metadata: {
-                            full_name: profile.name,
-                            avatar_url: profile.picture,
-                            email: profile.email
-                        }
-                    },
-                    access_token: idToken,
-                    expires_at: profile.exp
+                var userId = (data && data.user && data.user.id) ? data.user.id : ('user_' + Date.now());
+                var profileObj = {
+                    id: userId, username: username, full_name: username,
+                    phone: phone, country: country, email: email
                 };
-
-                localStorage.setItem('google_auth_user', JSON.stringify(customSession));
+                localStorage.setItem('active_user_session',     JSON.stringify(profileObj));
+                localStorage.setItem('user_profile_' + userId,  JSON.stringify(profileObj));
+                localStorage.setItem('last_registered_profile', JSON.stringify(profileObj));
+                localStorage.setItem('saved_user_email', email);
+                localStorage.setItem('saved_user_name',  username);
+                localStorage.setItem('saved_user_phone', phone);
+                localStorage.setItem('saved_user_gov',   country);
                 localStorage.setItem('signup_banner_dismissed', 'true');
 
-                const activeProfile = {
-                    id: profile.sub,
-                    email: profile.email,
-                    username: profile.name || profile.email.split('@')[0],
-                    full_name: profile.name || '',
-                    phone: '',
-                    country: 'Cairo',
-                    avatar_url: profile.picture || ''
-                };
-                localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
-                localStorage.setItem('user_profile_' + profile.sub, JSON.stringify(activeProfile));
-
-                // Also try Supabase signInWithIdToken if supported
-                try {
-                    if (supabaseClient.auth.signInWithIdToken) {
-                        await supabaseClient.auth.signInWithIdToken({
-                            provider: 'google',
-                            token: idToken
-                        });
-                    }
-                } catch (sbErr) {
-                    console.warn('Supabase ID token signin:', sbErr.message);
+                if (data && data.user) {
+                    try { await supabaseClient.from('user_profiles').upsert([profileObj]); }
+                    catch (dbErr) { console.warn('DB upsert:', dbErr); }
                 }
 
-                showAlert('success', `Welcome, ${profile.name}! Redirecting...`);
-                setTimeout(() => {
-                    window.location.replace('index.html');
-                }, 1000);
+                showAlert('success', 'Account created! Please check your email to confirm, then sign in.');
+                setTimeout(function () { setAuthMode('signin'); }, 3500);
             }
-        } catch (error) {
-            console.error('Google token error:', error);
-            showAlert('error', 'Google authentication failed: ' + error.message);
+        } catch (err) {
+            console.error('Signup error:', err);
+            showAlert('error', 'An unexpected error occurred. Please try again.');
+        } finally {
+            if (signupBtn) signupBtn.disabled = false;
+            if (btnText)   btnText.style.opacity = '1';
+            if (btnLoader) btnLoader.classList.add('hidden');
         }
     }
 
-    // Initialize GIS if loaded
+    // ==================== GOOGLE ====================
+    var GOOGLE_CLIENT_ID = '192480132298-jt33utn5motg52f308c4kihqenj09t4v.apps.googleusercontent.com';
+
+    function parseJwt(token) {
+        try {
+            var b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+            return JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join('')));
+        } catch(e) { return null; }
+    }
+
+    function handleGoogleCredentialResponse(response) {
+        var idToken = response.credential;
+        var profile = parseJwt(idToken);
+        if (!profile) { showAlert('error', 'Google sign-in failed. Please try again.'); return; }
+
+        var activeProfile = {
+            id: profile.sub, email: profile.email,
+            username: profile.name || profile.email.split('@')[0],
+            full_name: profile.name || '', phone: '', country: 'Cairo',
+            avatar_url: profile.picture || ''
+        };
+        localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
+        localStorage.setItem('user_profile_' + profile.sub, JSON.stringify(activeProfile));
+        localStorage.setItem('google_auth_user', JSON.stringify({ user: activeProfile, access_token: idToken }));
+        localStorage.setItem('signup_banner_dismissed', 'true');
+
+        if (supabaseClient && supabaseClient.auth.signInWithIdToken) {
+            supabaseClient.auth.signInWithIdToken({ provider: 'google', token: idToken }).catch(function(e) {
+                console.warn('Supabase Google ID token:', e.message);
+            });
+        }
+
+        showAlert('success', 'Welcome, ' + profile.name + '! Redirecting...');
+        isRedirecting = true;
+        setTimeout(function () { window.location.replace('index.html'); }, 1000);
+    }
+
     function initGoogleGIS() {
         if (window.google && window.google.accounts && window.google.accounts.id) {
             try {
@@ -434,113 +358,81 @@
                     auto_select: false,
                     cancel_on_tap_outside: true
                 });
-                console.log('✅ Google Identity Services initialized');
-            } catch (e) {
-                console.warn('GIS init notice:', e.message);
-            }
+                console.log('Google GIS initialized');
+            } catch(e) { console.warn('GIS init:', e.message); }
         }
     }
 
     window.addEventListener('load', initGoogleGIS);
 
-    // ==================== GOOGLE LOGIN HANDLER ====================
     async function handleGoogleLogin() {
-        const googleBtn = document.getElementById('google-btn');
+        var googleBtn = document.getElementById('google-btn');
         if (googleBtn) googleBtn.disabled = true;
-
         try {
-            // Use Google Identity Services (GIS) - One Tap or popup
             if (window.google && window.google.accounts && window.google.accounts.id) {
                 initGoogleGIS();
-                window.google.accounts.id.prompt((notification) => {
+                window.google.accounts.id.prompt(function (notification) {
                     if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                        // One-Tap was blocked, use OAuth2 popup flow instead
                         triggerGoogleOAuthPopup();
-                    } else {
-                        // One-Tap is showing, keep button disabled until response
                     }
                     if (googleBtn) googleBtn.disabled = false;
                 });
             } else {
-                // GIS not loaded yet, try popup flow
                 await triggerGoogleOAuthPopup();
                 if (googleBtn) googleBtn.disabled = false;
             }
-        } catch (error) {
-            console.error('Google login error:', error);
-            showAlert('error', getErrorMessage(error));
+        } catch(e) {
+            showAlert('error', getErrorMessage(e));
             if (googleBtn) googleBtn.disabled = false;
         }
     }
 
     async function triggerGoogleOAuthPopup() {
-        // Use Google OAuth2 popup via GIS oauth2 client (doesn't require Supabase Google provider)
         if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-            const client = window.google.accounts.oauth2.initTokenClient({
+            var client = window.google.accounts.oauth2.initTokenClient({
                 client_id: GOOGLE_CLIENT_ID,
                 scope: 'email profile openid',
-                callback: async (tokenResponse) => {
-                    if (tokenResponse.error) {
-                        showAlert('error', 'Google sign-in failed: ' + tokenResponse.error);
-                        return;
-                    }
-                    // Fetch user info with the access token
+                callback: async function (tokenResponse) {
+                    if (tokenResponse.error) { showAlert('error', 'Google sign-in failed: ' + tokenResponse.error); return; }
                     try {
-                        const resp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                        var resp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
                             headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
                         });
-                        const profile = await resp.json();
-                        const customSession = {
-                            user: {
-                                id: profile.sub,
-                                email: profile.email,
-                                user_metadata: {
-                                    full_name: profile.name,
-                                    avatar_url: profile.picture,
-                                    email: profile.email
-                                }
-                            },
-                            access_token: tokenResponse.access_token,
-                            expires_at: Date.now() / 1000 + tokenResponse.expires_in
+                        var profile = await resp.json();
+                        var ap = {
+                            id: profile.sub, email: profile.email,
+                            username: profile.name || profile.email.split('@')[0],
+                            full_name: profile.name || '', phone: '', country: 'Cairo',
+                            avatar_url: profile.picture || ''
                         };
-                        localStorage.setItem('google_auth_user', JSON.stringify(customSession));
+                        localStorage.setItem('active_user_session', JSON.stringify(ap));
+                        localStorage.setItem('google_auth_user', JSON.stringify({ user: ap, access_token: tokenResponse.access_token }));
                         localStorage.setItem('signup_banner_dismissed', 'true');
-                        showAlert('success', `Welcome, ${profile.name}! Redirecting...`);
-                        setTimeout(() => { window.location.replace('index.html'); }, 1000);
-                    } catch (e) {
-                        showAlert('error', 'Failed to get user info: ' + e.message);
-                    }
+                        showAlert('success', 'Welcome, ' + profile.name + '! Redirecting...');
+                        isRedirecting = true;
+                        setTimeout(function () { window.location.replace('index.html'); }, 1000);
+                    } catch(e) { showAlert('error', 'Failed to get user info: ' + e.message); }
                 }
             });
             client.requestAccessToken();
         } else {
-            showAlert('error', 'Google sign-in is not available. Please refresh the page and try again.');
+            showAlert('error', 'Google sign-in not available. Please refresh and try again.');
         }
     }
 
-    // ==================== EVENT LISTENERS ====================
-    if (loginForm) loginForm.addEventListener('submit', handleLogin);
-    if (signupForm) signupForm.addEventListener('submit', handleSignup);
+    // ==================== BIND EVENTS ====================
+    if (loginForm)    loginForm.addEventListener('submit', handleLogin);
+    if (signupForm)   signupForm.addEventListener('submit', handleSignup);
+
     if (toggleFormBtn) {
-        toggleFormBtn.onclick = function (e) {
-            if (e && e.preventDefault) e.preventDefault();
-            window.toggleForm(e);
-        };
+        toggleFormBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            setAuthMode(isSignupMode ? 'signin' : 'signup');
+        });
     }
 
-    // Add Google Button Listener
-    const googleBtn = document.getElementById('google-btn');
-    if (googleBtn) {
-        googleBtn.addEventListener('click', handleGoogleLogin);
-    }
+    var googleBtn = document.getElementById('google-btn');
+    if (googleBtn) googleBtn.addEventListener('click', handleGoogleLogin);
 
-    console.log('✅ Login page initialized (standalone version with Google auth)');
-    } // end init()
-
-    // Run init when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
+    console.log('Auth page ready - all buttons active');
+});
