@@ -5,6 +5,7 @@
 (function () {
     'use strict';
 
+    function init() {
     // ==================== SUPABASE CONFIG ====================
     const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
@@ -22,6 +23,20 @@
         })
         : null;
 
+    if (!supabaseClient) {
+        console.error('❌ Supabase failed to load. Please check your internet connection.');
+        const alertBox = document.getElementById('alert-container');
+        const alertText = document.querySelector('.alert-text');
+        const alertMsg = document.getElementById('alert-message');
+        if (alertBox && alertText && alertMsg) {
+            alertBox.classList.remove('hidden');
+            alertMsg.className = 'alert error';
+            alertText.textContent = 'Connection error. Please refresh the page or check your internet connection.';
+        }
+        return; // Stop execution if Supabase failed to load
+    }
+
+
     // ==================== DOM ELEMENTS ====================
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
@@ -33,6 +48,7 @@
     const alertText = document.querySelector('.alert-text');
 
     let isSignupMode = false;
+    let isRedirecting = false;
 
     // ==================== MODE SWITCHING FUNCTION ====================
     function setAuthMode(mode) {
@@ -206,14 +222,15 @@
                 const token = data.session.access_token;
                 const refresh = data.session.refresh_token;
                 console.log('Redirecting with token...');
+                isRedirecting = true;
                 window.location.replace(`index.html#access_token=${token}&refresh_token=${refresh}`);
             }
         } catch (error) {
             console.error('Login error:', error);
             showAlert('error', 'An unexpected error occurred');
         } finally {
-            if (!document.querySelector('.alert.success')) {
-                // Only reset button if not success redirecting
+            if (!isRedirecting) {
+                // Only reset button if not redirecting after success
                 loginBtn.disabled = false;
                 btnText.style.opacity = '1';
                 btnLoader.classList.add('hidden');
@@ -321,8 +338,9 @@
     supabaseClient.auth.onAuthStateChange((event, session) => {
         console.log('🔔 Auth event:', event);
 
-        if (event === 'SIGNED_IN') {
-            // Immediate redirect if logged in
+        if (event === 'SIGNED_IN' && !isRedirecting) {
+            // Only redirect if we're not already handling it in login/signup handlers
+            isRedirecting = true;
             window.location.replace('index.html');
         }
     });
@@ -517,4 +535,12 @@
     }
 
     console.log('✅ Login page initialized (standalone version with Google auth)');
+    } // end init()
+
+    // Run init when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
