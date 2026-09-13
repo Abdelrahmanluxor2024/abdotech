@@ -9,48 +9,91 @@
     const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
 
-    // Initialize Supabase with Same Persistence
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-            persistSession: true,
-            storageKey: 'project_auth_token', // نفس المفتاح بالضبط
-            storage: window.localStorage,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-        }
-    });
+    // Initialize Supabase safely
+    const supabaseClient = (window.supabase && window.supabase.createClient)
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                persistSession: true,
+                storageKey: 'project_auth_token',
+                storage: window.localStorage,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        })
+        : null;
 
     // ==================== DOM ELEMENTS ====================
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const toggleFormBtn = document.getElementById('toggle-form-btn');
     const toggleText = document.getElementById('toggle-text');
+    const toggleDividerText = document.getElementById('toggle-divider-text');
     const alertContainer = document.getElementById('alert-container');
     const alertMessage = document.getElementById('alert-message');
     const alertText = document.querySelector('.alert-text');
 
     let isSignupMode = false;
 
-    // ==================== CHECK URL MODE ====================
-    // If coming from ?mode=signup link, default to signup form
-    (function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mode') === 'signup') {
-            isSignupMode = true;
-            // Switch UI immediately
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
-            const toggleText = document.getElementById('toggle-text');
-            const cardTitle = document.querySelector('.card-title');
-            const cardSubtitle = document.querySelector('.card-subtitle');
+    // ==================== MODE SWITCHING FUNCTION ====================
+    function setAuthMode(mode) {
+        isSignupMode = (mode === 'signup');
+
+        const cardTitle = document.querySelector('.card-title');
+        const cardSubtitle = document.querySelector('.card-subtitle');
+        const googleBtnLabel = document.getElementById('google-btn-label');
+
+        if (isSignupMode) {
             if (loginForm) loginForm.classList.add('hidden');
             if (signupForm) signupForm.classList.remove('hidden');
-            if (toggleText) toggleText.textContent = 'Already have an account? Sign In';
+            if (toggleText) toggleText.textContent = 'Sign In';
+            if (toggleDividerText) toggleDividerText.textContent = 'Already have an account?';
             if (cardTitle) cardTitle.textContent = 'Create Account';
             if (cardSubtitle) cardSubtitle.textContent = 'Sign up to get started';
+            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign up with Google';
+            try {
+                if (window.location.search !== '?mode=signup') {
+                    window.history.replaceState(null, '', 'login.html?mode=signup');
+                }
+            } catch (e) {}
+        } else {
+            if (signupForm) signupForm.classList.add('hidden');
+            if (loginForm) loginForm.classList.remove('hidden');
+            if (toggleText) toggleText.textContent = 'Create New Account';
+            if (toggleDividerText) toggleDividerText.textContent = "Don't have an account?";
+            if (cardTitle) cardTitle.textContent = 'Welcome Back';
+            if (cardSubtitle) cardSubtitle.textContent = 'Sign in to access your account';
+            if (googleBtnLabel) googleBtnLabel.textContent = 'Continue with Google';
+            try {
+                if (window.location.search.includes('mode=signup')) {
+                    window.history.replaceState(null, '', 'login.html');
+                }
+            } catch (e) {}
+        }
+
+        closeAlert();
+    }
+
+    window.setAuthMode = setAuthMode;
+    window.toggleForm = function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        setAuthMode(isSignupMode ? 'signin' : 'signup');
+    };
+
+    // Initialize mode from URL
+    (function initModeFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'signup' || window.location.hash === '#signup') {
+            setAuthMode('signup');
+        } else {
+            setAuthMode('signin');
         }
     })();
+
+    // Support browser Back/Forward navigation
+    window.addEventListener('popstate', function () {
+        const params = new URLSearchParams(window.location.search);
+        setAuthMode(params.get('mode') === 'signup' ? 'signup' : 'signin');
+    });
 
     // ==================== UI FUNCTIONS ====================
     function showAlert(type, message) {
@@ -66,29 +109,6 @@
     window.closeAlert = function () {
         alertContainer.classList.add('hidden');
     };
-
-    window.toggleForm = function toggleForm() {
-        isSignupMode = !isSignupMode;
-        const googleBtnLabel = document.getElementById('google-btn-label');
-
-        if (isSignupMode) {
-            loginForm.classList.add('hidden');
-            signupForm.classList.remove('hidden');
-            toggleText.textContent = 'Already have an account? Sign In';
-            document.querySelector('.card-title').textContent = 'Create Account';
-            document.querySelector('.card-subtitle').textContent = 'Sign up to get started';
-            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign up with Google';
-        } else {
-            signupForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            toggleText.textContent = 'Create New Account';
-            document.querySelector('.card-title').textContent = 'Welcome Back';
-            document.querySelector('.card-subtitle').textContent = 'Sign in to access your account';
-            if (googleBtnLabel) googleBtnLabel.textContent = 'Sign in with Google';
-        }
-
-        closeAlert();
-    }
 
     window.togglePasswordVisibility = function (formType) {
         const passwordInput = formType === 'signup'
@@ -481,9 +501,14 @@
     }
 
     // ==================== EVENT LISTENERS ====================
-    loginForm.addEventListener('submit', handleLogin);
-    signupForm.addEventListener('submit', handleSignup);
-    toggleFormBtn.addEventListener('click', toggleForm);
+    if (loginForm) loginForm.addEventListener('submit', handleLogin);
+    if (signupForm) signupForm.addEventListener('submit', handleSignup);
+    if (toggleFormBtn) {
+        toggleFormBtn.onclick = function (e) {
+            if (e && e.preventDefault) e.preventDefault();
+            window.toggleForm(e);
+        };
+    }
 
     // Add Google Button Listener
     const googleBtn = document.getElementById('google-btn');

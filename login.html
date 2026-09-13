@@ -127,13 +127,7 @@
                         <div class="spinner"></div>
                     </div>
                 </button>
-
             </form>
-
-            <!-- Divider -->
-            <div class="divider">
-                <span class="divider-text">Don't have an account?</span>
-            </div>
 
             <!-- Sign Up Form -->
             <form id="signup-form" class="auth-form hidden">
@@ -232,8 +226,13 @@
                 </button>
             </form>
 
+            <!-- Bottom Mode Switch Divider -->
+            <div class="divider" id="mode-divider">
+                <span class="divider-text" id="toggle-divider-text">Don't have an account?</span>
+            </div>
+
             <!-- Toggle Button -->
-            <button class="btn btn-secondary" id="toggle-form-btn" onclick="toggleForm()">
+            <button type="button" class="btn btn-secondary" id="toggle-form-btn">
                 <span id="toggle-text">Create New Account</span>
             </button>
         </div>
