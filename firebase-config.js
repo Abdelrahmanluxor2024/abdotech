@@ -1,6 +1,4 @@
 // ==================== FIREBASE CONFIGURATION ====================
-// Firebase Web SDK (Compat version for broad compatibility & offline/file:// support)
-
 const firebaseConfig = {
   apiKey: "AIzaSyD_orcnGOH8XS6zY5Ii5379owwYZDZ8Yh4",
   authDomain: "me-web-f4e3a.firebaseapp.com",
@@ -11,10 +9,8 @@ const firebaseConfig = {
   measurementId: "G-87VNMQY1B6"
 };
 
-// Initialize Firebase if not already initialized
+// Initialize Firebase only once
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Each page gets its own auth/db reference via firebase.auth() and firebase.firestore()

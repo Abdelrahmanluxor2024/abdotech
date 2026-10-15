@@ -129,8 +129,9 @@
 
     <!-- MAIN PROFILE SCRIPT (FIREBASE) -->
     <script>
-        const auth = firebase.auth();
-        const db   = firebase.firestore();
+        // Firebase references (firebase-config.js initialized the app)
+        var auth = firebase.auth();
+        var db   = firebase.firestore();
 
         let activeProfile = {
             id: 'default_user',
