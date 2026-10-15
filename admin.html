@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | لوحة التحكم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-card: rgba(26, 26, 36, 0.8);
+            --accent: #667eea;
+            --accent-glow: rgba(102, 126, 234, 0.35);
+            --text-main: #ffffff;
+            --text-muted: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Login Card */
+        .login-box {
+            max-width: 420px;
+            margin: 80px auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 8px;
+            font-size: 1.6rem;
+            color: var(--accent);
+        }
+
+        .login-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.88rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* Dashboard View */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-logout {
+            padding: 8px 18px;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comment-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .user-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .username {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .date {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .comment-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+            background: rgba(255,255,255,0.02);
+            padding: 12px 14px;
+            border-radius: 8px;
+        }
+
+        .existing-reply {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-right: 3px solid var(--accent);
+            border-radius: 8px;
+        }
+
+        .existing-reply span {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .reply-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reply-input {
+            flex: 1;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .reply-input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-reply {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-reply:hover {
+            opacity: 0.9;
+        }
+
+        .btn-delete {
+            padding: 10px 14px;
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px dashed var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Login Card -->
+        <div class="login-box" id="login-section">
+            <h2>لوحة الإدارة 🛡️</h2>
+            <p>سجل الدخول للمتابعة والرد على تعليقات الزوار</p>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-user">اسم المستخدم</label>
+                    <input type="text" id="admin-user" class="form-control" placeholder="اسم المستخدم" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="admin-pass">كلمة المرور</label>
+                    <input type="password" id="admin-pass" class="form-control" placeholder="كلمة المرور" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn">تسجيل الدخول</button>
+                <div class="error-msg" id="login-error">بيانات الدخول غير صحيحة!</div>
+            </form>
+        </div>
+
+        <!-- Dashboard View -->
+        <div class="dashboard" id="dashboard-section">
+            <div class="dashboard-header">
+                <h1>
+                    <span>لوحة إدارة التعليقات</span>
+                    <span style="font-size: 0.85rem; color: var(--accent); background: rgba(102, 126, 234, 0.15); padding: 4px 10px; border-radius: 20px;">Admin Mode</span>
+                </h1>
+                <button class="btn-logout" id="logout-btn">تسجيل الخروج</button>
+            </div>
+
+            <div class="section-title">
+                <span>💬 التعليقات الواردة من كتاب الزوار</span>
+            </div>
+
+            <div id="comments-container">
+                <div class="empty-state">جاري تحميل التعليقات...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        const db = firebase.firestore();
+
+        const loginSection     = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const loginForm        = document.getElementById('admin-login-form');
+        const loginError       = document.getElementById('login-error');
+        const logoutBtn        = document.getElementById('logout-btn');
+        const commentsList     = document.getElementById('comments-container');
+
+        // Check authentication state
+        function checkSession() {
+            if (sessionStorage.getItem('admin_authenticated') === 'true') {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        }
+
+        function showLogin() {
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+        }
+
+        function showDashboard() {
+            loginSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            loadComments();
+        }
+
+        // Login Handler (Credentials: liger / S@nDisk0)
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value.trim();
+            const pass = document.getElementById('admin-pass').value;
+
+            if (user === 'liger' && pass === 'S@nDisk0') {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                loginError.style.display = 'none';
+                showDashboard();
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', function () {
+            sessionStorage.removeItem('admin_authenticated');
+            showLogin();
+        });
+
+        // Load comments in real-time
+        function loadComments() {
+            db.collection('comments').orderBy('created_at', 'desc').onSnapshot(function (snapshot) {
+                if (snapshot.empty) {
+                    commentsList.innerHTML = '<div class="empty-state">لا توجد تعليقات حتى الآن.</div>';
+                    return;
+                }
+
+                commentsList.innerHTML = '';
+                snapshot.forEach(function (doc) {
+                    const c = doc.data();
+                    const docId = doc.id;
+                    const dateStr = (c.created_at && c.created_at.toDate) ? c.created_at.toDate().toLocaleString('ar-EG') : 'منذ قليل';
+                    const avatar = c.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.username || 'User')}&background=6366f1&color=fff`;
+
+                    const item = document.createElement('div');
+                    item.className = 'comment-item';
+                    item.id = 'comment-' + docId;
+
+                    let existingReplyHtml = '';
+                    if (c.admin_reply) {
+                        existingReplyHtml = `
+                            <div class="existing-reply">
+                                <span>رد الإدارة الحالي:</span>
+                                <p style="color: #fff; margin: 0;">${escapeHTML(c.admin_reply)}</p>
+                            </div>
+                        `;
+                    }
+
+                    item.innerHTML = `
+                        <div class="comment-header">
+                            <div class="user-meta">
+                                <img src="${avatar}" alt="" class="avatar">
+                                <div>
+                                    <div class="username">${escapeHTML(c.username || 'زائر')}</div>
+                                    <div class="date">${dateStr}</div>
+                                </div>
+                            </div>
+                            <button class="btn-delete" onclick="deleteComment('${docId}')" title="حذف التعليق">حذف 🗑️</button>
+                        </div>
+                        <div class="comment-body">${escapeHTML(c.comment_text)}</div>
+                        ${existingReplyHtml}
+                        <form class="reply-form" onsubmit="submitReply(event, '${docId}')">
+                            <input type="text" class="reply-input" placeholder="اكتب رد الإدارة على هذا التعليق..." required value="${c.admin_reply ? escapeHTML(c.admin_reply) : ''}">
+                            <button type="submit" class="btn-reply">${c.admin_reply ? 'تحديث الرد ✍️' : 'إرسال الرد 🚀'}</button>
+                        </form>
+                    `;
+
+                    commentsList.appendChild(item);
+                });
+            }, function (error) {
+                console.error('Error fetching comments:', error);
+                commentsList.innerHTML = '<div class="empty-state" style="color: var(--danger)">حدث خطأ أثناء تحميل التعليقات: ' + error.message + '</div>';
+            });
+        }
+
+        // Submit Reply
+        window.submitReply = async function (e, docId) {
+            e.preventDefault();
+            const input = e.target.querySelector('.reply-input');
+            const replyText = input.value.trim();
+            if (!replyText) return;
+
+            const submitBtn = e.target.querySelector('.btn-reply');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الحفظ...';
+
+            try {
+                await db.collection('comments').doc(docId).update({
+                    admin_reply: replyText,
+                    reply_at: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert('تم نشر الرد بنجاح! ✅');
+            } catch (err) {
+                alert('فشل حفظ الرد: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'تحديث الرد ✍️';
+            }
+        };
+
+        // Delete Comment
+        window.deleteComment = async function (docId) {
+            if (!confirm('هل أنت متأكد من رغبتك في حذف هذا التعليق؟')) return;
+            try {
+                await db.collection('comments').doc(docId).delete();
+            } catch (err) {
+                alert('فشل الحذف: ' + err.message);
+            }
+        };
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        // Init
+        checkSession();
+    </script>
+</body>
+</html>

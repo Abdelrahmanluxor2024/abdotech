@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="profile.css">
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -235,10 +233,18 @@
                 if (user) {
                     activeProfile.id = user.uid;
                     activeProfile.uid = user.uid;
-                    activeProfile.email = user.email || activeProfile.email;
-                    activeProfile.username = user.displayName || activeProfile.username || user.email.split('@')[0];
-                    activeProfile.avatar_url = user.photoURL || activeProfile.avatar_url;
+                    activeProfile.email = user.email || activeProfile.email || '';
+                    if (!activeProfile.username) {
+                        activeProfile.username = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+                    }
+                    if (user.photoURL && !activeProfile.avatar_url) {
+                        activeProfile.avatar_url = user.photoURL;
+                    }
 
+                    // Render immediately with auth data
+                    applyProfileToDOM(activeProfile);
+
+                    // Fetch latest from Firestore document
                     try {
                         const doc = await db.collection('users').doc(user.uid).get();
                         if (doc.exists) {
@@ -248,6 +254,7 @@
                             if (data.phone) activeProfile.phone = data.phone;
                             if (data.country) activeProfile.country = data.country;
                             if (data.avatar_url) activeProfile.avatar_url = data.avatar_url;
+                            applyProfileToDOM(activeProfile);
                         }
                     } catch(err) {
                         console.warn('Firestore user fetch notice:', err);
@@ -256,8 +263,12 @@
                     localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
                     applyProfileToDOM(activeProfile);
                 } else {
-                    // Not logged in and no cache -> redirect to login
-                    if (!localStorage.getItem('active_user_session')) {
+                    // Check if local cache exists
+                    const cached = localStorage.getItem('active_user_session');
+                    if (cached) {
+                        applyProfileToDOM(JSON.parse(cached));
+                    } else {
+                        // User not authenticated
                         window.location.replace('login.html');
                     }
                 }

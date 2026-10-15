@@ -132,6 +132,17 @@
                     });
                 }
 
+                var replyHtml = '';
+                if (comment.admin_reply) {
+                    replyHtml = 
+                        '<div class="admin-reply-box" style="margin-top: 12px; padding: 12px 16px; background: rgba(102, 126, 234, 0.12); border-left: 3px solid #667eea; border-radius: 8px;">' +
+                            '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">' +
+                                '<span style="font-weight: 700; font-size: 0.85rem; color: #667eea; background: rgba(102, 126, 234, 0.2); padding: 2px 8px; border-radius: 4px;">Admin Reply 🛡️</span>' +
+                            '</div>' +
+                            '<p style="font-size: 0.92rem; color: #e2e8f0; margin: 0; line-height: 1.5;">' + escapeHTML(comment.admin_reply) + '</p>' +
+                        '</div>';
+                }
+
                 var card = document.createElement('div');
                 card.className = 'comment-card';
                 card.innerHTML = 
@@ -142,6 +153,7 @@
                             '<span class="comment-date">' + dateStr + '</span>' +
                         '</div>' +
                         '<p class="comment-text">' + escapeHTML(comment.comment_text) + '</p>' +
+                        replyHtml +
                     '</div>';
                 commentsList.appendChild(card);
             });
