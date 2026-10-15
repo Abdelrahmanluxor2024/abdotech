@@ -123,27 +123,20 @@
         </div>
     </div>
 
-    <!-- MAIN PROFILE SCRIPT -->
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- MAIN PROFILE SCRIPT (FIREBASE) -->
     <script>
-        // --- Supabase Config ---
-        const SUPABASE_URL = 'https://bebudhdiylpxrmddrhyp.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlYnVkaGRpeWxweHJtZGRyaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.LB6-Tg7QdOertHK3eEue966iblIgVzO7982-WAg2bVM';
-        
-        let client = null;
-        if (window.supabase && window.supabase.createClient) {
-            client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-                auth: {
-                    persistSession: true,
-                    storageKey: 'project_auth_token',
-                    storage: window.localStorage,
-                    autoRefreshToken: true,
-                    detectSessionInUrl: true
-                }
-            });
-        }
+        const auth = firebase.auth();
+        const db   = firebase.firestore();
 
         let activeProfile = {
             id: 'default_user',
+            uid: '',
             email: '',
             username: '',
             full_name: '',
@@ -213,9 +206,8 @@
             }
         }
 
-        // 1. Instant Load from ALL Local Storage Sources
+        // 1. Instant Load from Local Storage Cache
         function loadAllStorageData() {
-            // Source 1: active_user_session
             try {
                 const s = localStorage.getItem('active_user_session');
                 if (s) {
@@ -224,111 +216,55 @@
                 }
             } catch(e) {}
 
-            // Source 2: last_registered_profile
-            try {
-                const r = localStorage.getItem('last_registered_profile');
-                if (r) {
-                    const parsed = JSON.parse(r);
-                    if (parsed) {
-                        if (!activeProfile.email && parsed.email) activeProfile.email = parsed.email;
-                        if (!activeProfile.username && parsed.username) activeProfile.username = parsed.username;
-                        if (!activeProfile.phone && parsed.phone) activeProfile.phone = parsed.phone;
-                        if (!activeProfile.country && parsed.country) activeProfile.country = parsed.country;
-                    }
-                }
-            } catch(e) {}
-
-            // Source 3: saved_user keys
             const sEmail = localStorage.getItem('saved_user_email');
-            const sName = localStorage.getItem('saved_user_name');
+            const sName  = localStorage.getItem('saved_user_name');
             const sPhone = localStorage.getItem('saved_user_phone');
-            const sGov = localStorage.getItem('saved_user_gov');
+            const sGov   = localStorage.getItem('saved_user_gov');
+
             if (sEmail && !activeProfile.email) activeProfile.email = sEmail;
             if (sName && !activeProfile.username) activeProfile.username = sName;
             if (sPhone && !activeProfile.phone) activeProfile.phone = sPhone;
             if (sGov && !activeProfile.country) activeProfile.country = sGov;
 
-            // Source 4: project_auth_token
-            try {
-                const tok = localStorage.getItem('project_auth_token');
-                if (tok) {
-                    const parsed = JSON.parse(tok);
-                    const u = parsed.user || parsed;
-                    if (u && u.email) {
-                        activeProfile.id = u.id || activeProfile.id;
-                        activeProfile.email = u.email || activeProfile.email;
-                        const m = u.user_metadata || {};
-                        if (m.username) activeProfile.username = m.username;
-                        if (m.full_name) activeProfile.full_name = m.full_name;
-                        if (m.phone) activeProfile.phone = m.phone;
-                        if (m.country) activeProfile.country = m.country;
-                        if (m.avatar_url) activeProfile.avatar_url = m.avatar_url;
-                    }
-                }
-            } catch(e) {}
-
-            // Source 5: google_auth_user
-            try {
-                const g = localStorage.getItem('google_auth_user');
-                if (g) {
-                    const parsed = JSON.parse(g);
-                    const u = parsed.user || parsed;
-                    if (u && u.email) {
-                        activeProfile.id = u.id || activeProfile.id;
-                        activeProfile.email = u.email;
-                        const m = u.user_metadata || {};
-                        if (!activeProfile.username) activeProfile.username = m.full_name || u.email.split('@')[0];
-                        if (!activeProfile.full_name) activeProfile.full_name = m.full_name || '';
-                        if (!activeProfile.avatar_url && m.avatar_url) activeProfile.avatar_url = m.avatar_url;
-                    }
-                }
-            } catch(e) {}
-
             applyProfileToDOM(activeProfile);
         }
 
-        // 2. Fetch Latest Database Record from Supabase
-        async function fetchSupabaseProfile() {
-            if (!client) return;
-
-            try {
-                const { data: { session } } = await client.auth.getSession();
-                if (session && session.user) {
-                    const u = session.user;
-                    activeProfile.id = u.id;
-                    activeProfile.email = u.email || activeProfile.email;
-
-                    const m = u.user_metadata || {};
-                    if (m.username) activeProfile.username = m.username;
-                    if (m.full_name) activeProfile.full_name = m.full_name;
-                    if (m.phone) activeProfile.phone = m.phone;
-                    if (m.country) activeProfile.country = m.country;
-                    if (m.avatar_url) activeProfile.avatar_url = m.avatar_url;
+        // 2. Fetch Live User Profile from Firebase & Firestore
+        function initFirebaseProfile() {
+            auth.onAuthStateChanged(async function(user) {
+                if (user) {
+                    activeProfile.id = user.uid;
+                    activeProfile.uid = user.uid;
+                    activeProfile.email = user.email || activeProfile.email;
+                    activeProfile.username = user.displayName || activeProfile.username || user.email.split('@')[0];
+                    activeProfile.avatar_url = user.photoURL || activeProfile.avatar_url;
 
                     try {
-                        const { data } = await client
-                            .from('user_profiles')
-                            .select('*')
-                            .eq('id', u.id)
-                            .single();
-                        if (data) {
+                        const doc = await db.collection('users').doc(user.uid).get();
+                        if (doc.exists) {
+                            const data = doc.data();
                             if (data.username) activeProfile.username = data.username;
                             if (data.full_name) activeProfile.full_name = data.full_name;
                             if (data.phone) activeProfile.phone = data.phone;
                             if (data.country) activeProfile.country = data.country;
                             if (data.avatar_url) activeProfile.avatar_url = data.avatar_url;
                         }
-                    } catch(err) {}
+                    } catch(err) {
+                        console.warn('Firestore user fetch notice:', err);
+                    }
 
                     localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
                     applyProfileToDOM(activeProfile);
+                } else {
+                    // Not logged in and no cache -> redirect to login
+                    if (!localStorage.getItem('active_user_session')) {
+                        window.location.replace('login.html');
+                    }
                 }
-            } catch(e) {
-                console.warn('Supabase fetch note:', e);
-            }
+            });
         }
 
-        // 3. Avatar Upload Handler (Direct Native Change Event)
+        // 3. Avatar Upload Handler
         const fileInput = document.getElementById('avatar-file-input');
         const avatarImg = document.getElementById('avatar-img');
 
@@ -342,28 +278,31 @@
                     return;
                 }
 
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast('حجم الصورة كبير جداً (الحد الأقصى 10 ميجابايت)', 'error');
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('حجم الصورة كبير جداً (الحد الأقصى 5 ميجابايت)', 'error');
                     return;
                 }
 
                 const reader = new FileReader();
-                reader.onload = function(evt) {
+                reader.onload = async function(evt) {
                     const base64Data = evt.target.result;
                     if (avatarImg) avatarImg.src = base64Data;
 
                     activeProfile.avatar_url = base64Data;
-                    const userId = activeProfile.id || 'default_user';
+                    const userId = activeProfile.id || (auth.currentUser ? auth.currentUser.uid : 'default_user');
 
                     localStorage.setItem('user_avatar', base64Data);
                     localStorage.setItem('user_avatar_global', base64Data);
                     localStorage.setItem('user_avatar_' + userId, base64Data);
                     localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
 
-                    if (client && activeProfile.id && activeProfile.id !== 'default_user') {
-                        client.from('user_profiles').upsert([
-                            { id: activeProfile.id, avatar_url: base64Data, updated_at: new Date() }
-                        ]).then(() => {}).catch(() => {});
+                    if (auth.currentUser) {
+                        try {
+                            await db.collection('users').doc(auth.currentUser.uid).set({
+                                avatar_url: base64Data,
+                                updated_at: firebase.firestore.FieldValue.serverTimestamp()
+                            }, { merge: true });
+                        } catch(e) {}
                     }
 
                     showToast('تم تحديث الصورة الشخصية بنجاح! ✅', 'success');
@@ -396,41 +335,31 @@
                 activeProfile.country = countryVal;
                 if (avatarVal) activeProfile.avatar_url = avatarVal;
 
-                const userId = activeProfile.id || 'default_user';
-
                 // Save locally
                 localStorage.setItem('active_user_session', JSON.stringify(activeProfile));
                 localStorage.setItem('saved_user_name', activeProfile.username);
                 localStorage.setItem('saved_user_phone', activeProfile.phone);
                 localStorage.setItem('saved_user_gov', activeProfile.country);
-                localStorage.setItem('user_profile_' + userId, JSON.stringify(activeProfile));
-                localStorage.setItem('last_registered_profile', JSON.stringify(activeProfile));
 
-                // Save to Supabase
-                if (client && activeProfile.id && activeProfile.id !== 'default_user') {
+                // Save to Firebase Firestore
+                if (auth.currentUser) {
                     try {
-                        await client.from('user_profiles').upsert([{
-                            id: activeProfile.id,
+                        await db.collection('users').doc(auth.currentUser.uid).set({
                             username: activeProfile.username,
                             full_name: activeProfile.full_name,
                             phone: activeProfile.phone,
                             country: activeProfile.country,
                             avatar_url: activeProfile.avatar_url,
-                            updated_at: new Date()
-                        }]);
+                            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
 
-                        if (client.auth && client.auth.updateUser) {
-                            await client.auth.updateUser({
-                                data: {
-                                    username: activeProfile.username,
-                                    full_name: activeProfile.full_name,
-                                    phone: activeProfile.phone,
-                                    country: activeProfile.country
-                                }
+                        if (auth.currentUser.updateProfile) {
+                            await auth.currentUser.updateProfile({
+                                displayName: activeProfile.username
                             });
                         }
                     } catch(err) {
-                        console.warn('Supabase update notice:', err);
+                        console.warn('Firestore update notice:', err);
                     }
                 }
 
@@ -445,23 +374,19 @@
             });
         }
 
-        // 5. Sign Out Handler (Instant & Reliable)
+        // 5. Sign Out Handler
         const signOutBtn = document.getElementById('sign-out-btn');
         if (signOutBtn) {
-            signOutBtn.addEventListener('click', function(e) {
+            signOutBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 signOutBtn.textContent = 'جاري الخروج...';
                 signOutBtn.disabled = true;
 
                 try {
-                    if (client && client.auth) {
-                        client.auth.signOut().catch(() => {});
-                    }
+                    await auth.signOut();
                 } catch(e) {}
 
                 localStorage.removeItem('active_user_session');
-                localStorage.removeItem('project_auth_token');
-                localStorage.removeItem('google_auth_user');
                 localStorage.removeItem('saved_user_email');
                 localStorage.removeItem('saved_user_name');
                 localStorage.removeItem('saved_user_phone');
@@ -474,9 +399,9 @@
             });
         }
 
-        // Instant Initialization
+        // Initialization
         loadAllStorageData();
-        fetchSupabaseProfile();
+        initFirebaseProfile();
 
     </script>
 </body>

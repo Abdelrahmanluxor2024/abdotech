@@ -237,18 +237,18 @@
 
         <!-- Footer -->
         <div class="login-footer">
-            <p>&copy; 2026 Abdelrahman El-Assiouty. Secured by Supabase.</p>
+            <p>&copy; 2026 Abdelrahman El-Assiouty. Secured by Firebase.</p>
         </div>
     </div>
 
-    <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <!-- Authentication Script (Standalone - works without server) -->
-    <script src="auth-standalone.js"></script>
+    <!-- Firebase Config & Auth Script -->
+    <script src="firebase-config.js"></script>
+    <script src="auth-firebase.js"></script>
 </body>
 
 </html>
