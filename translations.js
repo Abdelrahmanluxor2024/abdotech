@@ -90,7 +90,9 @@ const translations = {
             project7Desc: "An innovative user interface using a modern color palette (neon and amber), customized for interactive dashboards and structured data visualization.",
             project8Title: "Body Tube Digital Platform",
             project8Desc: "An interactive web app for streaming media and videos, built on a flexible frontend design that ensures fast loading and smooth list scrolling.",
-            flagshipBadge: "⭐ My Flagship Project ⭐",
+            project9Title: "Luxor Prayer Times Platform (PWA)",
+            project9Desc: "A dedicated bilingual PWA web service displaying precise prayer times for Luxor Governorate using Egyptian General Survey Authority calculations, with live countdown, offline PWA support, Ramadan Imsakia, and downloadable daily prayer cards.",
+            flagshipBadge: "⭐ My Flagship Projects ⭐",
             flagshipLive: "Integrated Digital Platform",
             flagshipTitle: "Mr. Abdelrahman El-Assiouty Platform for Programming & AI",
             flagshipQuote: "\"After months of dedication and hard work, the dream is finally reality: Mr. Abdelrahman El-Assiouty Platform for Programming & AI! 🚀💻 A massive, seamless educational environment built with cutting-edge AI technologies to guarantee top performance and quality. Students code hands-on from session one.\"",
@@ -98,6 +100,24 @@ const translations = {
             flagshipF1Desc: "Gradual progression from scratch to building strong computational thinking.",
             flagshipF2Title: "Smart Practical Application",
             flagshipF2Desc: "Real-world projects and applications built with Python & Artificial Intelligence.",
+            flagshipF3Title: "Smart Assessments & Full Support",
+            flagshipF3Desc: "Comprehensive periodic tracking and testing system to monitor progress.",
+            flagshipCta: "Visit Platform 🚀",
+            flagshipPreview: "Preview Platform Live",
+
+            // Second Flagship: Luxor Prayer Times
+            flagship2Badge: "⭐ Leading Community Service Platform ⭐",
+            flagship2Live: "Progressive Web App (PWA)",
+            flagship2Title: "Luxor Prayer Times Platform (مواقيت الصلاة - الأقصر)",
+            flagship2Quote: "\"A 100% free, community-first Progressive Web App (PWA) built specifically for Luxor Governorate and Upper Egypt. Delivering astronomical-precision prayer times backed by the Egyptian General Survey Authority, live real-time countdown, automatic daylight saving handling, and instant daily social card generation with zero annoying ads.\"",
+            flagship2F1Title: "Precise Astronomical Calculation",
+            flagship2F1Desc: "Accurate 5 daily prayers & sunrise times based on Luxor coordinates and Egyptian Survey Authority.",
+            flagship2F2Title: "Live Clock & Smart Countdown",
+            flagship2F2Desc: "Real-time Luxor-locked seconds clock with intelligent progress bar for the upcoming prayer.",
+            flagship2F3Title: "Daily Card Generator & Imsakia",
+            flagship2F3Desc: "One-click 3:4 visual social card creation for WhatsApp/Facebook plus full monthly Ramadan calendar.",
+            flagship2Cta: "Visit Luxor Prayer Times 🕌",
+            flagship2Preview: "Preview Live Platform"
             flagshipF3Title: "Exams & Full Support",
             flagshipF3Desc: "Regular monitoring and smart evaluation system tracking performance continuously.",
             flagshipCta: "Visit Platform Live 🚀",
@@ -255,6 +275,8 @@ const translations = {
             project7Desc: "تصميم مبتكر لواجهة مستخدم تعتمد على تمازج الألوان العصرية (النيون والكهرمان)، مخصصة لبناء لوحات التحكم التفاعلية وعرض البيانات بشكل منظم.",
             project8Title: "منصة Body Tube الرقمية",
             project8Desc: "تطبيق ويب تفاعلي لعرض المحتوى ومقاطع الفيديو المتخصصة، يعتمد على بنية تصميم مرنة تضمن سرعة التحميل وسلاسة تصفح القوائم والمجموعات.",
+            project9Title: "منصة مواقيت الصلاة - الأقصر (PWA)",
+            project9Desc: "تطبيق ويب تقدمي (PWA) خدمي ومجاني بالكامل، يعرض مواقيت الصلوات بدقة متناهية لأهل محافظة الأقصر ومراكزها باعتماد الهيئة المصرية العامة للمساحة، مع ساعة حية، عداد تنازلي، إمساكية شهرية، ومولد كروت يومية للمشاركة.",
             flagshipBadge: "⭐ أهم أعمالي ⭐",
             flagshipLive: "منصة رقمية متكاملة",
             flagshipTitle: "منصة مستر عبدالرحمن الأسيوطي للبرمجة والذكاء الاصطناعي",
@@ -266,7 +288,21 @@ const translations = {
             flagshipF3Title: "امتحانات ودعم كامل",
             flagshipF3Desc: "نظام تقييم ومتابعة دورية يقيس مستواك أولاً بأول.",
             flagshipCta: "زيارة المنصة الآن 🚀",
-            flagshipPreview: "معاينة المنصة مباشرة"
+            flagshipPreview: "معاينة المنصة مباشرة",
+
+            // Second Flagship: Luxor Prayer Times
+            flagship2Badge: "⭐ منصة خدمية رائدة - أهم أعمالي ⭐",
+            flagship2Live: "تطبيق ويب تقدمي (PWA) 🕌",
+            flagship2Title: "موقع مواقيت الصلاة - الأقصر (خدمي ومجاني 100%)",
+            flagship2Quote: "\"تطبيق ويب تقدمي (PWA) خفيف وسريع، صُمم وطُوّر لخدمة أهل محافظة الأقصر ومراكزها وقراها بدقة متناهية. مواقيت محسوبة فلكياً باعتماد الهيئة المصرية العامة للمساحة، مع ساعة حية بتوقيت الأقصر، عداد تنازلي ذكي للصلاة القادمة، واكتشاف تلقائي للتوقيت الصيفي/الشتوي، بالإضافة لتوليد كروت المواقيت اليومية وإمساكية شهر رمضان بدون أي إعلانات مزعجة نهائياً.\"",
+            flagship2F1Title: "حساب فلكي رسمي دقيق",
+            flagship2F1Desc: "مواقيت الصلوات الخمس والشروق بدقة متناهية وفق إحداثيات الأقصر وهيئة المساحة المصرية.",
+            flagship2F2Title: "ساعة حية وعداد تنازلي",
+            flagship2F2Desc: "ساعة بالثواني بتوقيت الأقصر مع بطاقة ذكية للصلاة القادمة وشريط تقدم زمني مرئي.",
+            flagship2F3Title: "توليد كروت وإمساكية رمضان",
+            flagship2F3Desc: "توليد كارت فوري مقاس 3:4 للمشاركة على واتساب وفيسبوك، مع جدول كامل لمواقيت الشهر.",
+            flagship2Cta: "زيارة موقع مواقيت الصلاة الآن 🕌",
+            flagship2Preview: "معاينة موقع مواقيت الصلاة"
         },
         // Videos Section
         videos: {
@@ -525,6 +561,33 @@ function applyTranslations(t) {
     if (fsF3Desc && t.portfolio.flagshipF3Desc) fsF3Desc.textContent = t.portfolio.flagshipF3Desc;
     if (fsCta && t.portfolio.flagshipCta) fsCta.textContent = t.portfolio.flagshipCta;
     if (fsView && t.portfolio.flagshipPreview) fsView.textContent = t.portfolio.flagshipPreview;
+
+    // Flagship 2 (Luxor Prayer Times) Elements Update
+    const fs2Badge = document.getElementById('flagship2-badge-text');
+    const fs2Live = document.getElementById('flagship2-live-tag');
+    const fs2Title = document.getElementById('flagship2-title-text');
+    const fs2Quote = document.getElementById('flagship2-quote-text');
+    const fs2F1Title = document.getElementById('flagship2-f1-title');
+    const fs2F1Desc = document.getElementById('flagship2-f1-desc');
+    const fs2F2Title = document.getElementById('flagship2-f2-title');
+    const fs2F2Desc = document.getElementById('flagship2-f2-desc');
+    const fs2F3Title = document.getElementById('flagship2-f3-title');
+    const fs2F3Desc = document.getElementById('flagship2-f3-desc');
+    const fs2Cta = document.getElementById('flagship2-cta-text');
+    const fs2View = document.getElementById('flagship2-view-btn');
+
+    if (fs2Badge && t.portfolio.flagship2Badge) fs2Badge.textContent = t.portfolio.flagship2Badge;
+    if (fs2Live && t.portfolio.flagship2Live) fs2Live.textContent = t.portfolio.flagship2Live;
+    if (fs2Title && t.portfolio.flagship2Title) fs2Title.textContent = t.portfolio.flagship2Title;
+    if (fs2Quote && t.portfolio.flagship2Quote) fs2Quote.innerHTML = t.portfolio.flagship2Quote;
+    if (fs2F1Title && t.portfolio.flagship2F1Title) fs2F1Title.textContent = t.portfolio.flagship2F1Title;
+    if (fs2F1Desc && t.portfolio.flagship2F1Desc) fs2F1Desc.textContent = t.portfolio.flagship2F1Desc;
+    if (fs2F2Title && t.portfolio.flagship2F2Title) fs2F2Title.textContent = t.portfolio.flagship2F2Title;
+    if (fs2F2Desc && t.portfolio.flagship2F2Desc) fs2F2Desc.textContent = t.portfolio.flagship2F2Desc;
+    if (fs2F3Title && t.portfolio.flagship2F3Title) fs2F3Title.textContent = t.portfolio.flagship2F3Title;
+    if (fs2F3Desc && t.portfolio.flagship2F3Desc) fs2F3Desc.textContent = t.portfolio.flagship2F3Desc;
+    if (fs2Cta && t.portfolio.flagship2Cta) fs2Cta.textContent = t.portfolio.flagship2Cta;
+    if (fs2View && t.portfolio.flagship2Preview) fs2View.textContent = t.portfolio.flagship2Preview;
 
     // Videos Section
     const videoLabel = document.querySelector('#videos .section-label');
